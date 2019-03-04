@@ -1,0 +1,16 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  height: 100vh;
+  background: url("./index_bkgrnd.jpg");
+  background-repeat: repeat;
+}
+
+.container {
+  justify-content: center;
+}
