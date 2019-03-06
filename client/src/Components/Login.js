@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import AuthService from './AuthService';
 import { Alert } from 'reactstrap';
 import logo from '../images/bacancy-technology2.png'
-import '../CSS/Login.css'
-import $ from 'jquery';
-
+import '../assets/css/Login.css'
 class Login extends Component {
 
   constructor(props) {
@@ -32,10 +30,10 @@ class Login extends Component {
     this.Auth.login(this.state.uname, this.state.pword)
       .then(res => {
         let role = res.User.role
-        if (role)
-          this.props.history.replace('/admin');
+        if (!role)
+          this.props.history.replace('/home');
         else
-        this.props.history.replace('/home')
+          this.props.history.replace('/admin')
       })
       .catch(err => {
         if (this.state.collapse === false) this.setState({ collapse: !this.state.collapse });
@@ -57,14 +55,14 @@ class Login extends Component {
     //   working = true;
     //   var $this = $(this),
     //     $state = $this.find('button > .state');
-    //   $this.addClass('loading');
+    //   $this.addclassName('loading');
     //   $state.html('Authenticating');
     //   setTimeout(function () {
-    //     $this.addClass('ok');
+    //     $this.addclassName('ok');
     //     $state.html('Welcome back!');
     //     setTimeout(function () {
     //       $state.html('Log in');
-    //       $this.removeClass('ok loading');
+    //       $this.removeclassName('ok loading');
     //       working = false;
     //     }, 4000);
     //   }, 3000);
@@ -73,18 +71,18 @@ class Login extends Component {
   render() {
     return (
       <>
-        <div class="wrapper">
-          <form class="login" onSubmit={(e) => this.handleLogin(e)}>
+        <div className="wrapper" style={{height: "100vh"}}>
+          <form className="login" onSubmit={(e) => this.handleLogin(e)}>
             <img src={logo} alt='no logo found' ></img>
             <input type="text" value={this.state.uname} onChange={(e) => this.ChangeValue(e, 'uname')} placeholder="Username" onClick={() => this.setState({ uname: '' })} required />
-            <i class="fa fa-user"></i>
-            <input type="text" value={this.state.pword} onChange={(e) => this.ChangeValue(e, 'pword')} placeholder="Password" onClick={() => this.setState({ pword: '' })} required />
-            <i class="fa fa-key"></i>
-            <a href="">Forgot your password?</a>
+            <i className="fa fa-user"></i>
+            <input type="password" value={this.state.pword} onChange={(e) => this.ChangeValue(e, 'pword')} placeholder="Password" onClick={() => this.setState({ pword: '' })} required />
+            <i className="fa fa-key"></i>
+            {/* <a href="">Forgot your password?</a> */}
 
             <button>
-              {/* <i class="spinner"></i> */}
-              <span class="state">Log in</span>
+              {/* <i className="spinner"></i> */}
+              <span className="state">Log in</span>
             </button>
 
           </form>

@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { render } from "react-dom";
-import _ from "lodash";
-import { Link } from "react-router-dom";
-import { Button } from 'reactstrap';
+// import _ from "lodash";
 import withAuth from './withAuth';
 import axios from 'axios'
 import AuthService from './AuthService';

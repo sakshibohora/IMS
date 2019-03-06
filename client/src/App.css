@@ -7,7 +7,7 @@
 body {
   font-family: "Open Sans", sans-serif;
   height: 100vh;
-  background: url("./index_bkgrnd.jpg");
+  /* background: url("./index_bkgrnd.jpg");  */
   background-repeat: repeat;
 }
 

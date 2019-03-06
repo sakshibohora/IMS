@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Login from './Components/Login'
-import Main from './Components/Main'
 import Home from './Components/Home'
 import Footer from './Components/Footer';
 import './App.css';
 import Admin from './Components/Admin';
+import ViewComponentStatus from './Components/ViewComponentStatus';
 
 class App extends Component {
   render() {
@@ -13,11 +13,13 @@ class App extends Component {
       <>
         <Router>
           <>
-            <Route exact path='/' component={Main} />
-            <Route exact path='/login' component={Login} />
+            {/* <Route exact path='/' component={Main} /> */}
+            <Route exact path='/' component={Login} />
             <Route path='/home' component={Home} />
             <Route path='/admin' component={Admin} />
-            {/* <Redirect from='/*' to='/login' /> */}
+            <Route exact path='/home/viewComponentStatus' component={ViewComponentStatus} />
+            {/* <Redirect from='/admin' to='/home' /> 
+            <Redirect to='/admin' from='/home' />  */}
           </>
         </Router>
         <Footer />

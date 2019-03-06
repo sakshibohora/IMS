@@ -21,28 +21,10 @@ class Home extends Component {
     this.handleLogout = this.handleLogout.bind(this);
     this.Auth = new AuthService();
   }
-
   handleLogout() {
     Auth.logout()
-    this.props.history.replace('/login');
+    this.props.history.replace('/');
   }
-
-  componentDidMount() {
-    // const header = this.Auth.getToken();
-
-    // axios.get('http://localhost:8080/api/users/list', {
-    //   headers: {
-    //     'Authorization': header
-    //   }
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   })
-  }
-
   changeVisibility() {
     this.setState({ toggle: true })
   }
@@ -52,15 +34,15 @@ class Home extends Component {
         <Navbar {...this.props} />
         <div id='wrapper'>
           <Sidebar />
-          <div id="content-wrapper" >
-            <Route path='/home/viewProfile' render={() => (<ViewProfile {...this.props} />)} />
-            <Route path='/home/requestComponent' render={() => (<RequestComponent {...this.props} />)} />
-            <Route path='/home/raiseIssue' render={() => (<RaiseIssue {...this.props} />)} />
-            <Route path='/home/viewComponentStatus' render={() => (<ViewComponentStatus {...this.props} />)} />
-            <Route path='/home/viewIncidentStatus' render={() => (<ViewIncidentStatus {...this.props} />)} />
+          <div id="content-wrapper" style={{ height: "100%" }} >
+            <Route exact path='/home/viewProfile' render={() => (<ViewProfile {...this.props} />)} />
+            <Route exact path='/home/requestComponent' render={() => (<RequestComponent {...this.props} />)} />
+            <Route exact path='/home/raiseIssue' render={() => (<RaiseIssue {...this.props} />)} />
+            <Route exact path='/home/viewComponentStatus' render={() => (<ViewComponentStatus {...this.props} />)} />
+            <Route exact path='/home/viewIncidentStatus' render={() => (<ViewIncidentStatus {...this.props} />)} />
           </div>
         </div>
-        
+
       </>
     )
   }

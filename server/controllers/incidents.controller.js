@@ -68,7 +68,7 @@ exports.getAllIncidents = async function (request, response) {
       limit: limiting,
     });
   } catch (err) {
-    response.status(500).json({
+    response.status(404).json({
       status: false,
       message: 'Unable To List Data.',
       data: err,

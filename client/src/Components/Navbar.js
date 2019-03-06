@@ -12,7 +12,7 @@ class Navbar extends Component {
 
   handleLogout() {
     Auth.logout()
-    this.props.history.replace('/login');
+    this.props.history.replace('/');
   }
 
   render() {

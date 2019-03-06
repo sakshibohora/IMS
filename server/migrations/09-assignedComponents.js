@@ -1,36 +1,42 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Components', {
+    return queryInterface.createTable('AssignedComponents', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      categoryId: {
+      userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Categories',
+          model: 'Users',
           key: 'id',
         },
         onUpdate: 'cascade',
         onDelete: 'cascade',
       },
-      componentName: {
+      componentId: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Components',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
-      status: {
+      assignedBy: {
         allowNull: false,
-        type: Sequelize.BOOLEAN
-      },
-      serialNo: {
-        type: Sequelize.STRING
-      },
-      warrantyDate: {
-        type: Sequelize.DATE
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade',
       },
       createdAt: {
         allowNull: false,
@@ -43,6 +49,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Components');
+    return queryInterface.dropTable('AssignedComponents');
   }
 };

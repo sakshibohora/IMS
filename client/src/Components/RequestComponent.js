@@ -115,45 +115,51 @@ class RequestComponent extends Component {
   render() {
     return (
       <>
-        <form onSubmit={(e) => { this.handleFormSubmit(e) }}>
-          Select Category<br />
-          <ButtonDropdown isOpen={this.state.dropdownOpen1} toggle={this.toggle}>
-            <DropdownToggle caret>{this.state.categoryId}</DropdownToggle>
-            <DropdownMenu>
-              {this.state.cId.map(e => {
-                return (
-                  <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue1(e) }}>{e.id}
-                  </DropdownItem>)
-              })}
-            </DropdownMenu>
-          </ButtonDropdown>
-          <br /><br />
+        <div className="row">
+          <div className="col-md-4"></div>
+          <div className="col-md-4">
+            <form onSubmit={(e) => { this.handleFormSubmit(e) }}>
+              Select Category<br />
+              <ButtonDropdown isOpen={this.state.dropdownOpen1} toggle={this.toggle}>
+                <DropdownToggle caret>{this.state.categoryId}</DropdownToggle>
+                <DropdownMenu>
+                  {this.state.cId.map(e => {
+                    return (
+                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue1(e) }}>{e.id}
+                      </DropdownItem>)
+                  })}
+                </DropdownMenu>
+              </ButtonDropdown>
+              <br /><br />
 
-          Select Component <br />
-          <ButtonDropdown isOpen={this.state.dropdownOpen2} toggle={this.toggle2}>
-            <DropdownToggle caret>{this.state.componentName}</DropdownToggle>
-            <DropdownMenu>
-              {this.state.cName.map(e => {
-                return (
-                  <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue2(e) }}>{e.componentName}
-                  </DropdownItem>)
-              })}
-            </DropdownMenu>
-          </ButtonDropdown>
-          <br /><br />
-          Issue <br />
-          <textarea
-            placeholder="Description goes here..."
-            name="issue"
-            onChange={(e) => { this.changeValue3(e) }}
-          />
-          <br />
-          <input value="Request Send" type="submit" />
-        </form>
-        <button type="button" onClick={() => { this.props.history.replace('/home') }}>Home</button>
-        <Alert color="primary" isOpen={this.state.collapse}>
-          Your request has been sent to Admin!
-     </Alert>
+              Select Component <br />
+              <ButtonDropdown isOpen={this.state.dropdownOpen2} toggle={this.toggle2}>
+                <DropdownToggle caret>{this.state.componentName}</DropdownToggle>
+                <DropdownMenu>
+                  {this.state.cName.map(e => {
+                    return (
+                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue2(e) }}>{e.componentName}
+                      </DropdownItem>)
+                  })}
+                </DropdownMenu>
+              </ButtonDropdown>
+              <br /><br />
+              Issue <br />
+              <textarea
+                placeholder="Description goes here..."
+                name="issue"
+                onChange={(e) => { this.changeValue3(e) }}
+              />
+              <br />
+              {/* <input value="Request Send" type="submit" /> */}
+              <button className="btn btn-outline-dark">Request Send</button>
+            </form>
+            <button className="btn btn-outline-dark" onClick={() => this.props.history.push('/home')}>Home</button>
+            <Alert color="primary" isOpen={this.state.collapse}>
+              Your request has been sent to Admin!
+           </Alert>
+          </div>
+        </div>
       </>
 
     )

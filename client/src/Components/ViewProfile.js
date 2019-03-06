@@ -12,11 +12,17 @@ class ViewProfile extends Component {
       firstName: '',
       lastName: '',
       email: '',
+      contactNo: ''
     }
     this.Auth = new AuthService()
+    this.handleLogout=this.handleLogout.bind(this)
   }
-
+  handleLogout() {
+    this.Auth.logout()
+    this.props.history.replace('/');
+  }
   componentDidMount() {
+
     const header = this.Auth.getToken()
     const id = this.props.user.id
     const data = {
@@ -30,7 +36,8 @@ class ViewProfile extends Component {
       this.setState({
         firstName: response.data.data.firstName,
         lastName: response.data.data.lastName,
-        email: response.data.data.email
+        email: response.data.data.email,
+        contactNo: response.data.data.contactNo,
       })
     }).catch(function (error) {
       console.log(error);
@@ -38,44 +45,30 @@ class ViewProfile extends Component {
   }
   render() {
     return (
-      <div className="row">
-        {/* <form >
-          First Name<br /><input value={this.state.firstName} disabled /><br />
-          Last Name <br /><input value={this.state.lastName} disabled /><br />
-          email <br /><input value={this.state.email} disabled /><br />
-          <input type="button" className="form-submit" onClick={() => this.props.history.push('/home')} value="Home" />
-          <input type='button' value='HomeMe' onClick={() => this.props.history.push('/login')} />
-        </form> */}
-        <div className="col-lg-3"></div>
-        <div className="container col-lg-6">
-          <form>
-            <div class="form-group">
-              <label for="firstnames">First Name</label>
-              <input class="form-control col-4" aria-describedby="emailHelp" value={this.state.firstName} disabled />
+      <div className="container-fluid padding">
+        <div className="row padding">
+          <div className="col-md-4"></div>
+          <div className="col-md-4">
+            <div className="card">
+              <div className="card-body">
+                <h4 className="card-title">{this.state.firstName} {this.state.lastName}</h4>
+                <p className="card-text">
+                                  Email : {this.state.email}
+                 
+                  Contact No: {this.state.contactNo}
+                </p>
+                <button className="btn btn-outline-dark" onClick={() => this.props.history.push('/home')}>Home</button>
+              </div>
+              <input type='button' value='Logout' className="btn btn-danger" onClick={this.handleLogout.bind(this)} />
             </div>
-            <div class="form-group">
-              <label for="firstnames">Last Name</label>
-              <input class="form-control col-4" aria-describedby="emailHelp" value={this.state.lastName} disabled />
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Email</label>
-              <input class="form-control col-4" id="exampleInputPassword1" value={this.state.email} disabled />
-            </div>
-            <div class="form-group">
-              <input type="button" className="form-submit" onClick={() => this.props.history.push('/home')} value="Home" />
-              <input type='button' value='Home Me' onClick={() => this.props.history.push('/login')} />
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+          </div>
         </div>
-        <div className="col-lg-3"></div>
       </div>
+
     )
   }
 }
 export default withAuth(ViewProfile)
-
-
 
 
 

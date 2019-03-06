@@ -11,11 +11,11 @@ require('../config/passport')(passport);
 
 const routes = (app) => {
   app.post('/api/users', user.createNewUsers);
-  app.get('/api/users/list', passport.authenticate('jwt', { session: false }), checkSignIn, user.getAllUsers);
-  app.put('/api/users/:id', passport.authenticate('jwt', { session: false }), checkSignIn, user.updateUsers);
-  app.delete('/api/users/:id', passport.authenticate('jwt', { session: false }), checkSignIn, user.deleteUsers);
+  app.get('/api/users/list', user.getAllUsers);
+  app.put('/api/users/:id', user.updateUsers);
+  app.delete('/api/users/:id', user.deleteUsers);
   app.post('/api/users/getUserDetails', passport.authenticate('jwt', { session: false }), checkSignIn, user.getUserDetails);
-
+  // passport.authenticate('jwt', { session: false }), checkSignIn
   app.post('/api/users/login/', function (req, res) {
     users
       .find({
@@ -36,7 +36,7 @@ const routes = (app) => {
             jwt.verify(token, 'nodeauthsecret', function (err, data) {
               // console.log(err, data);
             })
-            res.json({ success: true, token: 'JWT ' + token, User:user });
+            res.json({ success: true, token: 'JWT ' + token, User: user });
           } else {
             res.status(401).send({ success: false, msg: 'Authentication failed. Wrong password.' });
           }

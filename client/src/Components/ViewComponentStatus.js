@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { render } from "react-dom";
-import _ from "lodash";
-import { Link } from "react-router-dom";
-import { Button } from 'reactstrap';
+// import _ from "lodash";
 import withAuth from './withAuth';
 import axios from 'axios'
 import AuthService from './AuthService';
@@ -22,7 +19,7 @@ class ViewStatus extends Component {
     this.makeData = this.makeData.bind(this);
   }
 
-  makeData(){
+  makeData() {
     const id = this.props.user.id;
     // console.log(id)
     const data = {
@@ -46,14 +43,13 @@ class ViewStatus extends Component {
   }
 
   render() {
-    
+
     return (
       <>
         <ReactTable
           data={this.state.data}
           columns={[
             {
-              Header: "Component Details",
               columns: [
                 {
                   Header: "Component Name",
@@ -62,8 +58,7 @@ class ViewStatus extends Component {
               ]
             },
             {
-              Header: "Info",
-              columns: [
+                columns: [
                 {
                   Header: "issue",
                   accessor: "issue"

@@ -1,8 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './assets/css/sb-admin.css';
+import './assets/css/sb-admin.min.css';
+import './index.css';
+import './assets/vendor/fontawesome-free/css/all.min.css'
+import './assets/vendor/datatables/dataTables.bootstrap4.css'
+// import './assets/vendor/datatables/jquery.dataTables.js'
+// import './assets/vendor/datatables/dataTables.bootstrap4.js'
+import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));

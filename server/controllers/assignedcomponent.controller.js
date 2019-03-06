@@ -1,7 +1,7 @@
 const db = require('../models/index.js');
 
 // eslint-disable-next-line prefer-destructuring
-const components = db.Components;
+// const components = db;
 exports.createNewComponents = async function (req, res) {
   let data;
   try {
@@ -139,8 +139,7 @@ exports.getComponentName = async function (request, response) {
   let data
   try {
     data = await components.findAll({
-      where: { categoryId: request.body.categoryId,
-                status:true },
+      where: { categoryId: request.body.categoryId },
       attributes: ['componentName', 'id']
     });
   } catch (err) {
