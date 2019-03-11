@@ -15,8 +15,6 @@ var logger = require('morgan');
 
 // Load environment variables.
 require('dotenv').config();
-
-const fs = require('fs');
 const app = express();
 
 app.use(logger('dev'));
