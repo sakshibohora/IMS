@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { Route } from "react-router-dom";
 import AuthService from './AuthService';
 import withAuth from './withAuth';
-
 import Navbar from './Navbar';
+import PropTypes from 'prop-types';
 import Sidebar from './Sidebar';
-
 import ViewProfile from './ViewProfile';
 import RequestComponent from './RequestComponent'
 import RaiseIssue from './RaiseIssue';
@@ -25,21 +24,19 @@ class Home extends Component {
     Auth.logout()
     this.props.history.replace('/');
   }
-  changeVisibility() {
-    this.setState({ toggle: true })
-  }
   render() {
+    const { match } = this.props;
     return (
       <>
         <Navbar {...this.props} />
         <div id='wrapper'>
           <Sidebar />
           <div id="content-wrapper" style={{ height: "100%" }} >
-            <Route exact path='/home/viewProfile' render={() => (<ViewProfile {...this.props} />)} />
-            <Route exact path='/home/requestComponent' render={() => (<RequestComponent {...this.props} />)} />
-            <Route exact path='/home/raiseIssue' render={() => (<RaiseIssue {...this.props} />)} />
-            <Route exact path='/home/viewComponentStatus' render={() => (<ViewComponentStatus {...this.props} />)} />
-            <Route exact path='/home/viewIncidentStatus' render={() => (<ViewIncidentStatus {...this.props} />)} />
+            <Route exact path={`${match.url}/viewProfile`} render={props => (<ViewProfile {...props} />)} />
+            <Route exact path={`${match.url}/requestComponent`} render={props => (<RequestComponent {...props} />)} />
+            <Route exact path={`${match.url}/raiseissue`} render={props => (<RaiseIssue {...this.props} />)} />
+            <Route exact path={`${match.url}/viewComponentStatus`}render={props => (<ViewComponentStatus {...props} />)} />
+            <Route exact path={`${match.url}/viewIncidentStatus`} render={props=> (<ViewIncidentStatus {...props} />)} />
           </div>
         </div>
 
@@ -47,5 +44,12 @@ class Home extends Component {
     )
   }
 }
+
+Home.defaultProps = {
+  match: {},
+};
+Home.propTypes = {
+  match: PropTypes.object,
+};
 
 export default withAuth(Home);
