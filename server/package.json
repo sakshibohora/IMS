@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Franklin P. Thaker",
+  "author": "Sakshi Bohora",
   "license": "ISC",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
