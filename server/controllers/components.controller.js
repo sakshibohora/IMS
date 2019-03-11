@@ -32,39 +32,39 @@ exports.getAllComponents = async function (req, res) {
   let data;
 
   // PAGINATION
-  let skipping = req.query.skip;
-  let limiting = req.query.limit;
-  let searching = req.query.search;
-  // eslint-disable-next-line prefer-destructuring
-  const asc = req.query.asc;
-  // eslint-disable-next-line prefer-destructuring
-  let sort = req.query.sort;
-  let x = 'ASC';
-  // eslint-disable-next-line prefer-destructuring
-  const Op = db.Sequelize.Op;
-  if (skipping === null || skipping === undefined || skipping === '') {
-    skipping = 0;
-  }
-  if (limiting === '' || limiting === null || limiting === undefined) {
-    limiting = null;
-  }
-  if (searching === null || searching === undefined) {
-    searching = '';
-  }
-  if (sort === null || sort === undefined || sort === '') {
-    sort = 'id';
-  }
-  if (asc === '0') {
-    x = 'DESC';
-  } else {
-    x = 'ASC';
-  }
+  // let skipping = req.query.skip;
+  // let limiting = req.query.limit;
+  // let searching = req.query.search;
+  // // eslint-disable-next-line prefer-destructuring
+  // const asc = req.query.asc;
+  // // eslint-disable-next-line prefer-destructuring
+  // let sort = req.query.sort;
+  // let x = 'ASC';
+  // // eslint-disable-next-line prefer-destructuring
+  // const Op = db.Sequelize.Op;
+  // if (skipping === null || skipping === undefined || skipping === '') {
+  //   skipping = 0;
+  // }
+  // if (limiting === '' || limiting === null || limiting === undefined) {
+  //   limiting = null;
+  // }
+  // if (searching === null || searching === undefined) {
+  //   searching = '';
+  // }
+  // if (sort === null || sort === undefined || sort === '') {
+  //   sort = 'id';
+  // }
+  // if (asc === '0') {
+  //   x = 'DESC';
+  // } else {
+  //   x = 'ASC';
+  // }
   try {
     data = await components.findAll({
-      where: { componentName: { [Op.iLike]: `${searching}%` } },
-      order: [[sort, x]],
-      offset: skipping,
-      limit: limiting,
+      // where: { componentName: { [Op.iLike]: `${searching}%` } },
+      // order: [[sort, x]],
+      // offset: skipping,
+      // limit: limiting,
     });
   } catch (err) {
     res.status(500).json({
