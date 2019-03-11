@@ -3,6 +3,7 @@ import AuthService from './AuthService';
 import { Alert } from 'reactstrap';
 import logo from '../images/bacancy-technology2.png'
 import '../assets/css/Login.css'
+
 class Login extends Component {
 
   constructor(props) {
@@ -20,8 +21,13 @@ class Login extends Component {
 
 
   componentWillMount() {
-    if (this.Auth.loggedIn())
-      this.props.history.replace('/home');
+    if (this.Auth.loggedIn()) {
+      if (false)
+        this.props.history.replace('/home');
+      else
+        this.props.history.replace('/admin')
+
+    }
   }
 
   handleLogin(e) {
@@ -71,7 +77,7 @@ class Login extends Component {
   render() {
     return (
       <>
-        <div className="wrapper" style={{height: "100vh"}}>
+        <div className="wrapper" style={{ height: "100vh" }}>
           <form className="login" onSubmit={(e) => this.handleLogin(e)}>
             <img src={logo} alt='no logo found' ></img>
             <input type="text" value={this.state.uname} onChange={(e) => this.ChangeValue(e, 'uname')} placeholder="Username" onClick={() => this.setState({ uname: '' })} required />
