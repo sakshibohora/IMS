@@ -15,7 +15,7 @@ class ViewProfile extends Component {
       contactNo: ''
     }
     this.Auth = new AuthService()
-    this.handleLogout=this.handleLogout.bind(this)
+    this.handleLogout = this.handleLogout.bind(this)
   }
   handleLogout() {
     this.Auth.logout()
@@ -53,8 +53,8 @@ class ViewProfile extends Component {
               <div className="card-body">
                 <h4 className="card-title">{this.state.firstName} {this.state.lastName}</h4>
                 <p className="card-text">
-                                  Email : {this.state.email}
-                 
+                  Email : {this.state.email}
+
                   Contact No: {this.state.contactNo}
                 </p>
                 <button className="btn btn-outline-dark" onClick={() => this.props.history.push('/home')}>Home</button>
