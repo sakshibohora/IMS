@@ -1,54 +1,69 @@
 import React, { Component } from 'react';
-import { Route} from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import AuthService from './AuthService';
 import withAuth from './withAuth';
-
+import PropTypes from 'prop-types';
 import Navbar from './Navbar';
-import Sidebar from './Sidebar';
-
 import ViewProfile from './ViewProfile';
-import RequestComponent from './RequestComponent'
-import RaiseIssue from './RaiseIssue';
-import ViewComponentStatus from './ViewComponentStatus';
-
+import SidebarAdmin from './sidebarAdmin';
+import A0 from './0'
+import A1 from './1'
 const Auth = new AuthService();
 
 class Admin extends Component {
-
   constructor(props) {
-    super(props);
-    this.handleLogout = this.handleLogout.bind(this);
+    super(props)
+    this.state = {
+
+    }
     this.Auth = new AuthService();
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   handleLogout() {
     Auth.logout()
-    this.props.history.replace('/login');
+    this.props.history.replace('/');
   }
 
-  componentDidMount() {
-   }
-
-  changeVisibility() {
-    this.setState({ toggle: true })
-  }
   render() {
+    const { match } = this.props
     return (
       <>
         <Navbar {...this.props} />
         <div id='wrapper'>
-          <Sidebar />
+          <SidebarAdmin />
           <div id="content-wrapper" >
-            <Route path='/home/viewProfile' render={() => (<ViewProfile {...this.props} />)} />
-            <Route path='/home/requestComponent' render={() => (<RequestComponent {...this.props} />)} />
-            <Route path='/home/raiseIssue' render={() => (<RaiseIssue {...this.props} />)} />
-            <Route path='/home/viewComponentStatus' render={() => (<ViewComponentStatus {...this.props} />)} />
+            <Route exact path={`${match.url}/viewProfile`} render={() =>
+              <ViewProfile {...this.props}
+              />
+            }
+            />
+            <Route path={`${match.url}/a0`} render={(props) =>
+              <A0
+                {...props}
+              />
+            }
+            />
+            <Route path={`${match.url}/a1`} render={(props) =>
+              <A1
+                {...props}
+              />
+            }
+            />
+            {/* <Redirect to={`${match.url}/a0/listuser`} from={`${match.url}/a0`} /> */}
           </div>
         </div>
-
       </>
-    )
+    );
   }
 }
 
+Admin.defaultProps = {
+  match: {},
+};
+Admin.propTypes = {
+  match: PropTypes.object,
+};
 export default withAuth(Admin);
+
+
