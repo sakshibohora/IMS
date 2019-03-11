@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import withAuth from './withAuth';
 class Sidebar extends Component {
   render() {
-
     return (
       <>
         <ul className="sidebar navbar-nav">
@@ -36,9 +35,7 @@ class Sidebar extends Component {
               <label className="dropdown-item">Categories</label>
               <label className="dropdown-item">Invoices</label>
               <label className="dropdown-item"><Link to="/users">Users</Link></label>
-
             </div>
-
           </li>
         </ul>
       </>
