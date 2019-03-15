@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Route } from "react-router-dom";
 import AuthService from './AuthService';
-import withAuth from './withAuth';
 import PropTypes from 'prop-types';
 import ListUser from './listuser';
 import AddUser from './Adduser'
+import AssignComponent from './AssignComponent'
 
 let formData = {
   username: '',
@@ -46,7 +46,6 @@ class a0 extends Component {
     this.setState({ flag: false, formData: { ...formData }, id: '' })
   }
   editData(element) {
-    // console.log(element.username)
     const formData1 = {
       username: element.username,
       password: element.password,
@@ -71,27 +70,37 @@ class a0 extends Component {
     const { match } = this.props
     return (
       <>
-            <Route path={`${match.url}/listuser`} render={(props) =>
-              <ListUser
-                {...props}
-                handleSearch={this.handleSearch}
-                {...this.state}
-                updateData={this.updateData}
-                editData={this.editData}
-              />
-            }
-            />
+        <Route path={`${match.url}/listuser`} render={(props) =>
+          <ListUser
+            {...props}
+            handleSearch={this.handleSearch}
+            {...this.state}
+            updateData={this.updateData}
+            editData={this.editData}
+          />
+        }
+        />
 
-            <Route path={`${match.url}/adduser`} render={(props) =>
-              <AddUser
-                {...props}
-                {...this.state}
-                updateState={this.updateState}
-                updateformData={this.updateformData}
-                handleChange={this.handleChange}
-              />
-            }
-            />
+        <Route path={`${match.url}/adduser`} render={(props) =>
+          <AddUser
+            {...props}
+            {...this.state}
+            updateState={this.updateState}
+            updateformData={this.updateformData}
+            handleChange={this.handleChange}
+          />
+        }
+        />
+        <Route path={`${match.url}/assigncomponent`} render={(props) =>
+          <AssignComponent
+            {...props}
+            {...this.state}
+            updateState={this.updateState}
+            updateformData={this.updateformData}
+            handleChange={this.handleChange}
+          />
+        }
+        />
       </>
     );
   }
@@ -103,4 +112,4 @@ a0.defaultProps = {
 a0.propTypes = {
   match: PropTypes.object,
 };
-export default withAuth(a0);
+export default a0;

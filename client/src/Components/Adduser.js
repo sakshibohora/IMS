@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
-import withAuth from './withAuth';
 import axios from 'axios'
 import AuthService from './AuthService';
 class AddUser extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-
-    }
     this.Auth = new AuthService()
     this.insertData = this.insertData.bind(this)
   }
@@ -19,7 +15,7 @@ class AddUser extends Component {
         .then((res) => {
           console.log(res)
           this.props.updateState()
-          this.props.history.push('/admin/a0/listuser');
+          this.props.history.push('/admin/adminhome/a0/listuser');
         }).catch((err) => {
           console.log(err)
         })
@@ -28,43 +24,17 @@ class AddUser extends Component {
         .then((res) => {
           console.log(res)
           this.props.updateformData()
-          this.props.history.push('/admin/a0/listuser');
+          this.props.history.push('/admin/adminhome/a0/listuser');
         }).catch((err) => {
           console.log(err)
         })
     }
   }
 
-  // handleFormSubmit(e) {
-  //   e.preventDefault()
-  //   const header = this.Auth.getToken();
-  //   const data = {
-  //     username: this.state.username,
-  //     password: this.state.password,
-  //     firstName: this.state.firstName,
-  //     lastName: this.state.lastName,
-  //     email: this.state.email,
-  //     contactNo: this.state.contactNo,
-  //     role: this.state.role,
-  //     status: this.state.status,
-
-  //   }
-  //   axios.post('http://localhost:8080/api/users', data, {
-  //     headers: {
-  //       'Authorization': header
-  //     },
-  //   }).then((response) => {
-  //     console.log(response);
-  //   })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     })
-  // }
-
   render() {
     return (
       <>
-        <form onSubmit={(e) => { this.insertData(e) }}>
+        <form  onSubmit={(e) => { this.insertData(e) }}>
           <div className="row">
             <div className="col-5" style={{ margin: "10px" }}>
               <div className="form-group">
@@ -119,10 +89,10 @@ class AddUser extends Component {
               </div>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary btn-lg" style={{ margin: "10px" }}>Submit</button>
+          <button type="submit" className="btn btn-lg sg-submit-button" style={{ margin: "10px" }}>Submit</button>
         </form>
       </>
     )
   }
 }
-export default withAuth(AddUser)
+export default AddUser

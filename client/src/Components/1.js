@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import { Route } from "react-router-dom";
 import AuthService from './AuthService';
-import withAuth from './withAuth';
 import PropTypes from 'prop-types';
 import ListComponent from './listcomponent';
 import AddComponent from './AddComponent'
 
 let formData = {
-  categoryid: '',
-  componentname: '',
-  serialno: '',
-  warrantydate: '',
+  categoryId: '',
+  componentName: '',
+  serialNo: '',
+  warrantyDate: '',
   status: '',
 }
 class a1 extends Component {
@@ -45,10 +44,10 @@ class a1 extends Component {
   editData(element) {
     console.log(element)
     const formData1 = {
-      categoryid: element.categoryid,
-      componentname: element.componentname,
-      serialno: element.serialno,
-      warrantydate: element.warrantydate,
+      categoryId: element.categoryId,
+      componentName: element.componentName,
+      serialNo: element.serialNo,
+      warrantyDate: element.warrantyDate,
       status: element.status,
     }
     this.setState({ formData: formData1, flag: true, id: element.id })
@@ -96,4 +95,4 @@ a1.defaultProps = {
 a1.propTypes = {
   match: PropTypes.object,
 };
-export default withAuth(a1);
+export default a1;

@@ -9,6 +9,7 @@ export default class AuthService {
     this.fetch = this.fetch.bind(this) // React binding stuff
     this.login = this.login.bind(this)
     this.getProfile = this.getProfile.bind(this)
+    this.getRole = this.getRole.bind(this);
   }
 
   login(username, password) {
@@ -20,8 +21,9 @@ export default class AuthService {
         password
       })
     }).then(res => {
-
+      console.log(res)
       this.setToken(res.token) // Setting the token in localStorage
+      this.setRole(res.User.role)
       return Promise.resolve(res);
     })
   }
@@ -55,7 +57,16 @@ export default class AuthService {
     // Retrieves the user token from localStorage
     return localStorage.getItem('id_token')
   }
+  setRole(role) {
+    // Saves user token to localStorage
+    localStorage.setItem('role', role)
+  }
 
+  getRole() {
+    // Saves user token to localStorage
+    let isTrueSet = (localStorage.getItem('role')) === 'true';
+    return isTrueSet
+  }
   logout() {
     // Clear user token and profile data from localStorage
     localStorage.removeItem('id_token');

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Login from './Components/Login'
-import Home from './Components/Home'
+import UserHome from './Components/UserHome'
 import Footer from './Components/Footer';
 import './App.css';
-import Admin from './Components/Admin';
+import AdminHome from './Components/AdminHome';
 class App extends Component {
   render() {
     return (
@@ -12,8 +12,9 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path='/' component={Login} />
-            <Route path='/home' render={props => <Home {...props} />} />
-            <Route path='/admin' render={props => <Admin {...props} />} />
+            <Route path='/user/userhome' render={props => <UserHome {...props} />} />
+            <Route path='/admin/adminhome' render={props => <AdminHome {...props} />} />
+            <Redirect from='/*' to='/' />
           </Switch>
         </Router>
         <Footer />
@@ -21,6 +22,4 @@ class App extends Component {
     );
   }
 };
-
-
 export default App;
