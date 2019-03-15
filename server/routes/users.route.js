@@ -11,7 +11,9 @@ require('../config/passport')(passport);
 
 const routes = (app) => {
   app.post('/api/users', user.createNewUsers);
+  app.get('/api/users/find/:id',user.findUser)
   app.get('/api/users/list', user.getAllUsers);
+  app.get('/api/users/name', user.findUserName);
   app.put('/api/users/edit:id', user.updateUsers);
   app.delete('/api/users/delete/:id', user.deleteUsers);
   app.post('/api/users/getUserDetails', passport.authenticate('jwt', { session: false }), checkSignIn, user.getUserDetails);
