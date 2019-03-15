@@ -62,10 +62,10 @@ exports.getAllIncidents = async function (request, response) {
   }
   try {
     data = await incidents.findAll({
-      where: { userId: req.body.userId },
-      order: [[sort, x]],
-      offset: skipping,
-      limit: limiting,
+      // where: { userId: req.body.userId },
+      // order: [[sort, x]],
+      // offset: skipping,
+      // limit: limiting,
     });
   } catch (err) {
     response.status(404).json({
@@ -87,6 +87,31 @@ exports.getAllIncidents = async function (request, response) {
     });
   }
 };
+
+exports.getIncident = async function (request, response) {
+  let data;
+  try {
+    data = await incidents.find({
+      // where: { incidentBy: request.params.id },
+    })
+  } catch (err) {
+    response.status(500).json({
+      status: false,
+      message: 'unable to find data',
+      data: err,
+    })
+  }
+  if (data !== undefined) {
+    response.status(200).json({
+      status: true,
+      message: 'All Data fetched successfully',
+      data,
+    });
+  }
+}
+
+
+
 exports.updateIncidents = async function (request, response) {
   let data;
   try {
