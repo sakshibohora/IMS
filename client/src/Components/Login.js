@@ -22,28 +22,27 @@ class Login extends Component {
 
   componentWillMount() {
     if (this.Auth.loggedIn()) {
-      if (false)
-        this.props.history.replace('/home');
+      if (this.Auth.getRole())
+        this.props.history.replace('/admin/adminhome');
       else
-        this.props.history.replace('/admin')
-
+        this.props.history.replace('/user/userhome');
     }
   }
 
   handleLogin(e) {
     e.preventDefault();
-
     this.Auth.login(this.state.uname, this.state.pword)
       .then(res => {
-        let role = res.User.role
-        if (!role)
-          this.props.history.replace('/home');
+        let role = res.User.role;
+        if (role)
+          this.props.history.replace('/admin/adminhome');
         else
-          this.props.history.replace('/admin')
+          this.props.history.replace('/user/userhome');
       })
       .catch(err => {
         if (this.state.collapse === false) this.setState({ collapse: !this.state.collapse });
       })
+
   }
 
   ChangeValue(e, field) {
@@ -54,25 +53,6 @@ class Login extends Component {
 
 
   componentDidMount() {
-    // var working = false;
-    // $('.login').on('submit', function (e) {
-    //   e.preventDefault();
-    //   if (working) return;
-    //   working = true;
-    //   var $this = $(this),
-    //     $state = $this.find('button > .state');
-    //   $this.addclassName('loading');
-    //   $state.html('Authenticating');
-    //   setTimeout(function () {
-    //     $this.addclassName('ok');
-    //     $state.html('Welcome back!');
-    //     setTimeout(function () {
-    //       $state.html('Log in');
-    //       $this.removeclassName('ok loading');
-    //       working = false;
-    //     }, 4000);
-    //   }, 3000);
-    // });
   }
   render() {
     return (
@@ -84,8 +64,6 @@ class Login extends Component {
             <i className="fa fa-user"></i>
             <input type="password" value={this.state.pword} onChange={(e) => this.ChangeValue(e, 'pword')} placeholder="Password" onClick={() => this.setState({ pword: '' })} required />
             <i className="fa fa-key"></i>
-            {/* <a href="">Forgot your password?</a> */}
-
             <button>
               {/* <i className="spinner"></i> */}
               <span className="state">Log in</span>
@@ -103,3 +81,6 @@ class Login extends Component {
 }
 
 export default Login;
+
+
+
