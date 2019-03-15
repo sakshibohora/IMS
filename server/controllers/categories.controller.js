@@ -6,7 +6,7 @@ exports.createNewCategories = async function (req, res) {
   let data;
   try {
     data = await categories.create({
-      categoryType: req.body.categoryType
+      categoryType: req.body.categoryname
     });
   } catch (err) {
     res.status(500).json({
@@ -57,10 +57,10 @@ exports.getAllCategories = async function (req, res) {
   }
   try {
     data = await categories.findAll({
-      where: { categoryType: { [Op.iLike]: `${searching}%` } },
-      order: [[sort, x]],
-      offset: skipping,
-      limit: limiting,
+      // where: { categoryType: { [Op.iLike]: `${searching}%` } },
+      // order: [[sort, x]],
+      // offset: skipping,
+      // limit: limiting,
     });
   } catch (err) {
     res.status(500).json({
