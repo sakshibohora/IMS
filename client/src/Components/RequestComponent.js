@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import AuthService from './AuthService';
-import withAuth from './withAuth';
 import { Alert } from 'reactstrap';
 import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 
@@ -116,10 +115,10 @@ class RequestComponent extends Component {
     return (
       <>
         <div className="row">
-          <div className="col-md-4"></div>
-          <div className="col-md-4">
+          <div className="col-3"></div>
+          <div className="col-4">
             <form onSubmit={(e) => { this.handleFormSubmit(e) }}>
-              Select Category<br />
+              <label htmlFor="selectcat">Select Category</label>
               <ButtonDropdown isOpen={this.state.dropdownOpen1} toggle={this.toggle}>
                 <DropdownToggle caret>{this.state.categoryId}</DropdownToggle>
                 <DropdownMenu>
@@ -132,7 +131,7 @@ class RequestComponent extends Component {
               </ButtonDropdown>
               <br /><br />
 
-              Select Component <br />
+              <label htmlFor="selectcomp">Select Component</label>
               <ButtonDropdown isOpen={this.state.dropdownOpen2} toggle={this.toggle2}>
                 <DropdownToggle caret>{this.state.componentName}</DropdownToggle>
                 <DropdownMenu>
@@ -144,17 +143,16 @@ class RequestComponent extends Component {
                 </DropdownMenu>
               </ButtonDropdown>
               <br /><br />
-              Issue <br />
+              <label htmlFor="issue">Issue</label>
               <textarea
                 placeholder="Description goes here..."
                 name="issue"
                 onChange={(e) => { this.changeValue3(e) }}
               />
               <br />
-              {/* <input value="Request Send" type="submit" /> */}
-              <button className="btn btn-outline-dark">Request Send</button>
+              <button type="submit" class="btn btn-lg sg-submit-button">Send</button>
             </form>
-            <button className="btn btn-outline-dark" onClick={() => this.props.history.push('/home')}>Home</button>
+            {/* <button className="btn btn-outline-dark" onClick={() => this.props.history.push('/user/userhome')}>Home</button> */}
             <Alert color="primary" isOpen={this.state.collapse}>
               Your request has been sent to Admin!
            </Alert>
@@ -165,4 +163,4 @@ class RequestComponent extends Component {
     )
   }
 }
-export default withAuth(RequestComponent)
+export default RequestComponent
