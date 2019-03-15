@@ -10,12 +10,18 @@ export default function withAuth(AuthComponent) {
         user: null
       }
     }
-
     componentWillMount() {
       if (!Auth.loggedIn()) {
         this.props.history.replace('/')
       }
       else {
+        if (Auth.getRole()) {
+          this.props.history.replace('/admin/adminhome')
+        }
+        else {
+          console.log("Going from withauth to home")
+          this.props.history.replace('/user/userhome')
+        }
         try {
           const profile = Auth.getProfile()
           this.setState({
