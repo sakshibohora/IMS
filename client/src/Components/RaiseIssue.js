@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
-import withAuth from './withAuth';
 import '../App.css'
 
 class RaiseIssue extends Component {
@@ -51,37 +50,6 @@ class RaiseIssue extends Component {
   }
   render() {
     return (
-      // <div>
-      //   <form onSubmit={(e) => { this.handleFormSubmit(e) }}>
-      //     Issue title  <br /><input
-      //       placeholder="Title goes here..."
-      //       name="title"
-      //       type="text"
-      //       value={this.state.title}
-      //       onChange={(e) => { this.handleChange(e, 'title') }}
-      //       onClick={()=>{this.setState({collapse:false})}}
-      //       required
-      //     />
-      //     <br />
-      //     Issue description <br />
-      //     <textarea
-      //       placeholder="Description goes here..."
-      //       name="description"
-      //       value={this.state.description}
-      //       onChange={(e) => { this.handleChange(e, 'description') }}
-      //       onClick={()=>{this.setState({collapse:false})}}
-      //     /><br />
-      //     <input
-      //       className="form-submit"
-      //       value="Raise Issue"
-      //       type="submit"
-      //     />
-      //   </form>
-      //   <button type="button" className="form-submit" onClick={this.handleClick.bind(this)}>Home</button>
-      //   <Alert color="danger" isOpen={this.state.collapse}>
-      //    Issue request has been sent to Admin!
-      //   </Alert>
-      // </div>
       <div className="row">
         <div className="col-lg-3"></div>
         <div className="container col-lg-9">
@@ -98,16 +66,11 @@ class RaiseIssue extends Component {
                 onChange={(e) => { this.handleChange(e, 'description') }}
                 onClick={() => { this.setState({ collapse: false }) }} />
             </div>
-            {/* <div class="form-group">
-              <input type="button" className="form-submit" onClick={() => this.props.history.push('/home')} value="Home" />
-              <input type='button' value='Home Me' onClick={() => this.props.history.push('/login')} />
-            </div> */}
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-md sg-submit-button">Submit</button>
           </form>
         </div>
-        {/* <div className="col-lg-3"></div> */}
       </div>
     )
   }
 }
-export default withAuth(RaiseIssue);
+export default RaiseIssue;
