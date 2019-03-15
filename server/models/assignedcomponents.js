@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const AssignedComponents = sequelize.define('AssignedComponents', {
     userId: DataTypes.INTEGER,
+    categoryId:DataTypes.INTEGER,
     componentId: DataTypes.INTEGER,
     assignedBy: DataTypes.INTEGER,
   }, {});
