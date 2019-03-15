@@ -93,6 +93,52 @@ exports.getAllUsers = async function (req, res) {
     .catch((error) => { res.status(400).send(error); });
 };
 
+//find single user
+exports.findUser = async function (request, response) {
+  let data;
+  try {
+    data = await users.find({
+      where: { id: request.params.id }
+    })
+  } catch (err) {
+    response.status(500).json({
+      status: false,
+      message: 'unable to fetch data',
+      data: err,
+    })
+  }
+  if (data !== undefined) {
+    response.status(200).json({
+      status: true,
+      message: 'data fetched successfully',
+      data,
+    })
+  }
+}
+//find username and id
+exports.findUserName = async function (request, response) {
+  let data;
+  try {
+    data = await users.findAll({
+      attributes:['firstName','id']
+    })
+  } catch (err) {
+    response.status(500).json({
+      status: false,
+      message: 'unable to fetch data',
+      data: err,
+    })
+  }
+  if (data !== undefined) {
+    response.status(200).json({
+      status: true,
+      message: 'data fetched successfully',
+      data,
+    })
+  }
+}
+
+//update user
 exports.updateUsers = async function (req, res) {
   let data;
   try {
@@ -122,7 +168,7 @@ exports.updateUsers = async function (req, res) {
     });
   }
 };
-
+//delete user
 exports.deleteUsers = async function (req, res) {
   let data;
   try {
@@ -143,47 +189,13 @@ exports.deleteUsers = async function (req, res) {
   }
 };
 
-exports.login = async function (request, response) {
-  uname = request.body.userName
-  pword = request.body.passWord
-  let data;
-  try {
-    data = await users.findOne({
-      where: {
-        userName: uname,
-        passWord: pword,
-      }
-    });
-  } catch (err) {
-    response.status(500).json({
-      status: false,
-      message: 'Unable To get Data.',
-      data: err,
-    });
-  }
-  if (data === null) {
-    response.status(200).json({
-      status: false,
-      message: "authentication failed",
-    })
-  }
-  else {
-    response.status(200).json({
-      status: true,
-      message: 'Logged In',
-      data,
-    });
-  }
-
-};
-
 exports.getUserDetails = async function (request, response) {
   let data;
 
   try {
     data = await users.find({
       where: { id: request.body.id },
-      attributes: ['username', 'password', 'firstName', 'lastName', 'email', 'contactNo']
+      attributes: ['username', 'password', 'firstName', 'lastName', 'email', 'contactNo', 'role', 'status']
     });
   } catch (err) {
     response.status(500).json({
@@ -200,3 +212,42 @@ exports.getUserDetails = async function (request, response) {
     });
   }
 };
+
+
+
+
+
+// exports.login = async function (request, response) {
+//   uname = request.body.userName
+//   pword = request.body.passWord
+//   let data;
+//   try {
+//     data = await users.findOne({
+//       where: {
+//         userName: uname,
+//         passWord: pword,
+//       }
+//     });
+//   } catch (err) {
+//     response.status(500).json({
+//       status: false,
+//       message: 'Unable To get Data.',
+//       data: err,
+//     });
+//   }
+//   if (data === null) {
+//     response.status(200).json({
+//       status: false,
+//       message: "authentication failed",
+//     })
+//   }
+//   else {
+//     response.status(200).json({
+//       status: true,
+//       message: 'Logged In',
+//       data,
+//     });
+//   }
+
+// };
+
