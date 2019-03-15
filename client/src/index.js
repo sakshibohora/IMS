@@ -6,6 +6,10 @@ import './assets/css/sb-admin.min.css';
 import './index.css';
 import './assets/vendor/fontawesome-free/css/all.min.css'
 import './assets/vendor/datatables/dataTables.bootstrap4.css'
+import './assets/vendor/datatables/dataTables.bootstrap4.css'
+import './assets/css/sidebar.css';
+
+
 // import './assets/vendor/datatables/jquery.dataTables.js'
 // import './assets/vendor/datatables/dataTables.bootstrap4.js'
 import App from './App';
