@@ -24,7 +24,6 @@ exports.createNewInvoicers = async function (req, res) {
     });
   }
 };
-
 exports.getAllInvoicers = async function (req, res) {
   let data;
 
