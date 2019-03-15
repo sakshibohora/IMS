@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import withAuth from './withAuth';
 import AuthService from './AuthService';
 import axios from 'axios'
 import '../App.css'
@@ -25,6 +24,7 @@ class ViewProfile extends Component {
 
     const header = this.Auth.getToken()
     const id = this.props.user.id
+    console.log(id)
     const data = {
       id: id
     }
@@ -45,30 +45,30 @@ class ViewProfile extends Component {
   }
   render() {
     return (
-      <div className="container-fluid padding">
-        <div className="row padding">
-          <div className="col-md-4"></div>
-          <div className="col-md-4">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">{this.state.firstName} {this.state.lastName}</h4>
-                <p className="card-text">
-                  Email : {this.state.email}
-
-                  Contact No: {this.state.contactNo}
-                </p>
-                <button className="btn btn-outline-dark" onClick={() => this.props.history.push('/home')}>Home</button>
+      <>
+        <div className="container-fluid padding">
+          <div className="row padding">
+            <div className="col-md-4"></div>
+            <div className="col-md-4">
+              <div className="card">
+                <div className="card-body">
+                  <h4 className="card-title">{this.state.firstName} {this.state.lastName}</h4>
+                  <p className="card-text">
+                    Email : {this.state.email}
+                    <br />
+                    Contact No: {this.state.contactNo}
+                  </p>
+                  <button className="btn btn-lg sg-submit-button" value='Logout' style={{ borderRadius: "5px" }} onClick={this.handleLogout.bind(this)}>Logout</button>
+                </div>
               </div>
-              <input type='button' value='Logout' className="btn btn-danger" onClick={this.handleLogout.bind(this)} />
             </div>
           </div>
         </div>
-      </div>
-
+      </>
     )
   }
 }
-export default withAuth(ViewProfile)
+export default ViewProfile
 
 
 
