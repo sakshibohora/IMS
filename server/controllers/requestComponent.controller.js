@@ -197,3 +197,26 @@ exports.getRequestedComponentByUser = async function (req, res) {
     });
   }
 };
+
+
+exports.getComponent = async function (request, response) {
+  let data;
+  try {
+    data = await reqcomponents.find({
+      //  where: { id: request.params.id },
+    })
+  } catch (err) {
+    response.status(500).json({
+      status: false,
+      message: 'unable to find data',
+      data: err,
+    })
+  }
+  if (data !== undefined) {
+    response.status(200).json({
+      status: true,
+      message: 'All Data fetched successfully',
+      data,
+    });
+  }
+}
