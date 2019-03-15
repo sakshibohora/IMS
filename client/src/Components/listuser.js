@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 // import _ from "lodash";
-import withAuth from './withAuth';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import AuthService from './AuthService';
-
+import { Button } from 'reactstrap'
+import '../assets/css/reactTable.css'
 // Import React Table
 import ReactTable from "react-table";
 import "react-table/react-table.css";
@@ -62,8 +62,6 @@ class ListUser extends Component {
 
     return (
       <>
-        {/* {console.log('hexa', this.props.data)} */}
-
         <ReactTable
           data={this.props.data}
           columns={[
@@ -87,7 +85,8 @@ class ListUser extends Component {
                 },
                 {
                   Header: "Role",
-                  accessor: "role"
+                  id: "role",
+                  accessor: d => String(d.role)
                 },
                 {
                   Header: "Contact No",
@@ -95,18 +94,32 @@ class ListUser extends Component {
                 },
                 {
                   Header: "Status",
-                  accessor: 'status'.toString()
+                  id: "status",
+                  accessor: d => String(d.status)
                 }
               ]
             },
             {
               Header: '',
-              Cell: row => (
-                <>
-                  <Link to='/admin/a0/adduser'><button onClick={() => { this.props.editData(row.original) }}>EDIT</button></Link>
-                  {<button onClick={() => { this.deleteData(row.original.id) }}>DELETE</button>}
-                </>
-              )
+              Cell:
+                row => (
+                  <>
+                    <Link to='/admin/adminhome/a0/adduser'>
+                      <button onClick={() => { this.props.editData(row.original) }}>
+                        <i className='fas'>&#xf044;</i>
+                      </button>
+                    </Link>
+                    {
+                      <button onClick={() => { this.deleteData(row.original.id) }}>
+                        <i className='fas'>&#xf1f8;</i>
+                      </button>
+                    }
+                    {<Link to={`/admin/adminhome/assigncomponent/${row.original.id}`} >
+                      <Button color='primary'>Assign Component
+                    </Button>
+                    </Link>}
+                  </>
+                )
             }
           ]}
           defaultPageSize={10}
@@ -117,35 +130,6 @@ class ListUser extends Component {
     )
   }
 }
-export default withAuth(ListUser)
+export default ListUser
 
 
-{/* <table>
-          <thead>
-            <tr>
-              <th>ProductName</th>
-              <th>ProductId</th>
-              <th>Prize</th>
-              <th>Quantity</th>
-              <th>Total</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.props.data.map(element =>
-              <tr key={element.id}>
-                <td>{element.username}</td>
-                <td>{element.password}</td>
-                <td>{element.firstName}</td>
-                <td>{element.lastName}</td>
-                <td>{element.email}</td>
-                <td>{element.contactNo}</td>
-                <td>{element.role}</td>
-                <td>{element.status}</td>
-                <td><Link to='/admin/adduser'><button  onClick={() => { this.props.editData(element) }}>EDIT</button></Link></td>
-                <td><button onClick={() => { this.deleteData(element.id) }}>DELETE</button></td>
-              </tr>
-            )}
-          </tbody>
-        </table> */}
