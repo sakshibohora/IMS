@@ -1,16 +1,14 @@
 const db = require('../models/index.js');
-
 // eslint-disable-next-line prefer-destructuring
-// const components = db;
-exports.createNewComponents = async function (req, res) {
+const assignComponent=db.AssignedComponents
+exports.assignComponent = async function (req, res) {
   let data;
   try {
-    data = await components.create({
+    data = await assignComponent.create({
+      userId: req.body.userId,
       categoryId: req.body.categoryId,
-      componentName: req.body.componentName,
-      status: req.body.status,
-      serialNo: req.body.serialNo,
-      warrantyDate: req.body.warrantyDate,
+      componentId: req.body.componentId,
+      assignedBy: req.body.assignedBy,
     });
   } catch (err) {
     res.status(500).json({
@@ -28,7 +26,7 @@ exports.createNewComponents = async function (req, res) {
   }
 };
 
-exports.getAllComponents = async function (req, res) {
+exports.getAllAssignedComponent = async function (req, res) {
   let data;
 
   // PAGINATION
@@ -60,8 +58,8 @@ exports.getAllComponents = async function (req, res) {
     x = 'ASC';
   }
   try {
-    data = await components.findAll({
-      where: { componentName: { [Op.iLike]: `${searching}%` } },
+    data = await assignComponent.findAll({
+      // where: { componentId: req.body.componentId },
       order: [[sort, x]],
       offset: skipping,
       limit: limiting,
@@ -87,15 +85,14 @@ exports.getAllComponents = async function (req, res) {
   }
 };
 
-exports.updateComponents = async function (req, res) {
+exports.updateAssignedComponent = async function (req, res) {
   let data;
   try {
-    data = await components.update({
+    data = await assignComponent.update({
+      userId: req.body.userId,
       categoryId: req.body.categoryId,
-      componentName: req.body.componentName,
-      status: req.body.status,
-      serialNo: req.body.serialNo,
-      warrantyDate: req.body.warrantyDate,
+      componentId: req.body.componentId,
+      assignedBy: req.body.assignedBy,
     },
       { where: { id: req.params.id } });
   } catch (err) {
@@ -112,12 +109,12 @@ exports.updateComponents = async function (req, res) {
       data,
     });
   }
-};
+}
 
 exports.deleteComponents = async function (req, res) {
   let data;
   try {
-    data = await components.destroy({ where: { id: req.params.id } });
+    data = await assignComponent.destroy({ where: { id: req.params.id } });
   } catch (err) {
     res.status(500).json({
       status: false,
@@ -131,29 +128,5 @@ exports.deleteComponents = async function (req, res) {
       message: 'Deleted Successfully',
       data,
     });
-  }
-};
-
-
-exports.getComponentName = async function (request, response) {
-  let data
-  try {
-    data = await components.findAll({
-      where: { categoryId: request.body.categoryId },
-      attributes: ['componentName', 'id']
-    });
-  } catch (err) {
-    response.status(500).json({
-      status: false,
-      message: 'unable to fetch data',
-      data: err,
-    })
-  }
-  if (data) {
-    response.status(200).json({
-      status: true,
-      message: 'fetched successfully',
-      data: data,
-    })
   }
 }
