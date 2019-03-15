@@ -1,49 +1,40 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import withAuth from './withAuth';
+
 class Sidebar extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false
+    }
+  }
+  openNav() {
+    this.setState({ isOpen: !this.state.isOpen })
+  }
+
+  closeNav() {
+    this.setState({ isOpen: false })
+  }
   render() {
     return (
       <>
-        <ul className="sidebar navbar-nav">
-          <li className="nav-item active">
-            <Link to='/home/viewProfile' className="nav-link">
-              <i className="fas fa-fw fa-tachometer-alt"></i>
-              <span>View Profile</span>
-            </Link>
-          </li>
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              <i className="fas fa-fw fa-folder"></i>
-              <span>Pages</span>
-            </a>
-            <div className="dropdown-menu" aria-labelledby="pagesDropdown">
-              <h6 className="dropdown-header">User Side Screens:</h6>
-              <Link to='/home/requestComponent' className="dropdown-item">RequestComponent</Link>
-              <Link to='/home/raiseIssue' className="dropdown-item">Raise Issue</Link>
-              <Link to='/home/viewComponentStatus' className="dropdown-item">Requested Component Status</Link>
-              <Link to='/home/viewIncidentStatus' className="dropdown-item">Incident Status</Link>
-            </div>
-          </li>
-          <li className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i className="fas fa-fw fa-folder"></i>
-              <span>Tables</span>
-            </a>
-            <div className="dropdown-menu" aria-labelledby="pagesDropdown">
-              <h6 className="dropdown-header">Tables</h6>
-              <label className="dropdown-item">Categories</label>
-              <label className="dropdown-item">Invoices</label>
-              <label className="dropdown-item"><Link to="/users">Users</Link></label>
-            </div>
-          </li>
-        </ul>
+        <div id="mySidenav" style={{ width: this.state.isOpen ? '250px' : '0px' }} className="sidenav">
+          <a href="javascript:void(0)" className="closebtn" onClick={() => this.openNav()}>&times;</a>
+          <Link to='/user/userhome/viewProfile' onClick={() => this.closeNav()}>
+            View Profile</Link>
+          <Link to='/user/userhome/requestComponent' className="menu-item" onClick={() => this.closeNav()}>RequestComponent</Link>
+          <Link to='/user/userhome/raiseIssue' className="menu-item" onClick={() => this.closeNav()}>Raise Issue</Link>
+          <Link to='/user/userhome/viewComponentStatus' className="menu-item" onClick={() => this.closeNav()}>Requested Component Status</Link>
+          <Link to='/user/userhome/viewIncidentStatus' className="menu-item" onClick={() => this.closeNav()}>Raise Issue Status</Link>
+        </div>
+        <span style={{ cursor: "pointer" }} className="openBtn" onClick={() => this.openNav()}>&#9776;</span>
       </>
     );
   }
 }
+export default Sidebar;
 
-export default withAuth(Sidebar);
 
 
 
