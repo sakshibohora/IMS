@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-// import _ from "lodash";
-import withAuth from './withAuth';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import AuthService from './AuthService';
@@ -8,8 +6,6 @@ import AuthService from './AuthService';
 // Import React Table
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-
-
 class ListComponent extends Component {
   constructor(props) {
     super(props)
@@ -43,11 +39,8 @@ class ListComponent extends Component {
       })
   }
   makeData() {
-    // console.log('request is going')
     axios.get('http://localhost:8080/api/components/list')
       .then((response) => {
-        // console.log("listuser", response.data)
-
         this.props.updateData(response.data)
       }).catch((error) => {
         console.log("error from listuser", error);
@@ -58,8 +51,6 @@ class ListComponent extends Component {
   }
 
   render() {
-    { console.log(this.props) }
-
     return (
       <>
         <ReactTable
@@ -85,7 +76,8 @@ class ListComponent extends Component {
                 },
                 {
                   Header: "Status",
-                  accessor: 'status'.toString()
+                  id: "status",
+                  accessor: d => String(d.status)
                 }
               ]
             },
@@ -93,8 +85,14 @@ class ListComponent extends Component {
               Header: '',
               Cell: row => (
                 <>
-                  <Link to='/admin/a1/addcomponent'><button onClick={() => { this.props.editData(row.original) }}>EDIT</button></Link>
-                  {<button onClick={() => { this.deleteData(row.original.id) }}>DELETE</button>}
+                  <Link to='/admin/adminhome/a1/addcomponent'>
+                    <button onClick={() => { this.props.editData(row.original) }}>
+                      <i style={{ fontSize: 'font-size:24px' }} className='fas'>&#xf044;</i>
+                    </button>
+                  </Link>
+                  {<button onClick={() => { this.deleteData(row.original.id) }}>
+                    <i style={{ fontSize: 'font-size:24px' }} className='fas'>&#xf1f8;</i>
+                  </button>}
                 </>
               )
             }
@@ -102,11 +100,10 @@ class ListComponent extends Component {
           defaultPageSize={10}
           className="-striped -highlight"
         />
-
       </>
     )
   }
 }
-export default withAuth(ListComponent)
+export default ListComponent
 
 
