@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 // import _ from "lodash";
-import withAuth from './withAuth';
 import axios from 'axios'
 import AuthService from './AuthService';
 
@@ -21,7 +20,6 @@ class ViewStatus extends Component {
 
   makeData() {
     const id = this.props.user.id;
-    // console.log(id)
     const data = {
       userId: id,
     }
@@ -58,14 +56,15 @@ class ViewStatus extends Component {
               ]
             },
             {
-                columns: [
+              columns: [
                 {
                   Header: "issue",
                   accessor: "issue"
                 },
                 {
                   Header: "Status",
-                  accessor: "status"
+                  id: "status",
+                  accessor: d => String(d.status)
                 }
               ]
             }
@@ -74,37 +73,8 @@ class ViewStatus extends Component {
           className="-striped -highlight"
         />
         <br />
-        {/* <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" onChange={(e) => this.setSearchTerm(e.target.value)}  />
-          <Link to={`/insert/`}><Button color="primary">Insert!</Button></Link>
-        </nav> */}
-
-        {/* <div>
-          <table className="table table-bordered table-dark">
-            <thead>
-              <tr>                
-                <th>categoryId</th>
-                <th>Component Name</th>
-                <th>Issue</th>
-                <th>status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.arr.map(data =>
-                <tr key={data.id}>                  
-                  <td>{data.categoryId} </td>
-                  <td>{data.componentName} </td>
-                  <td>{data.issue}</td>
-                  <td>{data.status}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div> */}
-
-
       </>
     )
   }
 }
-export default withAuth(ViewStatus)
+export default ViewStatus
