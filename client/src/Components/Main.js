@@ -1,6 +1,5 @@
 // import logo from '../images/bacancy-technology2.png'
 import React, { Component } from 'react';
-import AddUser from './Adduser';
 
 class Main extends Component {
   render() {
