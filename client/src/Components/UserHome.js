@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 import PropTypes from 'prop-types';
 import ViewProfile from './ViewProfile';
 import RequestComponent from './RequestComponent'
-import RaiseIssue from './RaiseIssue';
+import RaiseIncidents from './RaiseIncident';
 import ViewComponentStatus from './ViewComponentStatus';
 import ViewIncidentStatus from './ViewIncidentStatus';
 
@@ -31,14 +31,13 @@ class UserHome extends Component {
         <div id='wrapper'>
           {/* <Sidebar /> */}
           <div id="content-wrapper" style={{ height: "100%" }} >
-            <Route exact path={`${match.url}/viewProfile`} render={props => (<ViewProfile {...this.props} />)} />
-            <Route exact path={`${match.url}/requestComponent`} render={props => (<RequestComponent {...this.props} />)} />
-            <Route exact path={`${match.url}/raiseissue`} render={props => (<RaiseIssue {...this.props} />)} />
-            <Route exact path={`${match.url}/viewComponentStatus`} render={props => (<ViewComponentStatus {...this.props} />)} />
-            <Route exact path={`${match.url}/viewIncidentStatus`} render={props => (<ViewIncidentStatus {...this.props} />)} />
+            <Route exact path={`${match.url}/viewProfile`} render={() => <ViewProfile {...this.props} />} />
+            <Route exact path={`${match.url}/requestComponent`} render={() => <RequestComponent {...this.props} />} />
+            <Route exact path={`${match.url}/raiseIncidents`} render={() => <RaiseIncidents {...this.props} />} />
+            <Route exact path={`${match.url}/viewComponentStatus`} render={() => <ViewComponentStatus {...this.props} />} />
+            <Route exact path={`${match.url}/viewIncidentStatus`} render={() => <ViewIncidentStatus {...this.props} />} />
           </div>
         </div>
-
       </>
     )
   }

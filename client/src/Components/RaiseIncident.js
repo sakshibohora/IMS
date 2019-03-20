@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
 import '../App.css'
+import {Alert} from 'reactstrap'
 
-class RaiseIssue extends Component {
+class RaiseIncidents extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -42,7 +43,7 @@ class RaiseIssue extends Component {
       .then((response) => {
         console.log(response);
         if (this.state.collapse === false) this.setState({ collapse: !this.state.collapse });
-        this.setState({ title: '', description: '' })
+        this.setState({ title: '', description: '' ,collapse:true})
       })
       .catch(function (error) {
         console.log(error);
@@ -54,23 +55,26 @@ class RaiseIssue extends Component {
         <div className="col-lg-3"></div>
         <div className="container col-lg-9">
           <form onSubmit={(e) => { this.handleFormSubmit(e) }}>
-            <div class="form-group">
-              <label for="issuetitle">Issue Title</label>
+            <div className="form-group">
+              <label htmlFor="issuetitle">Issue Title</label>
               <input type="text" className="form-control col-6" aria-describedby="emailHelp" value={this.state.title}
                 onChange={(e) => { this.handleChange(e, 'title') }}
-                onClick={() => { this.setState({ collapse: false }) }} />
+                onClick={() => { this.setState({ collapse: false }) }} required/>
             </div>
-            <div class="form-group">
-              <label for="issuedesc">Issue Description</label>
+            <div className="form-group">
+              <label htmlFor="issuedesc">Issue Description</label>
               <textarea className="form-control col-6" value={this.state.description}
                 onChange={(e) => { this.handleChange(e, 'description') }}
-                onClick={() => { this.setState({ collapse: false }) }} />
+                onClick={() => { this.setState({ collapse: false }) }} required/>
             </div>
-            <button type="submit" class="btn btn-md sg-submit-button">Submit</button>
+            <button type="submit" className="btn btn-md sg-submit-button">Raise Issue</button>
           </form>
+          <Alert color="primary" isOpen={this.state.collapse}>
+            Your DATA has been updated!
+        </Alert>
         </div>
       </div>
     )
   }
 }
-export default RaiseIssue;
+export default RaiseIncidents;

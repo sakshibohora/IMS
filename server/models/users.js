@@ -11,18 +11,19 @@ module.exports = (sequelize, DataTypes) => {
     contactNo: DataTypes.NUMERIC(10),
     role: DataTypes.BOOLEAN,
     status: DataTypes.BOOLEAN,
-  }, {});
-  Users.beforeSave((user, options) => {
-    if (user.changed('password')) {
-      user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
-    }
-  });
+  }, {
+      hooks: {
+        beforeCreate: function (user) {
+          if (user.changed('password')) {
+            user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
+          }
+        },
+        beforeUpdate: function (user) {
+          user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
+        },
+      },
+    });
 
-  Users.beforeUpdate((user, options) => {
-    if (user.changed('password')) {
-      user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
-    }
-  });
   Users.prototype.comparePassword = function (passw, cb) {
     bcrypt.compare(passw, this.password, function (err, isMatch) {
       if (err) {
@@ -31,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       cb(null, isMatch);
     });
   };
+
   Users.associate = function (models) {
     // associations can be defined here
   };

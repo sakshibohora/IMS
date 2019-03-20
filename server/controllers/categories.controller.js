@@ -6,7 +6,7 @@ exports.createNewCategories = async function (req, res) {
   let data;
   try {
     data = await categories.create({
-      categoryType: req.body.categoryname
+      categoryType: req.body.categoryType
     });
   } catch (err) {
     res.status(500).json({
@@ -144,6 +144,29 @@ exports.getCategoryId = async function (request, response) {
       status: true,
       message: 'ID fetched successfully',
       data: data,
+    })
+  }
+}
+
+
+exports.findCategory= async function (request, response) {
+  let data;
+  try {
+    data = await categories.find({
+      where: { id: request.params.id }
+    })
+  } catch (err) {
+    response.status(500).json({
+      status: false,
+      message: 'unable to fetch data',
+      data: err,
+    })
+  }
+  if (data !== undefined) {
+    response.status(200).json({
+      status: true,
+      message: 'data fetched successfully',
+      data,
     })
   }
 }

@@ -3,13 +3,9 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import AuthService from './AuthService';
-import { Button } from 'reactstrap'
 import '../assets/css/reactTable.css'
 // Import React Table
 import ReactTable from "react-table";
-import "react-table/react-table.css";
-
-
 class ListUser extends Component {
   constructor(props) {
     super(props)
@@ -43,7 +39,7 @@ class ListUser extends Component {
       })
   }
   makeData() {
-    // console.log('request is going')
+    b// console.log('request is going')
     axios.get('http://localhost:8080/api/users/list')
       .then((response) => {
         // console.log("listuser", response.data)
@@ -109,15 +105,14 @@ class ListUser extends Component {
                         <i className='fas'>&#xf044;</i>
                       </button>
                     </Link>
-                    {
-                      <button onClick={() => { this.deleteData(row.original.id) }}>
-                        <i className='fas'>&#xf1f8;</i>
+                    <button onClick={() => { this.deleteData(row.original.id) }}>
+                      <i className='fas'>&#xf1f8;</i>
+                    </button>
+                    <Link to={`/admin/adminhome/assigncomponent/${row.original.id}`}>
+                      <button>
+                        <i className='fas'>&#xf0fe;</i>
                       </button>
-                    }
-                    {<Link to={`/admin/adminhome/assigncomponent/${row.original.id}`} >
-                      <Button color='primary'>Assign Component
-                    </Button>
-                    </Link>}
+                    </Link>
                   </>
                 )
             }

@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import axios from 'axios';
 import AuthService from './AuthService';
-import withAuth from './withAuth';
-import { Link } from 'react-router-dom';
 import { Alert } from 'reactstrap';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
-
 import ReactTable from "react-table";
-import "react-table/react-table.css";
-import ManageIncidents from './ManageIncidents';
+import ManageRequestedComponent from './ManageRequestedComponent';
 
-class Incidents extends Component {
+class AssignRequestedComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -49,40 +45,56 @@ class Incidents extends Component {
   }
 
   makeData() {
-    axios.get('http://localhost:8080/api/incidents/list', {
-
+    axios.get('http://localhost:8080/api/requestComponents/list', {
     }).then((response) => {
       this.setState({
         data: response.data.data
       })
-      console.log('Getting api data', this.state.data)
+    }).catch(function (error) {
+      console.log(error);
     })
+  }
 
+  componentWillMount() {
+    this.makeData();
+  }
+
+  handleDelete(rowId) {
+    const header = this.Auth.getToken();
+    axios.delete('http://localhost:8080/api/requestComponents/delete' + rowId, {
+      headers: {
+        'Authorization': header
+      },
+    }).then((response) => {
+      this.makeData();
+    })
       .catch(function (error) {
         console.log(error);
       })
   }
-  // renderAddCategoryModal() {
-  //   return (
-  //     <Modal isOpen={this.state.modalAdd} toggle={this.toggleAdd} className={this.props.className}>
-  //       <ModalHeader toggle={this.toggleAdd}>Add New Category</ModalHeader>
-  //       <ModalBody>
-  //         <ManageUser {...this.props} makeData={this.makeData} />
-  //       </ModalBody>
-  //       <ModalFooter>
-  //         <Button color="secondary" onClick={this.toggleAdd}>Cancel</Button>
-  //       </ModalFooter>
-  //     </Modal>
-  //   )
-  // }
+
+  //Add Modal
+  renderAddCategoryModal() {
+    return (
+      <Modal isOpen={this.state.modalAdd} toggle={this.toggleAdd} className={this.props.className}>
+        <ModalHeader toggle={this.toggleAdd}>Add New Category</ModalHeader>
+        <ModalBody>
+          <ManageRequestedComponent {...this.props} makeData={this.makeData} />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={this.toggleAdd}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+    )
+  }
 
   //Edit Modal
   renderEditCategoryModal() {
     return (
       <Modal isOpen={this.state.modalEdit} toggle={this.toggleEdit} className={this.props.className}>
-        <ModalHeader toggle={(e) => { this.toggleEdit(e) }}>Update Incident</ModalHeader>
+        <ModalHeader toggle={(e) => { this.toggleEdit(e) }}>Assign Component</ModalHeader>
         <ModalBody>
-          <ManageIncidents id={this.state.id} {...this.props} makeData={this.makeData} />
+          <ManageRequestedComponent id={this.state.id} {...this.props} makeData={this.makeData} toggleEdit={this.toggleEdit} />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={(e) => { this.toggleEdit(e) }}>Cancel</Button>
@@ -90,38 +102,36 @@ class Incidents extends Component {
       </Modal>
     )
   }
-  componentWillMount() {
-    this.makeData();
-  }
+
   render() {
     return (
       <>
+        {/* <Button type="submit" color="primary" onClick={this.toggleAdd}>Add New User</Button>&nbsp; */}
         <ReactTable
           data={this.state.data}
           columns={[
             {
-              Header: "Incident Details",
+              Header: "Request Component Details",
               columns: [
                 {
-                  Header: "Incident By",
-                  accessor: "incidentBy"
+                  Header: "User Id",
+                  accessor: "userId"
                 },
                 {
-                  Header: "Incident Id",
-                  accessor: "id"
-                },
-
-                {
-                  Header: "Issue Title",
-                  accessor: "incidentName"
+                  Header: "Category Id",
+                  accessor: "categoryId"
                 },
                 {
-                  Header: "Issue Details",
-                  accessor: "incident"
+                  Header: "Component Id",
+                  accessor: "componentId"
                 },
                 {
-                  Header: "Resolved By",
-                  accessor: "resolvedBy"
+                  Header: "Component  Name",
+                  accessor: "componentName"
+                },
+                {
+                  Header: 'Issue',
+                  accessor: "issue"
                 },
                 {
                   Header: "Status",
@@ -133,8 +143,7 @@ class Incidents extends Component {
                   Cell: row => (
                     <>
                       {<Button onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
-                      {/* {<Button onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>} */}
-                      {/* {<Button onClick={(e) => { this.togglemodal(row.original.id) }}><i className='fas'>&#xf0fe;</i>&nbsp;</Button>} */}
+                      {<Button onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>}
                     </>
                   )
                 }
@@ -148,8 +157,7 @@ class Incidents extends Component {
         {/* {this.renderAddCategoryModal()} */}
         {/* {this.renderAssignComponentModal()} */}
       </>
-
     )
   }
 }
-export default Incidents;
+export default AssignRequestedComponent

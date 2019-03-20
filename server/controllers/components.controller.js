@@ -158,3 +158,24 @@ exports.getComponentName = async function (request, response) {
     })
   }
 }
+exports.findComponent= async function (request, response) {
+  let data;
+  try {
+    data = await components.find({
+      where: { id: request.params.id }
+    })
+  } catch (err) {
+    response.status(500).json({
+      status: false,
+      message: 'unable to fetch data',
+      data: err,
+    })
+  }
+  if (data !== undefined) {
+    response.status(200).json({
+      status: true,
+      message: 'data fetched successfully',
+      data,
+    })
+  }
+}

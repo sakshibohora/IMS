@@ -5,15 +5,16 @@ import withAuth from './withAuth';
 import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import ViewProfile from './ViewProfile';
-import A0 from './0'
-import A1 from './1'
-import A2 from './2'
-import AssignComponent from './AssignComponent';
+import User from './User';
 import Incidents from './Incidents';
-import EditIncidents from './EditIncidents';
-import ListRequestComponent from './listRequstComponent';
-import AssignRequestedComponent from './AssignRequestedComponent';
-import ListAssignedComponent from './ListAssignedComponent';
+import AssignRequestedComponent from './AssignRequestComponent';
+import ManageUser from './ManageUser';
+import Category from './Category';
+import Components from './Component';
+import ManageCategory from './ManageCategory';
+import ManageComponent from './ManageComponent';
+import ManageRequestedComponent from './ManageRequestedComponent';
+import ManageIncidents from './ManageIncidents';
 // import IncidentUpdate from './IncidentUpdates';
 const Auth = new AuthService();
 
@@ -41,35 +42,26 @@ class AdminHome extends Component {
               />
             }
             />
-            {/* <Route exact path={`${match.url}/incidentupdates`} render={() =>
-              <IncidentUpdate {...this.props}
-              />
-            }
-            /> */}
-            <Route path={`${match.url}/a0`} render={(props) =>
-              <A0
-                {...props}
-              />
-            }
-            />
-            <Route path={`${match.url}/a1`} render={(props) =>
-              <A1
-                {...props}
-              />
-            }
-            />
-            <Route path={`${match.url}/a2`} render={(props) =>
-              <A2
-                {...props}
-              />
-            }
-            />
+            <Route exact path={`${match.url}/user`} render={() => <User {...this.props} />} />
+            <Route exact path={`${match.url}/manageuser`} render={() => <ManageUser {...this.props} />} />
+           
+            <Route exact path={`${match.url}/category`} render={() => <Category {...this.props} />} />
+            <Route exact path={`${match.url}/managecategory`} render={() => <ManageCategory {...this.props} />} />
+            
+            <Route exact path={`${match.url}/component`} render={() => <Components {...this.props} />} />
+            <Route exact path={`${match.url}/managecomponent`} render={() => <ManageComponent {...this.props} />} />
+           
+            <Route exact path={`${match.url}/assigncomponent`} render={() => <AssignRequestedComponent {...this.props} />} />
+            <Route exact path={`${match.url}/managerequestcomponent`} render={() => <ManageRequestedComponent {...this.props} />} />
+            
             <Route exact path={`${match.url}/incidents`} render={() => <Incidents {...this.props} />} />
-            <Route exact path={`${match.url}/editincidents/:id`} component={EditIncidents} />
-            <Route path={`${match.url}/assigncomponent/:id`} component={AssignComponent} />
-            <Route path={`${match.url}/ListRequestComponent`} render={() => <ListRequestComponent {...this.props} />} />
-            <Route path={`${match.url}/ListAssignedComponent`} render={() => <ListAssignedComponent {...this.props} />} />
-            <Route path={`${match.url}/assignrequestedcomponent/:id`} component={AssignRequestedComponent} />
+            <Route exact path={`${match.url}/manageincident`} render={() => <ManageIncidents {...this.props} />} />
+          
+            {/* <Route exact path={`${match.url}/manageincidents`} component={EditIncidents} /> */}
+            {/* <Route path={`${match.url}/assigncomponent/:id`} component={AssignComponent} /> */}
+            {/* <Route path={`${match.url}/ListRequestComponent`} render={() => <ListRequestComponent {...this.props} />} /> */}
+            {/* <Route path={`${match.url}/ListAssignedComponent`} render={() => <ListAssignedComponent {...this.props} />} /> */}
+            {/* <Route path={`${match.url}/assignrequestedcomponent/:id`} component={AssignRequestedComponent} /> */}
           </div>
         </div>
       </>

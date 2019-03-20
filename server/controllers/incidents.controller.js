@@ -1,6 +1,7 @@
 const db = require('../models/index');
 
 const incidents = db.Incidents;
+const incidentUpdates = db.IncidentUpdates;
 
 exports.createIncidents = async function (request, response) {
   let data;
@@ -62,7 +63,7 @@ exports.getAllIncidents = async function (request, response) {
   }
   try {
     data = await incidents.findAll({
-      // where: { userId: req.body.userId },
+      where: { incidentBy: request.params.id },
       // order: [[sort, x]],
       // offset: skipping,
       // limit: limiting,
@@ -92,7 +93,7 @@ exports.getIncident = async function (request, response) {
   let data;
   try {
     data = await incidents.find({
-      // where: { incidentBy: request.params.id },
+      where: { id: request.params.id },
     })
   } catch (err) {
     response.status(500).json({
@@ -113,7 +114,7 @@ exports.getIncident = async function (request, response) {
 
 
 exports.updateIncidents = async function (request, response) {
-  let data;
+  let data, data1;
   try {
     data = await incidents.update({
       incidentBy: request.body.incidentBy,
@@ -123,6 +124,14 @@ exports.updateIncidents = async function (request, response) {
       resolvedBy: request.body.resolvedBy,
       status: request.body.status,
     }, { where: { id: request.params.id } });
+
+    data1 = incidentUpdates.create({
+      incidentId: request.params.id,
+      updateBy: request.body.resolvedBy,
+      updates: request.body.updates,
+      status: request.body.status,
+    })
+
   } catch (err) {
     response.status(500).json({
       status: false,
@@ -153,6 +162,28 @@ exports.deleteIncidents = async function (request, response) {
     response.status(200).json({
       status: true,
       message: 'Deleted Successfully',
+      data,
+    });
+  }
+};
+
+exports.getIncidents = async function (request, response) {
+  let data;
+
+  try {
+    data = await incidents.findAll({
+    });
+  } catch (err) {
+    response.status(404).json({
+      status: false,
+      message: 'Unable To List Data.',
+      data: err,
+    });
+  }
+  if (data !== undefined) {
+    response.status(200).json({
+      status: true,
+      message: 'All Data fetched successfully',
       data,
     });
   }

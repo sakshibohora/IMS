@@ -6,6 +6,7 @@ import Footer from './Components/Footer';
 import './App.css';
 import AdminHome from './Components/AdminHome';
 class App extends Component {
+  
   render() {
     return (
       <>
@@ -14,7 +15,7 @@ class App extends Component {
             <Route exact path='/' component={Login} />
             <Route path='/user/userhome' render={props => <UserHome {...props} />} />
             <Route path='/admin/adminhome' render={props => <AdminHome {...props} />} />
-            <Redirect from='/*' to='/' />
+            {/* <Redirect from='/*' to='/' /> */}
           </Switch>
         </Router>
         <Footer />

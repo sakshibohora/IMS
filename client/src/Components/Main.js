@@ -8,7 +8,6 @@ class Main extends Component {
         <div className="container col-4" ></div>
         <div className="container col-4">
           <input type="button" value="Login" className="btn btn-primary" onClick={() => { this.props.history.push('/') }} />
-
         </div>
         <div className="container col-4"></div>
       </>

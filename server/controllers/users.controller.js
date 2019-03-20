@@ -15,7 +15,7 @@ exports.createNewUsers = async function (req, res) {
       status: req.body.status,
     });
   } catch (err) {
-    res.status(500).json({
+    res.status(404).json({
       status: false,
       message: 'Unable to save in database',
       data: err,
@@ -120,7 +120,7 @@ exports.findUserName = async function (request, response) {
   let data;
   try {
     data = await users.findAll({
-      attributes:['firstName','id']
+      attributes: ['firstName', 'id']
     })
   } catch (err) {
     response.status(500).json({
@@ -140,33 +140,37 @@ exports.findUserName = async function (request, response) {
 
 //update user
 exports.updateUsers = async function (req, res) {
-  let data;
   try {
-    data = await users.update({
-      username: req.body.username,
-      password: req.body.password,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      contactNo: req.body.contactNo,
-      role: req.body.role,
-      status: req.body.status,
-    },
-      { where: { id: req.params.id } });
-  } catch (err) {
+    users.findOne({
+      where: { id: req.params.id }
+    }).then(function (result) {
+      return result.update({
+        username: req.body.username,
+        password: req.body.password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        contactNo: req.body.contactNo,
+        role: req.body.role,
+        status: req.body.status,
+      }).then(function (data) {
+        // res.end();
+        res.status(200).json({
+          status: true,
+          message: 'Data sucessfully updated!',
+          data: data
+        })
+      });
+    });
+  }
+  catch (err) {
     res.status(500).json({
       status: false,
       message: 'Unable To Update.',
       data: err,
     });
   }
-  if (data !== undefined) {
-    res.status(200).json({
-      status: true,
-      message: 'Updated Successfully',
-      data,
-    });
-  }
+
 };
 //delete user
 exports.deleteUsers = async function (req, res) {
@@ -212,42 +216,3 @@ exports.getUserDetails = async function (request, response) {
     });
   }
 };
-
-
-
-
-
-// exports.login = async function (request, response) {
-//   uname = request.body.userName
-//   pword = request.body.passWord
-//   let data;
-//   try {
-//     data = await users.findOne({
-//       where: {
-//         userName: uname,
-//         passWord: pword,
-//       }
-//     });
-//   } catch (err) {
-//     response.status(500).json({
-//       status: false,
-//       message: 'Unable To get Data.',
-//       data: err,
-//     });
-//   }
-//   if (data === null) {
-//     response.status(200).json({
-//       status: false,
-//       message: "authentication failed",
-//     })
-//   }
-//   else {
-//     response.status(200).json({
-//       status: true,
-//       message: 'Logged In',
-//       data,
-//     });
-//   }
-
-// };
-

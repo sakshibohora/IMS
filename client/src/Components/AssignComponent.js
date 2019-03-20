@@ -63,9 +63,8 @@ class AssignComponent extends Component {
   }
   componentDidMount() {
     const header = this.Auth.getToken()
-    axios.get('http://localhost:8080/api/users/find/' + this.props.match.params.id)
+    axios.get('http://localhost:8080/api/users/find/' + this.props.id)
       .then(response => {
-        console.log(response)
         this.setState({ formdata: response.data.data });
       })
       .catch(function (error) {
@@ -88,7 +87,6 @@ class AssignComponent extends Component {
       }
     }).then((response) => {
       this.setState({ uname: response.data.data })
-      console.log("user res", this.state.uname)
       this.setState({ collapse: false });
     }).catch(function (error) {
       console.log(error);
@@ -151,7 +149,6 @@ class AssignComponent extends Component {
       },
     })
       .then((response) => {
-        console.log(response)
         if (this.state.collapse === false) this.setState({ collapse: !this.state.collapse });
         this.setState({ categoryId: 'Select Category', componentName: 'Select Component' })
       })
@@ -161,7 +158,6 @@ class AssignComponent extends Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <>
         <form onSubmit={(e) => this.handleUpdateData(e)}>
@@ -245,8 +241,8 @@ class AssignComponent extends Component {
               </ButtonDropdown>
             </div>
           </div>
-          <Button type="submit" value="Update" color="primary" > Assign</Button>&nbsp;
-          <Button type="button" value="Home" color="primary" onClick={() => this.props.history.push('/admin/adminhome')} > Home </Button>
+          <Button className="btn btn-md sg-submit-button" type="submit" value="Update" color="primary" > Assign</Button>&nbsp;
+          <Button className="btn btn-md sg-submit-button" type="button" value="Home" color="primary" onClick={() => this.props.history.push('/admin/adminhome')} > Home </Button>
         </form>
       </>
     )

@@ -23,17 +23,12 @@ class Sidebar extends Component {
           <a href="javascript:void(0)" className="closebtn" onClick={() => this.openNav()}>&times;</a>
           <Link to='/admin/adminhome/viewProfile' onClick={() => this.closeNav()}>View Profile
            </Link>
-          <Link to='/admin/adminhome/incidentupdates' onClick={() => this.closeNav()}>Incident Updates
-           </Link>
-          <Link to='/admin/adminhome/a0/adduser' onClick={() => this.closeNav()}>Add User</Link>
-          <Link to='/admin/adminhome/a0/listuser' onClick={() => this.closeNav()}>list User</Link>
-          <Link to='/admin/adminhome/a1/addcomponent' onClick={() => this.closeNav()}>Add Component</Link>
-          <Link to='/admin/adminhome/a1/listcomponent' onClick={() => this.closeNav()}>List Component</Link>
-          <Link to='/admin/adminhome/a2/addcategory' onClick={() => this.closeNav()}>Add Category</Link>
-          <Link to='/admin/adminhome/a2/listcategory' onClick={() => this.closeNav()}>List Category</Link>
-          <Link to='/admin/adminhome/incidents' onClick={() => this.closeNav()}>Incidents</Link>
-          <Link to='/admin/adminhome/ListRequestComponent' onClick={()=>this.closeNav()} >Requested Component</Link>
-          <Link to='/admin/adminhome/ListAssignedComponent' onClick={()=>this.closeNav()} >All Assigned Component</Link>
+           <Link to='/admin/adminhome/user' onClick={() => this.closeNav()}>Manage User</Link>
+          <Link to='/admin/adminhome/category' onClick={() => this.closeNav()}>Manage Category</Link>
+          <Link to='/admin/adminhome/component' onClick={() => this.closeNav()}>Manage Component</Link>
+          <Link to='/admin/adminhome/incidents' onClick={() => this.closeNav()}>Manage Incidents</Link>
+          <Link to='/admin/adminhome/assigncomponent' onClick={() => this.closeNav()} >Manage Requested Component</Link>
+          {/* <Link to='/admin/adminhome/ListAssignedComponent' onClick={() => this.closeNav()} >All Assigned Component</Link> */}
         </div>
         <span style={{ cursor: "pointer" }} className="openBtn" onClick={() => this.openNav()}>&#9776;</span>
       </>

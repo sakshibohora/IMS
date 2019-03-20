@@ -147,12 +147,11 @@ class RequestComponent extends Component {
               <textarea
                 placeholder="Description goes here..."
                 name="issue"
-                onChange={(e) => { this.changeValue3(e) }}
+                onChange={(e) => { this.changeValue3(e) }} required
               />
               <br />
-              <button type="submit" class="btn btn-lg sg-submit-button">Send</button>
+              <button type="submit" class="btn btn-md sg-submit-button">Request Send</button>
             </form>
-            {/* <button className="btn btn-outline-dark" onClick={() => this.props.history.push('/user/userhome')}>Home</button> */}
             <Alert color="primary" isOpen={this.state.collapse}>
               Your request has been sent to Admin!
            </Alert>
