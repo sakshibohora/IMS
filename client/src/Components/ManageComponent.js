@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
-
+import {Alert} from 'reactstrap'
 
 let formData = {
   categoryId: '',
@@ -15,7 +15,8 @@ class ManageComponent extends Component {
     super(props)
     this.state = {
       formData: { ...formData },
-      flag: false //false = insert, true = edit
+      flag: false, //false = insert, true = edit
+      collapse:false,
     }
     this.Auth = new AuthService()
     this.handleChange = this.handleChange.bind(this)
@@ -29,13 +30,15 @@ class ManageComponent extends Component {
 
   getData(rowId) {
     const header = this.Auth.getToken()
-    axios.get('http://localhost:8080/api/components/find/' + rowId)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/components/find/` + rowId)
       .then(response => {
         console.log(response)
         this.setState({
           formData: response.data.data,
-          flag: true
+          flag: true,
+          collapse:false,
         });
+        console.log(this.state.flag)
       })
       .catch(function (error) {
         console.log(error);
@@ -51,20 +54,23 @@ class ManageComponent extends Component {
   handleFormSubmit(e) {
     e.preventDefault();
 
-    if (this.props.flag === true) {
-      axios.put('http://localhost:8080/api/components/edit/' + this.props.id, this.state.formData)
+    if (this.state.flag === true) {
+      axios.put(`${process.env.REACT_APP_SERVER}/api/components/edit/` + this.props.id, this.state.formData)
         .then((res) => {
-          console.log(res)
+          console.log("update",res)
           this.props.makeData()
+          this.setState({collapse: true})
           // this.props.history.push('/admin/adminhome/a2/listcategory');
         }).catch((err) => {
           console.log(err)
         })
     } else {
-      axios.post('http://localhost:8080/api/components', this.state.formData)
+      axios.post(`${process.env.REACT_APP_SERVER}/api/components`, this.state.formData)
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           this.props.makeData()
+          this.setState({collapse: true})
+
           // this.props.history.push('/admin/adminhome/a2/listcategory');
         }).catch((err) => {
           console.log(err)
@@ -114,6 +120,9 @@ class ManageComponent extends Component {
             </div>
           </div>
         </form>
+        <Alert color="primary" isOpen={this.state.collapse}>
+          Your DATA has been recorded!
+        </Alert>
       </>
     )
   }

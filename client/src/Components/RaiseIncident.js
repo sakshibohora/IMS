@@ -34,7 +34,7 @@ class RaiseIncidents extends Component {
     e.preventDefault();
     const header = this.Auth.getToken();
     console.log(header)
-    axios.post('http://localhost:8080/api/incidents', data, {
+    axios.post(`${process.env.REACT_APP_SERVER}/api/incidents`, data, {
 
       headers: {
         'Authorization': header

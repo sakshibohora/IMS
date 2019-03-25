@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import AuthService from './AuthService';
-import { Alert } from 'reactstrap';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from "react-table";
 import ManageComponent from './ManageComponent';
@@ -46,7 +45,7 @@ class Components extends Component {
   }
 
   makeData() {
-    axios.get('http://localhost:8080/api/components/list', {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/components/list`, {
     }).then((response) => {
       this.setState({
         data: response.data.data
@@ -62,7 +61,7 @@ class Components extends Component {
 
   handleDelete(rowId) {
     const header = this.Auth.getToken();
-    axios.delete('http://localhost:8080/api/components/delete/' + rowId, {
+    axios.delete(`${process.env.REACT_APP_SERVER}/api/components/delete` + rowId, {
       headers: {
         'Authorization': header
       },
@@ -75,10 +74,10 @@ class Components extends Component {
   }
 
   //Add Modal
-  renderAddCategoryModal() {
+  renderAddComponentModal() {
     return (
       <Modal isOpen={this.state.modalAdd} toggle={this.toggleAdd} className={this.props.className}>
-        <ModalHeader toggle={this.toggleAdd}>Add New Category</ModalHeader>
+        <ModalHeader toggle={this.toggleAdd}>Add New Component</ModalHeader>
         <ModalBody>
           <ManageComponent {...this.props} makeData={this.makeData} />
         </ModalBody>
@@ -90,12 +89,12 @@ class Components extends Component {
   }
 
   //Edit Modal
-  renderEditCategoryModal() {
+  renderEditComponentModal() {
     return (
       <Modal isOpen={this.state.modalEdit} toggle={this.toggleEdit} className={this.props.className}>
         <ModalHeader toggle={(e) => { this.toggleEdit(e) }}>Edit Component</ModalHeader>
         <ModalBody>
-          <ManageComponent id={this.state.id} {...this.props} />
+          <ManageComponent id={this.state.id} makeData={this.makeData} {...this.props} />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={(e) => { this.toggleEdit(e) }}>Cancel</Button>
@@ -150,8 +149,8 @@ class Components extends Component {
           defaultPageSize={10}
           className="-striped -highlight"
         />
-        {this.renderEditCategoryModal()}
-        {this.renderAddCategoryModal()}
+        {this.renderEditComponentModal()}
+        {this.renderAddComponentModal()}
         {/* {this.renderAssignComponentModal()} */}
       </>
     )

@@ -49,7 +49,7 @@ class Incidents extends Component {
   }
 
   makeData() {
-    axios.get('http://localhost:8080/api/incidents/list', {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/incidents/list`, {
 
     }).then((response) => {
       this.setState({
@@ -62,21 +62,6 @@ class Incidents extends Component {
         console.log(error);
       })
   }
-  // renderAddCategoryModal() {
-  //   return (
-  //     <Modal isOpen={this.state.modalAdd} toggle={this.toggleAdd} className={this.props.className}>
-  //       <ModalHeader toggle={this.toggleAdd}>Add New Category</ModalHeader>
-  //       <ModalBody>
-  //         <ManageUser {...this.props} makeData={this.makeData} />
-  //       </ModalBody>
-  //       <ModalFooter>
-  //         <Button color="secondary" onClick={this.toggleAdd}>Cancel</Button>
-  //       </ModalFooter>
-  //     </Modal>
-  //   )
-  // }
-
-  //Edit Modal
   renderEditCategoryModal() {
     return (
       <Modal isOpen={this.state.modalEdit} toggle={this.toggleEdit} className={this.props.className}>
@@ -124,6 +109,10 @@ class Incidents extends Component {
                   accessor: "resolvedBy"
                 },
                 {
+                  Header: "Updates",
+                  accessor: "updates"
+                },
+                {
                   Header: "Status",
                   id: "status",
                   accessor: d => d.status
@@ -133,8 +122,6 @@ class Incidents extends Component {
                   Cell: row => (
                     <>
                       {<Button onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
-                      {/* {<Button onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>} */}
-                      {/* {<Button onClick={(e) => { this.togglemodal(row.original.id) }}><i className='fas'>&#xf0fe;</i>&nbsp;</Button>} */}
                     </>
                   )
                 }

@@ -45,7 +45,7 @@ class AssignRequestedComponent extends Component {
   }
 
   makeData() {
-    axios.get('http://localhost:8080/api/requestComponents/list', {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/requestComponents/list`, {
     }).then((response) => {
       this.setState({
         data: response.data.data
@@ -61,7 +61,7 @@ class AssignRequestedComponent extends Component {
 
   handleDelete(rowId) {
     const header = this.Auth.getToken();
-    axios.delete('http://localhost:8080/api/requestComponents/delete' + rowId, {
+    axios.delete(`${process.env.REACT_APP_SERVER}/api/requestComponents/delete`+ rowId, {
       headers: {
         'Authorization': header
       },

@@ -19,7 +19,7 @@ class ViewIncidentStatus extends Component {
   }
   incidentUpdates() {
     const id = this.props.user.id;
-    axios.get('http://localhost:8080/api/incidentUpdates/details/' + id, {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/incidentUpdates/details/` + id, {
 
     }).then((response) => {
       this.setState({
@@ -34,7 +34,7 @@ class ViewIncidentStatus extends Component {
   }
   makeData() {
     const id = this.props.user.id;
-    axios.get('http://localhost:8080/api/incidents/list/' + id, {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/incidents/list/` + id, {
 
     }).then((response) => {
       this.setState({

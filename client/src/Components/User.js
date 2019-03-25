@@ -1,11 +1,8 @@
-
 import React, { Component } from 'react'
 import axios from 'axios';
 import AuthService from './AuthService';
-import { Alert } from 'reactstrap';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from "react-table";
-import { Route, Link } from 'react-router-dom'
 import AssignComponent from './AssignComponent';
 import ManageUser from './ManageUser';
 
@@ -48,7 +45,7 @@ class User extends Component {
   }
 
   makeData() {
-    axios.get('http://localhost:8080/api/users/list', {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/users/list`, {
     }).then((response) => {
       this.setState({
         data: response.data
@@ -64,7 +61,7 @@ class User extends Component {
 
   handleDelete(rowId) {
     const header = this.Auth.getToken();
-    axios.delete('http://localhost:8080/api/users/delete/' + rowId, {
+    axios.delete(`${process.env.REACT_APP_SERVER}/api/users/delete/` + rowId, {
       headers: {
         'Authorization': header
       },
@@ -77,7 +74,7 @@ class User extends Component {
   }
 
   //Add Modal
-  renderAddCategoryModal() {
+  renderAddUserModal() {
     return (
       <Modal isOpen={this.state.modalAdd} toggle={this.toggleAdd} className={this.props.className}>
         <ModalHeader toggle={this.toggleAdd}>Add New User</ModalHeader>
@@ -92,7 +89,7 @@ class User extends Component {
   }
 
   //Edit Modal
-  renderEditCategoryModal() {
+  renderEditUserModal() {
     return (
       <Modal isOpen={this.state.modalEdit} toggle={this.toggleEdit} className={this.props.className}>
         <ModalHeader toggle={(e) => { this.toggleEdit(e) }}>Edit User Details</ModalHeader>
@@ -176,8 +173,8 @@ class User extends Component {
           defaultPageSize={10}
           className="-striped -highlight"
         />
-        {this.renderEditCategoryModal()}
-        {this.renderAddCategoryModal()}
+        {this.renderEditUserModal()}
+        {this.renderAddUserModal()}
         {this.renderAssignComponentModal()}
       </>
     )

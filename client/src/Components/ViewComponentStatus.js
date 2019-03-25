@@ -23,7 +23,7 @@ class ViewStatus extends Component {
     const data = {
       userId: id,
     }
-    axios.post('http://localhost:8080/api/requestComponents/requestComponentByUser', data, {
+    axios.post(`${process.env.REACT_APP_SERVER}/api/requestComponents/requestComponentByUser`, data, {
 
     }).then((response) => {
       this.setState({

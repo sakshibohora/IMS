@@ -32,7 +32,7 @@ class ManageRequestedComponent extends Component {
 
   getData(rowId) {
     const header = this.Auth.getToken()
-    axios.get('http://localhost:8080/api/requestcomponents/find/' + rowId)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/requestcomponents/find/` + rowId)
       .then(response => {
         console.log(response)
         this.setState({
@@ -46,7 +46,6 @@ class ManageRequestedComponent extends Component {
       })
   }
   handleChange(e, target, field) {
-    e.preventDefault();
     const temp = { ...this.state[target] };
     temp[field] = e.target.value;
     this.setState({ [target]: temp })
@@ -56,7 +55,7 @@ class ManageRequestedComponent extends Component {
     e.preventDefault();
 
     if (this.state.flag === true) {
-      axios.put('http://localhost:8080/api/requestComponents/edit/' + this.props.id, this.state.formData)
+      axios.put(`${process.env.REACT_APP_SERVER}/api/requestComponents/edit/` + this.props.id, this.state.formData)
         .then((res) => {
           console.log(res)
           this.props.makeData()
@@ -67,7 +66,7 @@ class ManageRequestedComponent extends Component {
           console.log(err)
         })
     } else {
-      axios.post('http://localhost:8080/api/requestComponents', this.state.formData)
+      axios.post(`${process.env.REACT_APP_SERVER}/api/requestComponents`, this.state.formData)
         .then((res) => {
           console.log(res)
           this.props.makeData()

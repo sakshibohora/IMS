@@ -44,24 +44,19 @@ class AdminHome extends Component {
             />
             <Route exact path={`${match.url}/user`} render={() => <User {...this.props} />} />
             <Route exact path={`${match.url}/manageuser`} render={() => <ManageUser {...this.props} />} />
-           
+
             <Route exact path={`${match.url}/category`} render={() => <Category {...this.props} />} />
             <Route exact path={`${match.url}/managecategory`} render={() => <ManageCategory {...this.props} />} />
-            
+
             <Route exact path={`${match.url}/component`} render={() => <Components {...this.props} />} />
             <Route exact path={`${match.url}/managecomponent`} render={() => <ManageComponent {...this.props} />} />
-           
+
             <Route exact path={`${match.url}/assigncomponent`} render={() => <AssignRequestedComponent {...this.props} />} />
             <Route exact path={`${match.url}/managerequestcomponent`} render={() => <ManageRequestedComponent {...this.props} />} />
-            
+
             <Route exact path={`${match.url}/incidents`} render={() => <Incidents {...this.props} />} />
             <Route exact path={`${match.url}/manageincident`} render={() => <ManageIncidents {...this.props} />} />
-          
-            {/* <Route exact path={`${match.url}/manageincidents`} component={EditIncidents} /> */}
-            {/* <Route path={`${match.url}/assigncomponent/:id`} component={AssignComponent} /> */}
-            {/* <Route path={`${match.url}/ListRequestComponent`} render={() => <ListRequestComponent {...this.props} />} /> */}
-            {/* <Route path={`${match.url}/ListAssignedComponent`} render={() => <ListAssignedComponent {...this.props} />} /> */}
-            {/* <Route path={`${match.url}/assignrequestedcomponent/:id`} component={AssignRequestedComponent} /> */}
+
           </div>
         </div>
       </>

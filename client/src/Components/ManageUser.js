@@ -32,7 +32,7 @@ class ManageUser extends Component {
 
   getData(rowId) {
     const header = this.Auth.getToken()
-    axios.get('http://localhost:8080/api/users/find/' + rowId)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/users/find/` + rowId)
       .then(response => {
         console.log(response)
         this.setState({
@@ -49,7 +49,6 @@ class ManageUser extends Component {
     e.preventDefault();
     const data = {
       username: this.state.formData.username,
-      password: this.state.formData.password,
       firstName: this.state.formData.firstName,
       lastName: this.state.formData.lastName,
       email: this.state.formData.email,
@@ -59,7 +58,7 @@ class ManageUser extends Component {
     }
     e.preventDefault();
     if (this.state.flag === true) {
-      axios.put('http://localhost:8080/api/users/edit' + this.props.id, this.state.formData)
+      axios.put(`${process.env.REACT_APP_SERVER}/api/users/edit` + this.props.id, data)
         .then((res) => {
           this.props.makeData()
           this.setState({ collapse: true })
@@ -67,7 +66,7 @@ class ManageUser extends Component {
           console.log(err)
         })
     } else {
-      axios.post('http://localhost:8080/api/users', this.state.formData)
+      axios.post(`${process.env.REACT_APP_SERVER}/api/users/`, this.state.formData)
         .then((res) => {
           this.props.makeData()
           this.setState({ collapse: true })
@@ -77,7 +76,6 @@ class ManageUser extends Component {
     }
   }
   handleChange(e, target, field) {
-    e.preventDefault();
     const temp = { ...this.state[target] };
     temp[field] = e.target.value;
     this.setState({ [target]: temp })
@@ -94,12 +92,16 @@ class ManageUser extends Component {
                   value={this.state.formData.username}
                   onChange={(e) => { this.handleChange(e, 'formData', 'username') }} />
               </div>
-              <div className="form-group">
+              {!this.state.flag &&
+                <div className="form-group">
                 <label htmlFor="password">Password</label>
-                <input type="password" className="form-control" placeholder="Password"
+                  <input type="password" placeholder="Password" value={this.state.formData.password} onChange={(e) => this.handleChange(e, 'formData', 'password')} required />
+                </div>}
+              {/* <div className="form-group">
+                <input type={this.state.flag ? "hidden" : "password"} className="form-control" placeholder="Password"
                   value={this.state.formData.password}
                   onChange={(e) => { this.handleChange(e, 'formData', 'password') }} />
-              </div>
+              </div> */}
               <div className="form-group">
                 <label htmlFor="firstName">First Name</label>
                 <input type="text" className="form-control" placeholder="First Name"
@@ -128,15 +130,37 @@ class ManageUser extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="role">Role</label>
-                <input type="text" className="form-control" placeholder="Role"
-                  value={this.state.formData.role}
-                  onChange={(e) => { this.handleChange(e, 'formData', 'role') }} />
+                Admin<input style={{ margin: "10px" }}
+                  type="radio"
+                  name="role"
+                  value="true"
+                  checked={this.state.formData.role === "true"}
+                  onChange={(e) => { this.handleChange(e, 'formData', 'role') }}
+                />  <br />
+                User<input style={{ margin: "10px" }}
+                  type="radio"
+                  name="role"
+                  value="false"
+                  checked={this.state.formData.role === "false"}
+                  onChange={(e) => { this.handleChange(e, 'formData', 'role') }}
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="status">Status</label>
-                <input type="text" className="form-control" placeholder="Status"
-                  value={this.state.formData.status}
-                  onChange={(e) => { this.handleChange(e, 'formData', 'status') }} />
+                Active<input style={{ margin: "10px" }}
+                  type="radio"
+                  name="status"
+                  value="true"
+                  checked={this.state.formData.status === "true"}
+                  onChange={(e) => { this.handleChange(e, 'formData', 'status') }}
+                />  <br />
+                Deactive<input style={{ margin: "10px" }}
+                  type="radio"
+                  name="status"
+                  value="false"
+                  checked={this.state.formData.status === "false"}
+                  onChange={(e) => { this.handleChange(e, 'formData', 'status') }}
+                />
               </div>
             </div>
           </div>

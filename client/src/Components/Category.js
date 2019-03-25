@@ -2,12 +2,8 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import AuthService from './AuthService';
-import { Alert } from 'reactstrap';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from "react-table";
-import { Route, Link } from 'react-router-dom'
-import AssignComponent from './AssignComponent';
-import ManageUser from './ManageUser';
 import ManageCategory from './ManageCategory';
 
 class Category extends Component {
@@ -49,7 +45,7 @@ class Category extends Component {
   }
 
   makeData() {
-    axios.get('http://localhost:8080/api/categories/list', {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/categories/list`, {
     }).then((response) => {
       this.setState({
         data: response.data.data
@@ -65,7 +61,7 @@ class Category extends Component {
 
   handleDelete(rowId) {
     const header = this.Auth.getToken();
-    axios.delete('http://localhost:8080/api/categories/delete/' + rowId, {
+    axios.delete(`${process.env.REACT_APP_SERVER}/api/categories/delete/` + rowId, {
       headers: {
         'Authorization': header
       },
@@ -98,7 +94,7 @@ class Category extends Component {
       <Modal isOpen={this.state.modalEdit} toggle={this.toggleEdit} className={this.props.className}>
         <ModalHeader toggle={(e) => { this.toggleEdit(e) }}>Edit Category</ModalHeader>
         <ModalBody>
-          <ManageCategory id={this.state.id} {...this.props} />
+          <ManageCategory id={this.state.id} makeData={this.makeData}{...this.props} />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={(e) => { this.toggleEdit(e) }}>Cancel</Button>

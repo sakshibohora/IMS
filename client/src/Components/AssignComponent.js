@@ -63,14 +63,14 @@ class AssignComponent extends Component {
   }
   componentDidMount() {
     const header = this.Auth.getToken()
-    axios.get('http://localhost:8080/api/users/find/' + this.props.id)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/users/find/` + this.props.id)
       .then(response => {
         this.setState({ formdata: response.data.data });
       })
       .catch(function (error) {
         console.log(error);
       })
-    axios.get('http://localhost:8080/api/categories/getCategoryId', {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/categories/getCategoryId`, {
       headers: {
         'Authorization': header,
       }
@@ -81,7 +81,7 @@ class AssignComponent extends Component {
         console.log(error);
       })
 
-    axios.get('http://localhost:8080/api/users/name', {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/users/name`, {
       headers: {
         'Authorization': header,
       }
@@ -100,7 +100,7 @@ class AssignComponent extends Component {
       categoryId: id
     }
     const header = this.Auth.getToken()
-    axios.post('http://localhost:8080/api/components/getComponentName', data, {
+    axios.post(`${process.env.REACT_APP_SERVER}/components/getComponentName`, data, {
       headers: {
         'Authorization': header,
       }
@@ -143,7 +143,7 @@ class AssignComponent extends Component {
     }
 
     const header = this.Auth.getToken();
-    axios.post('http://localhost:8080/api/assignedcomponent', data, {
+    axios.post(`${process.env.REACT_APP_SERVER}/api/assignedcomponent`, data, {
       headers: {
         'Authorization': header
       },

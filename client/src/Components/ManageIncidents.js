@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
-import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
+import { ButtonDropdown, Alert, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 
 let formData = {
   incidentBy: '',
@@ -19,7 +19,8 @@ class ManageIncidents extends Component {
       formData: { ...formData },
       uname: [],
       firstName: 'Select Name',
-      flag: false //false = insert, true = edit
+      flag: false, //false = insert, true = edit
+      collapse: false,
     }
     this.Auth = new AuthService()
     this.handleChange = this.handleChange.bind(this)
@@ -42,7 +43,7 @@ class ManageIncidents extends Component {
 
   getData(rowId) {
     const header = this.Auth.getToken()
-    axios.get('http://localhost:8080/api/incidents/find/' + rowId)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/incidents/find/` + rowId)
       .then(response => {
         console.log(response)
         this.setState({
@@ -56,32 +57,31 @@ class ManageIncidents extends Component {
   }
   componentDidMount() {
     const header = this.Auth.getToken();
-    axios.get('http://localhost:8080/api/users/name', {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/users/name`, {
       headers: {
         'Authorization': header,
       }
     }).then((response) => {
       this.setState({ uname: response.data.data })
       console.log("user res", this.state.uname)
-      this.setState({ collapse: false });
     }).catch(function (error) {
       console.log(error);
     })
   }
   handleFormSubmit(e) {
     e.preventDefault();
-    console.log(this.props.id)
-    console.log("adsfghj", this.state.formData)
-    axios.put('http://localhost:8080/api/incidents/edit/' + this.props.id, this.state.formData)
+    axios.put(`${process.env.REACT_APP_SERVER}/api/incidents/edit/` + this.props.id, this.state.formData)
       .then((res) => {
         console.log("edit", res)
         this.props.makeData()
+        this.setState({ collapse: true });
+
       }).catch((err) => {
         console.log(err)
       })
     // } else {
     //   console.log(this.state.formData)
-    //   axios.post('http://localhost:8080/api/users', this.state.formData)
+    //   axios.post(`${process.env.REACT_APP_SERVER}/api/users', this.state.formData)
     //     .then((res) => {
     //       console.log(res, "jfkldsjfklds")
     //       this.props.makeData()
@@ -153,11 +153,11 @@ class ManageIncidents extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="status">Status</label>
-                In process<input style={{ margin: "10px" }}
+                In Process<input style={{ margin: "10px" }}
                   type="radio"
-                  name="process"
-                  value="process"
-                  checked={this.state.formData.status === "process"}
+                  name="done"
+                  value="In Process"
+                  checked={this.state.formData.status === "In Process"}
                   onChange={(e) => { this.handleChange(e, 'formData', 'status') }}
                 /><br />
                 Done<input style={{ margin: "10px" }}
@@ -179,6 +179,9 @@ class ManageIncidents extends Component {
             </div>
           </div>
         </form>
+        <Alert color="primary" isOpen={this.state.collapse}>
+          Your DATA has been recorded!
+        </Alert>
       </>
     )
   }

@@ -41,7 +41,7 @@ class RequestComponent extends Component {
   }
   componentDidMount() {
     const header = this.Auth.getToken()
-    axios.get('http://localhost:8080/api/categories/getCategoryId', {
+    axios.get(`${process.env.REACT_APP_SERVER}/api/categories/getCategoryId`, {
       headers: {
         'Authorization': header,
       }
@@ -61,7 +61,7 @@ class RequestComponent extends Component {
       categoryId: id
     }
     const header = this.Auth.getToken()
-    axios.post('http://localhost:8080/api/components/getComponentName', data, {
+    axios.post(`${process.env.REACT_APP_SERVER}/api/components/getComponentName`, data, {
       headers: {
         'Authorization': header,
       }
@@ -92,7 +92,7 @@ class RequestComponent extends Component {
     }
 
     const header = this.Auth.getToken();
-    axios.post('http://localhost:8080/api/requestComponents', data, {
+    axios.post(`${process.env.REACT_APP_SERVER}/api/requestComponents`, data, {
       headers: {
         'Authorization': header
       },
