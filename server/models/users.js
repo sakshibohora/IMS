@@ -19,7 +19,9 @@ module.exports = (sequelize, DataTypes) => {
           }
         },
         beforeUpdate: function (user) {
-          user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
+          if (user.changed('password')) {
+            user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
+          }
         },
       },
     });

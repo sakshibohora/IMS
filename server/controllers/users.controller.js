@@ -31,62 +31,6 @@ exports.createNewUsers = async function (req, res) {
 };
 
 exports.getAllUsers = async function (req, res) {
-  // let data;
-
-  // // PAGINATION
-  // let skipping = req.query.skip;
-  // let limiting = req.query.limit;
-  // let searching = req.query.search;
-  // // eslint-disable-next-line prefer-destructuring
-  // const asc = req.query.asc;
-  // // eslint-disable-next-line prefer-destructuring
-  // let sort = req.query.sort;
-  // let x = 'ASC';
-  // // eslint-disable-next-line prefer-destructuring
-  // const Op = db.Sequelize.Op;
-  // if (skipping === null || skipping === undefined || skipping === '') {
-  //     skipping = 0;
-  // }
-  // if (limiting === '' || limiting === null || limiting === undefined) {
-  //     limiting = null;
-  // }
-  // if (searching === null || searching === undefined) {
-  //     searching = '';
-  // }
-  // if (sort === null || sort === undefined || sort === '') {
-  //     sort = 'id';
-  // }
-  // if (asc === '0') {
-  //     x = 'DESC';
-  // } else {
-  //     x = 'ASC';
-  // }
-  // try {
-  //     data = await users.findAll({
-  //         where: { username: { [Op.iLike]: `${searching}%` } },
-  //         order: [[sort, x]],
-  //         offset: skipping,
-  //         limit: limiting,
-  //     });
-  // } catch (err) {
-  //     res.status(500).json({
-  //         status: false,
-  //         message: 'Unable To List Data.',
-  //         data: err,
-  //     });
-  // }
-  // if (data !== undefined) {
-  //     res.status(200).json({
-  //         status: true,
-  //         message: 'All Data fetched successfully',
-  //         data,
-  //         metadata: {
-  //             skip: req.query.skip,
-  //             limit: req.query.limit,
-  //             search: req.query.search,
-  //         },
-  //     });
-  // }
   users
     .findAll()
     .then((data) => res.status(200).send(data))
@@ -146,7 +90,6 @@ exports.updateUsers = async function (req, res) {
     }).then(function (result) {
       return result.update({
         username: req.body.username,
-        password: req.body.password,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
