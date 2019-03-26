@@ -88,8 +88,8 @@ const routes = (app) => {
         var transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
-            user: 'bacancytechnology.com',
-            pass: ''
+            user: 'test@bacancytechnology.com',//valid email id, for testing purpose only
+            pass: 'test@123' //valid password, for testing purpose only
           }
         });
 
