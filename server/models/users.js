@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     contactNo: DataTypes.NUMERIC(10),
     role: DataTypes.BOOLEAN,
     status: DataTypes.BOOLEAN,
-  }, {
+    resetPasswordToken: DataTypes.STRING,
+    resetPasswordExpires: DataTypes.DATE,
+  },
+
+    {
       hooks: {
         beforeCreate: function (user) {
           if (user.changed('password')) {
