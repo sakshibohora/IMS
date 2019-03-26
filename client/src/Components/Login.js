@@ -64,8 +64,9 @@ class Login extends Component {
             <i className="fa fa-user"></i>
             <input type="password" value={this.state.pword} onChange={(e) => this.ChangeValue(e, 'pword')} placeholder="Password" onClick={() => this.setState({ pword: '' })} required />
             <i className="fa fa-key"></i>
+            <a href="/forgotPassword">Forgot password ?</a>
             <button>
-              {/* <i className="spinner"></i> */}
+             
               <span className="state">Log in</span>
             </button>
 
