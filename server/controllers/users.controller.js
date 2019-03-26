@@ -81,7 +81,6 @@ exports.findUserName = async function (request, response) {
     })
   }
 }
-
 //update user
 exports.updateUsers = async function (req, res) {
   try {
