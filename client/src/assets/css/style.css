@@ -1,0 +1,14 @@
+.bck-image{
+    background-image: url('../../images/backgroundimg.jpg');
+    height: -webkit-fill-available;
+
+    }
+    
+    .innerHeading h1 { 
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    padding: 300px;
+    text-transform: uppercase;
+    line-height: normal;
+    color:hsl(24, 74%, 49%); 
+    }

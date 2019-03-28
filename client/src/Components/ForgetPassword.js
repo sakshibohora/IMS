@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import AuthService from './AuthService';
-import { Alert } from 'reactstrap'
+import Simplert from 'react-simplert'
 class ForgotPassword extends Component {
   constructor() {
     super();
@@ -45,9 +45,8 @@ class ForgotPassword extends Component {
             this.setState({
               showError: false,
               messageFromServer: 'recovery email sent',
-              collapse:!this.state.collapse
+              collapse: !this.state.collapse
             });
-           // if (this.state.collapse === false) this.setState({ collapse: !this.state.collapse });
           }
         })
         .catch((error) => {
@@ -81,9 +80,12 @@ class ForgotPassword extends Component {
             Send Password Reset Email
         </button>
         </form>
-        <Alert color="primary" isOpen={this.state.collapse}>
-          Mail has been sent!
-        </Alert>
+        <Simplert
+          showSimplert={this.state.collapse}
+          type={"success"}
+          title={"alert"}
+          message={'Mail sent Successfully'}
+        />
       </div>
     )
   }

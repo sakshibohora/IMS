@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
-import { Alert } from 'reactstrap'
+import Simplert from 'react-simplert'
 
 let formData = {
   categoryType: '',
@@ -70,8 +70,9 @@ class ManageCategory extends Component {
         },
       })
         .then((res) => {
+          if(this.state.collapse === false) this.setState({ collapse: !this.state.collapse });
+
           this.props.makeData()
-          this.setState({ collapse: true })
 
         }).catch((err) => {
           console.log(err)
@@ -94,9 +95,12 @@ class ManageCategory extends Component {
             </div>
           </div>
         </form>
-        <Alert color="primary" isOpen={this.state.collapse}>
-          Your DATA has been recorded!
-        </Alert>
+        <Simplert
+          showSimplert={this.state.collapse}
+          type={"success"}
+          title={"alert"}
+          message={'Category added Successfully'}
+        />
       </>
     )
   }

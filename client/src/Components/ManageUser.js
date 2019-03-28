@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
-import { Alert } from 'reactstrap'
+import Simplert from 'react-simplert'
 
 let formData = {
   id: '',
@@ -174,9 +174,12 @@ class ManageUser extends Component {
           </div>
           <button type="submit" className="btn btn-lg sg-submit-button" style={{ margin: "10px" }}>Submit</button>
         </form>
-        <Alert color="primary" isOpen={this.state.collapse}>
-          Your DATA has been updated!
-        </Alert>
+        <Simplert
+          showSimplert={this.state.collapse}
+          type={"success"}
+          title={"alert"}
+          message={'User added Successfully'}
+        />
       </>
     )
   }

@@ -14,7 +14,7 @@ class Incidents extends Component {
       modalAdd: false,
       modalEdit: false,
       modal: false,
-      id: null
+      id: null,
     }
     this.toggleAdd = this.toggleAdd.bind(this)
     this.toggleEdit = this.toggleEdit.bind(this)

@@ -33,11 +33,9 @@ class Navbar extends Component {
                 {this.props.user.username}<i className="fas fa-user-circle fa-fw"></i>
               </a>
               <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                {/* <a className="dropdown-item" href="#">Settings</a>
-                <a className="dropdown-item" href="#">Activity Log</a> */}
-                <div className="dropdown-divider"></div>
-                {/* <a className="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a> */}
-                <input type='button' value='Logout' className="btn btn-danger" onClick={this.handleLogout.bind(this)} />
+                <center>
+                  <button className="btn btn-md sg-submit-button" value='Logout' style={{ borderRadius: "5px", alignSelf: 'center' }} onClick={this.handleLogout.bind(this)}>Logout</button>
+                </center>
               </div>
             </li>
           </ul>

@@ -14,8 +14,9 @@
     "react-dom": "^16.8.2",
     "react-native-cookie": "^0.2.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.5",
+    "react-scripts": "^2.1.8",
     "react-sidebar": "^3.0.2",
+    "react-simplert": "0.0.2",
     "react-table": "^6.9.2",
     "reactstrap": "^7.1.0"
   },

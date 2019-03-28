@@ -11,6 +11,9 @@ import AssignRequestedComponent from './AssignRequestComponent';
 import Category from './Category';
 import Components from './Component';
 import AllAssignedComponents from './AllAssignedComponents'
+import HomePage from './HomePage';
+import '../assets/css/style.css'
+
 const Auth = new AuthService();
 
 class AdminHome extends Component {
@@ -31,12 +34,9 @@ class AdminHome extends Component {
       <>
         <Navbar {...this.props} />
         <div id='wrapper'>
-          <div id="content-wrapper" >
-            <Route exact path={`${match.url}/viewProfile`} render={() =>
-              <ViewProfile {...this.props}
-              />
-            }
-            />
+          <div id="content-wrapper" style={{ paddingTop: '0px', paddingBottom: '0px' }}>
+            <Route exact path={`${match.url}`} component={HomePage} />
+            <Route exact path={`${match.url}/viewProfile`} render={() => <ViewProfile {...this.props} />} />
             <Route path={`${match.url}/user`} render={() => <User {...this.props} />} />
             <Route path={`${match.url}/category`} render={() => <Category {...this.props} />} />
             <Route path={`${match.url}/component`} render={() => <Components {...this.props} />} />
@@ -57,5 +57,3 @@ AdminHome.propTypes = {
   match: PropTypes.object,
 };
 export default withAuth(AdminHome);
-
-

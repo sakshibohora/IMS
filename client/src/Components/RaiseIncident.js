@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
 import '../App.css'
-import {Alert} from 'reactstrap'
+import Simplert from 'react-simplert'
 
 class RaiseIncidents extends Component {
   constructor(props) {
@@ -68,9 +68,12 @@ class RaiseIncidents extends Component {
             </div>
             <button type="submit" className="btn btn-md sg-submit-button">Raise Issue</button>
           </form>
-          <Alert color="primary" isOpen={this.state.collapse}>
-            Your DATA has been updated!
-        </Alert>
+          <Simplert
+          showSimplert={this.state.collapse}
+          type={"success"}
+          title={"alert"}
+          message={'Incident sent Successfully'}
+        />
         </div>
       </div>
     )

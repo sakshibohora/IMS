@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import AuthService from './AuthService';
-
-import { Button, Alert } from 'reactstrap'
+import Simplert from 'react-simplert'
+import { Button} from 'reactstrap'
 let formData = {
   password: '',
   confirmpassword: '',
@@ -116,7 +115,7 @@ export default class ResetPassword extends Component {
               <label htmlFor="password">Password</label>
               <input type="password"
                 id="password"
-                onChange={(e)=>{this.handleChange(e, 'formData', 'password')}}
+                onChange={(e) => { this.handleChange(e, 'formData', 'password') }}
                 value={this.state.formData.password}
               />
             </div>
@@ -124,7 +123,7 @@ export default class ResetPassword extends Component {
               <label htmlFor="confirmpassword">Confirm Password</label>
               <input type="password"
                 id="confirmpassword"
-                onChange={(e)=>{this.handleChange(e, 'formData', 'confirmpassword')}}
+                onChange={(e) => { this.handleChange(e, 'formData', 'confirmpassword') }}
                 value={this.state.formData.confirmpassword}
               />
             </div>
@@ -151,9 +150,12 @@ export default class ResetPassword extends Component {
             </Button>
             </div>
           )}
-          <Alert color="primary" isOpen={this.state.collapse}>
-            Your Password has been updated!
-         </Alert>
+          <Simplert
+            showSimplert={this.state.collapse}
+            type={"success"}
+            title={"alert"}
+            message={'Password Reset Successfully'}
+          />
         </div>
       </div>
 

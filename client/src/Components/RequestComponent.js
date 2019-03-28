@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import AuthService from './AuthService';
-import { Alert } from 'reactstrap';
+import Simplert from 'react-simplert'
 import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 
 class RequestComponent extends Component {
@@ -155,9 +155,12 @@ class RequestComponent extends Component {
               <br />
               <button type="submit" className="btn btn-md sg-submit-button">Request Send</button>
             </form>
-            <Alert color="primary" isOpen={this.state.collapse}>
-              Your request has been sent to Admin!
-           </Alert>
+            <Simplert
+          showSimplert={this.state.collapse}
+          type={"success"}
+          title={"alert"}
+          message={'Request sent Successfully'}
+        />
           </div>
         </div>
       </>

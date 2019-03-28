@@ -9,6 +9,7 @@ import RequestComponent from './RequestComponent'
 import RaiseIncidents from './RaiseIncident';
 import ViewComponentStatus from './ViewComponentStatus';
 import ViewIncidentStatus from './ViewIncidentStatus';
+import HomePage from './HomePage';
 
 const Auth = new AuthService();
 
@@ -29,8 +30,8 @@ class UserHome extends Component {
       <>
         <Navbar {...this.props} />
         <div id='wrapper'>
-          {/* <Sidebar /> */}
-          <div id="content-wrapper" style={{ height: "100%" }} >
+          <div id="content-wrapper" style={{ height: "100%", paddingTop: '0px', paddingBottom: '0px' }} >
+            <Route exact path={`${match.url}`} component={HomePage} />
             <Route exact path={`${match.url}/viewProfile`} render={() => <ViewProfile {...this.props} />} />
             <Route exact path={`${match.url}/requestComponent`} render={() => <RequestComponent {...this.props} />} />
             <Route exact path={`${match.url}/raiseIncidents`} render={() => <RaiseIncidents {...this.props} />} />
@@ -49,5 +50,4 @@ UserHome.defaultProps = {
 UserHome.propTypes = {
   match: PropTypes.object,
 };
-
 export default withAuth(UserHome);

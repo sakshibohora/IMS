@@ -5,6 +5,7 @@ import AuthService from './AuthService';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from "react-table";
 import ManageComponent from './ManageComponent';
+import Simplert from 'react-simplert'
 
 class Components extends Component {
   constructor(props) {
@@ -15,7 +16,8 @@ class Components extends Component {
       modalAdd: false,
       modalEdit: false,
       modal: false,
-      id: null
+      id: null,
+      collapse:false
     }
     this.toggleAdd = this.toggleAdd.bind(this)
     this.toggleEdit = this.toggleEdit.bind(this)
@@ -71,6 +73,7 @@ class Components extends Component {
       },
     }).then((response) => {
       this.makeData();
+      this.setState({collapse:true})
     })
       .catch(function (error) {
         console.log(error);
@@ -149,11 +152,17 @@ class Components extends Component {
               )
             }
           ]}
-          defaultPageSize={10}
+          defaultPageSize={5}
           className="-striped -highlight"
         />
         {this.renderEditComponentModal()}
         {this.renderAddComponentModal()}
+        <Simplert
+          showSimplert={this.state.collapse}
+          type={"error"}
+          title={"alert"}
+          message={'Record Deleted Successfully'}
+        />
       </>
     )
   }

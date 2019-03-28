@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
-import { Alert } from 'reactstrap'
+import Simplert from 'react-simplert'
 
 
 let formData = {
@@ -150,9 +150,12 @@ class ManageRequestedComponent extends Component {
             </div>
           </div>
         </form>
-        <Alert color="primary" isOpen={this.state.collapse}>
-          Your DATA has been updated!
-        </Alert>
+        <Simplert
+          showSimplert={this.state.collapse}
+          type={"success"}
+          title={"alert"}
+          message={'Changes added Successfully'}
+        />
       </>
     )
   }

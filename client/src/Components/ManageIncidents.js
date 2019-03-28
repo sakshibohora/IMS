@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
-import { ButtonDropdown, Alert, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
-
+import { ButtonDropdown,DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
+import Simplert from 'react-simplert'
 let formData = {
   incidentBy: '',
   incidentName: '',
@@ -177,9 +177,12 @@ class ManageIncidents extends Component {
             </div>
           </div>
         </form>
-        <Alert color="primary" isOpen={this.state.collapse}>
-          Your DATA has been recorded!
-        </Alert>
+        <Simplert
+          showSimplert={this.state.collapse}
+          type={"success"}
+          title={"alert"}
+          message={'Updated Successfully'}
+        />
       </>
     )
   }
