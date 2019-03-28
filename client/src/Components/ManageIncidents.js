@@ -43,7 +43,11 @@ class ManageIncidents extends Component {
 
   getData(rowId) {
     const header = this.Auth.getToken()
-    axios.get(`${process.env.REACT_APP_SERVER}/api/incidents/find/` + rowId)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/incidents/find/` + rowId, {
+      headers: {
+        'Authorization': header
+      },
+    })
       .then(response => {
         console.log(response)
         this.setState({
@@ -70,7 +74,12 @@ class ManageIncidents extends Component {
   }
   handleFormSubmit(e) {
     e.preventDefault();
-    axios.put(`${process.env.REACT_APP_SERVER}/api/incidents/edit/` + this.props.id, this.state.formData)
+    const header = this.Auth.getToken();
+    axios.put(`${process.env.REACT_APP_SERVER}/api/incidents/edit/` + this.props.id, this.state.formData, {
+      headers: {
+        'Authorization': header
+      },
+    })
       .then((res) => {
         console.log("edit", res)
         this.props.makeData()
@@ -79,17 +88,6 @@ class ManageIncidents extends Component {
       }).catch((err) => {
         console.log(err)
       })
-    // } else {
-    //   console.log(this.state.formData)
-    //   axios.post(`${process.env.REACT_APP_SERVER}/api/users', this.state.formData)
-    //     .then((res) => {
-    //       console.log(res, "jfkldsjfklds")
-    //       this.props.makeData()
-
-    //     }).catch((err) => {
-    //       console.log(err)
-    //     })
-    // }
   }
   handleChange(e, target, field) {
     e.preventDefault();

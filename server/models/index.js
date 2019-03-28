@@ -42,4 +42,27 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+db.Users=require('../models/users.js')(sequelize,Sequelize)
+db.Categories=require('../models/categories.js')(sequelize,Sequelize)
+db.RequestComponents=require('../models/requestComponents.js')(sequelize,Sequelize)
+db.Incidents=require('../models/incidents.js')(sequelize,Sequelize)
+db.Components = require('../models/components.js')(sequelize, Sequelize); 
+db.AssignedComponents = require('../models/assignedcomponents.js')(sequelize, Sequelize);
+
+
+
+db.RequestComponents.belongsTo(db.Categories,{foreignKey:'categoryId'})
+db.RequestComponents.belongsTo(db.Users,{foreignKey:'userId'})
+db.Incidents.belongsTo(db.Users,{foreignKey:'incidentBy'})
+
+
+
+
+//Relationships
+db.Components.belongsTo(db.Categories, {foreignKey: 'categoryId'});
+db.AssignedComponents.belongsTo(db.Categories, {foreignKey: 'categoryId'});
+db.AssignedComponents.belongsTo(db.Components, {foreignKey: 'componentId'});
+db.AssignedComponents.belongsTo(db.Users, {as: 'AssignedBy',foreignKey: 'assignedBy'});
+db.AssignedComponents.belongsTo(db.Users, {as: 'AssignedTo', foreignKey: 'userId'});
+
 module.exports = db;

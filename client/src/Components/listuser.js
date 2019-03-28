@@ -16,7 +16,11 @@ class ListUser extends Component {
   }
   deleteData(id) {
     console.log(id)
-    axios.delete(`${process.env.REACT_APP_SERVER}/api/users/delete/` + id)
+    axios.delete(`${process.env.REACT_APP_SERVER}/api/users/delete/` + id,{
+      headers: {
+        'Authorization': header
+      },
+    })
       .then(() => {
         console.log(this.props.data.length)
         if (this.props.data.length === 1) {
@@ -24,7 +28,11 @@ class ListUser extends Component {
           this.setState({ skip: 0 })
         } else {
 
-          axios.get(`${process.env.REACT_APP_SERVER}/api/users/list`)
+          axios.get(`${process.env.REACT_APP_SERVER}/api/users/list`,{
+            headers: {
+              'Authorization': header
+            },
+          })
             .then((res) => {
               let data = res.data;
               this.props.updateData(data)
@@ -40,7 +48,11 @@ class ListUser extends Component {
   }
   makeData() {
     b// console.log('request is going')
-    axios.get(`${process.env.REACT_APP_SERVER}/api/users/list`)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/users/list`,{
+      headers: {
+        'Authorization': header
+      },
+    })
       .then((response) => {
         // console.log("listuser", response.data)
 

@@ -2,6 +2,7 @@ const db = require('../models/index');
 
 const incidents = db.Incidents;
 const incidentUpdates = db.IncidentUpdates;
+const users = db.Users
 
 exports.createIncidents = async function (request, response) {
   let data;
@@ -152,7 +153,7 @@ exports.deleteIncidents = async function (request, response) {
   try {
     data = await incidents.destroy({ where: { id: request.params.id } });
   } catch (err) {
-    response.status(500).json({
+    response.status(404).json({
       status: false,
       message: 'Unable To Delete.',
       data: err,
@@ -188,3 +189,33 @@ exports.getIncidents = async function (request, response) {
     });
   }
 };
+
+
+
+exports.getIncidentdetails = async function (req, res) {
+  let data
+  try {
+    data = await incidents.findAll({
+      include: [
+        {
+          model: users,
+          attributes: ['username'],
+          required: true
+        }
+      ]
+    })
+  } catch (err) {
+    res.status(404).json({
+      status: false,
+      message: 'unable to find data',
+      data: err,
+    })
+  }
+  if (data !== undefined) {
+    res.status(200).json({
+      status: true,
+      message: 'All Data fetched successfully',
+      data,
+    });
+  }
+}

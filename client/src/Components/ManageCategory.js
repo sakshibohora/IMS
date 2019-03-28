@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
-import {Alert} from 'reactstrap'
+import { Alert } from 'reactstrap'
 
 let formData = {
   categoryType: '',
@@ -12,7 +12,7 @@ class ManageCategory extends Component {
     this.state = {
       formData: { ...formData },
       flag: false, //false = insert, true = edit
-      collapse:false,
+      collapse: false,
     }
     this.Auth = new AuthService()
     this.handleChange = this.handleChange.bind(this)
@@ -26,7 +26,11 @@ class ManageCategory extends Component {
 
   getData(rowId) {
     const header = this.Auth.getToken()
-    axios.get(`${process.env.REACT_APP_SERVER}/api/categories/find/` + rowId)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/categories/find/` + rowId, {
+      headers: {
+        'Authorization': header
+      },
+    })
       .then(response => {
         this.setState({
           formData: response.data.data,
@@ -46,23 +50,29 @@ class ManageCategory extends Component {
 
   handleFormSubmit(e) {
     e.preventDefault();
-
+    const header = this.Auth.getToken();
     if (this.state.flag === true) {
-      axios.put(`${process.env.REACT_APP_SERVER}/api/categories/edit/` + this.props.id, this.state.formData)
+      axios.put(`${process.env.REACT_APP_SERVER}/api/categories/edit/` + this.props.id, this.state.formData, {
+        headers: {
+          'Authorization': header
+        },
+      })
         .then((res) => {
           this.props.makeData()
-          this.setState({collapse:true})
-          // this.props.history.push('/admin/adminhome/a2/listcategory');
+          this.setState({ collapse: true })
         }).catch((err) => {
           console.log(err)
         })
     } else {
-      axios.post(`${process.env.REACT_APP_SERVER}/api/categories`, this.state.formData)
+      axios.post(`${process.env.REACT_APP_SERVER}/api/categories`, this.state.formData, {
+        headers: {
+          'Authorization': header
+        },
+      })
         .then((res) => {
           this.props.makeData()
-          this.setState({collapse:true})
+          this.setState({ collapse: true })
 
-          // this.props.history.push('/admin/adminhome/a2/listcategory');
         }).catch((err) => {
           console.log(err)
         })

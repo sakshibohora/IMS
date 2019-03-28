@@ -11,7 +11,8 @@ class RequestComponent extends Component {
       cId: [],
       cName: [],
       componentId: '',
-      categoryId: 'Select Category',
+      categoryId: '',
+      categoryType: 'Select Category',
       dropdownOpen1: false,
       componentName: 'Select Component',
       dropdownOpen2: false,
@@ -54,9 +55,11 @@ class RequestComponent extends Component {
 
   }
   changeValue1(e) {
-    this.setState({ categoryId: e.currentTarget.textContent });
+    this.setState({ categoryType: e.currentTarget.textContent });
     let id = e.currentTarget.getAttribute("id");
-
+    this.setState({
+      categoryId: id
+    })
     const data = {
       categoryId: id
     }
@@ -86,11 +89,11 @@ class RequestComponent extends Component {
     const data = {
       userId: this.props.user.id,
       categoryId: parseInt(this.state.categoryId),
-      componentId: this.state.componentId,
+      componentId: parseInt(this.state.componentId),
       componentName: this.state.componentName,
       issue: this.state.issue,
     }
-
+    console.log(data)
     const header = this.Auth.getToken();
     axios.post(`${process.env.REACT_APP_SERVER}/api/requestComponents`, data, {
       headers: {
@@ -120,11 +123,11 @@ class RequestComponent extends Component {
             <form onSubmit={(e) => { this.handleFormSubmit(e) }}>
               <label htmlFor="selectcat">Select Category</label>
               <ButtonDropdown isOpen={this.state.dropdownOpen1} toggle={this.toggle}>
-                <DropdownToggle caret>{this.state.categoryId}</DropdownToggle>
+                <DropdownToggle caret>{this.state.categoryType}</DropdownToggle>
                 <DropdownMenu>
                   {this.state.cId.map(e => {
                     return (
-                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue1(e) }}>{e.id}
+                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue1(e) }}>{e.categoryType}
                       </DropdownItem>)
                   })}
                 </DropdownMenu>
@@ -150,7 +153,7 @@ class RequestComponent extends Component {
                 onChange={(e) => { this.changeValue3(e) }} required
               />
               <br />
-              <button type="submit" class="btn btn-md sg-submit-button">Request Send</button>
+              <button type="submit" className="btn btn-md sg-submit-button">Request Send</button>
             </form>
             <Alert color="primary" isOpen={this.state.collapse}>
               Your request has been sent to Admin!

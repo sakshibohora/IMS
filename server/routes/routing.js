@@ -1,7 +1,5 @@
-var Sequelize = require('sequelize');
 var bcrypt = require('bcrypt-nodejs');
-var crypto = require('crypto');
-const nodemailer = require('nodemailer')
+
 
 
 const db = require('../models/index.js');
@@ -9,6 +7,7 @@ const users = db.Users;
 
 const checkSignIn = require('../controllers/middleware.js')
 const user = require('../controllers/users.controller');
+const forgotPassword = require('../controllers/forgetpassword.controller');
 const reqcomponents = require('../controllers/requestComponent.controller');
 const assignedComponent = require('../controllers/assignedcomponent.controller');
 const categories = require('../controllers/categories.controller');
@@ -26,14 +25,17 @@ const passport = require('passport');
 require('../config/passport')(passport);
 
 const routes = (app) => {
-  app.post('/api/users', user.createNewUsers);
+  app.post('/api/users', passport.authenticate('jwt', { session: false }), checkSignIn, user.createNewUsers);
   app.get('/api/users/find/:id', user.findUser)
-  app.get('/api/users/list', user.getAllUsers);
-  app.get('/api/users/name', user.findUserName);
-  app.put('/api/users/edit:id', user.updateUsers);
-  app.delete('/api/users/delete/:id', user.deleteUsers);
+  app.get('/api/users/list', passport.authenticate('jwt', { session: false }), checkSignIn, user.getAllUsers);
+  app.get('/api/users/name', passport.authenticate('jwt', { session: false }), checkSignIn, user.findUserName);
+  app.put('/api/users/edit:id', passport.authenticate('jwt', { session: false }), checkSignIn, user.updateUsers);
+  app.delete('/api/users/delete/:id', passport.authenticate('jwt', { session: false }), checkSignIn, user.deleteUsers);
   app.post('/api/users/getUserDetails', passport.authenticate('jwt', { session: false }), checkSignIn, user.getUserDetails);
-  // passport.authenticate('jwt', { session: false }), checkSignIn
+  app.post('/api/users/forgotPassword/', forgotPassword.forgotPassword);
+  app.get('/api/users/reset/:token', forgotPassword.resetpassword)
+  app.put('/api/users/updatePasswordViaEmail', forgotPassword.updatePasswordViaEmail)
+
   app.post('/api/users/login/', function (req, res) {
     users
       .find({
@@ -60,174 +62,64 @@ const routes = (app) => {
       })
       .catch((error) => res.status(400).send(error));
   });
-
-
-
-
-  app.post('/api/users/forgotPassword/', (req, res) => {
-    if (req.body.email === '') {
-      res.status(400).send('email required');
-    }
-    console.error(req.body.email);
-    users.findOne({
-      where: {
-        email: req.body.email,
-      },
-    }).then((user) => {
-      if (user === null) {
-        console.error('email not in database');
-        res.status(403).send('email not in db');
-      } else {
-        const token1 = crypto.randomBytes(20).toString('hex');
-        user.update({
-          resetPasswordToken: token1,
-          resetPasswordExpires: Date.now() + 36000,
-        });
-
-        // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-        var transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: 'test@bacancytechnology.com',//valid email id, for testing purpose only
-            pass: 'test@123' //valid password, for testing purpose only
-          }
-        });
-
-        var mailOptions = {
-          from: 'sakshi.bohora@bacancytechnology.com',
-          to: 'sakshibohora@gmail.com',
-          subject: 'Sending Email using Node.js',
-          text:
-            'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n'
-            + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n'
-            + `http://localhost:3000/reset/${token1}\n\n`
-            + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
-
-        };
-
-        transporter.sendMail(mailOptions, function (error, info) {
-          if (error) {
-            console.log("dfghjkl;", error);
-          } else {
-            console.log('Email sent: ' + info.response);
-          }
-        });
-      }
-    });
-  });
-
-  // eslint-disable-next-line prefer-destructuring
-  const Op = Sequelize.Op;
-  app.get('/api/users/reset/:token', (req, res) => {
-    console.log('sfsfs', req.params.token)
-    users.findOne({
-      where: {
-        resetPasswordToken: req.params.token,
-        resetPasswordExpires: {
-          [Op.gt]: Date.now(),
-        },
-      },
-    }).then((user) => {
-      if (user == null) {
-        console.log('password reset link is invalid or has expired');
-        res.status(403).send('password reset link is invalid or has expired');
-      } else {
-        res.status(200).send({
-          username: user.username,
-          message: 'password reset link a-ok',
-        });
-      }
-    }).catch((err) => console.log(err))
-  });
-
-  const BCRYPT_SALT_ROUNDS = 12;
-  app.put('/api/users/updatePasswordViaEmail', (req, res) => {
-    users.findOne({
-      where: {
-        username: req.body.username,
-        resetPasswordToken: req.body.resetPasswordToken,
-        resetPasswordExpires: {
-          [Op.gt]: Date.now(),
-        },
-      },
-    }).then(user => {
-      if (user == null) {
-        console.error('password reset link is invalid or has expired');
-        res.status(403).send('password reset link is invalid or has expired');
-      } else if (user != null) {
-        console.log('user exists in db');
-        user.update({
-          password: req.body.password,
-          resetPasswordToken: null,
-          resetPasswordExpires: null,
-        })
-          // })
-          .then(() => {
-            console.log('password updated');
-            res.status(200).send({ message: 'password updated' });
-          });
-      } else {
-        console.error('no user exists in db to update');
-        res.status(401).json('no user exists in db to update');
-      }
-    });
-  });
-
-
   //request component routes
-  app.get('/api/requestComponents/list', reqcomponents.getAllRequestedComponents);
-  app.post('/api/requestComponents', reqcomponents.createNewRequestComponents);
-  app.put('/api/requestComponents/edit/:id', reqcomponents.updateRequestedComponent);
-  app.delete('/api/requestComponents/delete:id', reqcomponents.deleteRequestedComponents);
-  app.post('/api/requestComponents/requestComponentByUser', reqcomponents.getRequestedComponentByUser);
-  app.get('/api/requestcomponents/find/:id', reqcomponents.getComponent)
+  app.get('/api/requestComponents/list', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.getAllRequestedComponents);
+  app.post('/api/requestComponents', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.createNewRequestComponents);
+  app.put('/api/requestComponents/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.updateRequestedComponent);
+  app.delete('/api/requestComponents/delete:id', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.deleteRequestedComponents);
+  app.post('/api/requestComponents/requestComponentByUser', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.getRequestedComponentByUser);
+  app.get('/api/requestcomponents/find/:id', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.getComponent)
+  app.get('/api/requestComponents/getRequestComponentDetails', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.getRequestComponentDetails)
+
 
   //assigned component routes
   app.get('/api/assignedComponent/list', assignedComponent.getAllAssignedComponent);
   app.post('/api/assignedcomponent', assignedComponent.assignComponent);
+  app.get('/api/assigncomponents/getAssignedComponentsData',assignedComponent.getAssignedComponentsData)
 
   //categories routes
-  app.get('/api/categories/list', categories.getAllCategories);
-  app.post('/api/categories', categories.createNewCategories);
-  app.put('/api/categories/edit/:id', categories.updateCategories);
-  app.delete('/api/categories/delete/:id', categories.deleteCategories);
-  app.get('/api/categories/getCategoryId', categories.getCategoryId)
-  app.get('/api/categories/find/:id', categories.findCategory)
+  app.get('/api/categories/list', passport.authenticate('jwt', { session: false }), checkSignIn, categories.getAllCategories);
+  app.post('/api/categories', passport.authenticate('jwt', { session: false }), checkSignIn, categories.createNewCategories);
+  app.put('/api/categories/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, categories.updateCategories);
+  app.delete('/api/categories/delete/:id', passport.authenticate('jwt', { session: false }), checkSignIn, categories.deleteCategories);
+  app.get('/api/categories/getCategoryId', passport.authenticate('jwt', { session: false }), checkSignIn, categories.getCategoryId)
+  app.get('/api/categories/find/:id', passport.authenticate('jwt', { session: false }), checkSignIn, categories.findCategory)
 
   //component routes
-  app.get('/api/components/list', components.getAllComponents);
-  app.post('/api/components', components.createNewComponents);
-  app.put('/api/components/edit/:id', components.updateComponents);
-  app.delete('/api/components/delete:id', components.deleteComponents);
-  app.post('/api/components/getComponentName', components.getComponentName);
-  app.get('/api/components/find/:id', components.findComponent)
+  app.get('/api/components/list', passport.authenticate('jwt', { session: false }), checkSignIn, components.getAllComponents);
+  app.post('/api/components', passport.authenticate('jwt', { session: false }), checkSignIn, components.createNewComponents);
+  app.put('/api/components/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, components.updateComponents);
+  app.delete('/api/components/delete:id', passport.authenticate('jwt', { session: false }), checkSignIn, components.deleteComponents);
+  app.post('/api/components/getComponentName', passport.authenticate('jwt', { session: false }), checkSignIn, components.getComponentName);
+  app.get('/api/components/find/:id', passport.authenticate('jwt', { session: false }), checkSignIn, components.findComponent)
 
   //incident routes
-  app.get('/api/incidents/list/:id', incidents.getAllIncidents);
-  app.get('/api/incidents/list', incidents.getIncidents);
-  app.post('/api/incidents', incidents.createIncidents);
-  app.get('/api/incidents/find/:id', incidents.getIncident);
-  app.put('/api/incidents/edit/:id', incidents.updateIncidents);
-  app.delete('/api/incidents/:id', incidents.deleteIncidents);
-
+  app.get('/api/incidents/list/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.getAllIncidents);
+  app.get('/api/incidents/list', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.getIncidents);
+  app.post('/api/incidents', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.createIncidents);
+  app.get('/api/incidents/find/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.getIncident);
+  app.put('/api/incidents/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.updateIncidents);
+  app.delete('/api/incidents/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.deleteIncidents);
+  app.get('/api/incidents/getincidentDetails', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.getIncidentdetails)
+  
   //incidentupdate routes
-  app.get('/api/incidentUpdates/list', incidentUpdates.getAllIncidentUpdates);
-  app.get('/api/incidentUpdates/details/:id', incidentUpdates.getIncident);
-  app.post('/api/incidentUpdates', incidentUpdates.createNewIncidentupdates);
-  app.put('/api/incidentUpdates/edit:id', incidentUpdates.updateIncidentUpdates);
-  app.delete('/api/incidentUpdates/delete:id', incidentUpdates.deleteIncidentUpdates);
+  app.get('/api/incidentUpdates/list', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.getAllIncidentUpdates);
+  app.get('/api/incidentUpdates/details/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.getIncident);
+  app.post('/api/incidentUpdates', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.createNewIncidentupdates);
+  app.put('/api/incidentUpdates/edit:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.updateIncidentUpdates);
+  app.delete('/api/incidentUpdates/delete:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.deleteIncidentUpdates);
 
   //invoicers routes
-  app.get('/api/invoicers/', invoicers.getAllInvoicers);
-  app.post('/api/invoicers', invoicers.createNewInvoicers);
-  app.put('/api/invoicers/:id', invoicers.updateInvoicers);
-  app.delete('/api/invoicers/:id', invoicers.deleteInvoicers);
+  app.get('/api/invoicers/', passport.authenticate('jwt', { session: false }), checkSignIn, invoicers.getAllInvoicers);
+  app.post('/api/invoicers', passport.authenticate('jwt', { session: false }), checkSignIn, invoicers.createNewInvoicers);
+  app.put('/api/invoicers/:id', passport.authenticate('jwt', { session: false }), checkSignIn, invoicers.updateInvoicers);
+  app.delete('/api/invoicers/:id', passport.authenticate('jwt', { session: false }), checkSignIn, invoicers.deleteInvoicers);
 
   //invoices routes
-  app.get('/api/invoices/', invoices.getAllInvoices);
-  app.post('/api/invoices', invoices.createInvoices);
-  app.put('/api/invoices/:id', invoices.updateInvoices);
-  app.delete('/api/invoices/:id', invoices.deleteInvoices);
+  app.get('/api/invoices/', passport.authenticate('jwt', { session: false }), checkSignIn, invoices.getAllInvoices);
+  app.post('/api/invoices', passport.authenticate('jwt', { session: false }), checkSignIn, invoices.createInvoices);
+  app.put('/api/invoices/:id', passport.authenticate('jwt', { session: false }), checkSignIn, invoices.updateInvoices);
+  app.delete('/api/invoices/:id', passport.authenticate('jwt', { session: false }), checkSignIn, invoices.deleteInvoices);
 
 }
 module.exports = { routes };

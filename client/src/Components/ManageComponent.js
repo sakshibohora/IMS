@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
-import {Alert} from 'reactstrap'
+import { Alert } from 'reactstrap'
 
 let formData = {
   categoryId: '',
@@ -16,7 +16,7 @@ class ManageComponent extends Component {
     this.state = {
       formData: { ...formData },
       flag: false, //false = insert, true = edit
-      collapse:false,
+      collapse: false,
     }
     this.Auth = new AuthService()
     this.handleChange = this.handleChange.bind(this)
@@ -30,13 +30,17 @@ class ManageComponent extends Component {
 
   getData(rowId) {
     const header = this.Auth.getToken()
-    axios.get(`${process.env.REACT_APP_SERVER}/api/components/find/` + rowId)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/components/find/` + rowId,{
+      headers: {
+        'Authorization': header
+      },
+    })
       .then(response => {
         console.log(response)
         this.setState({
           formData: response.data.data,
           flag: true,
-          collapse:false,
+          collapse: false,
         });
         console.log(this.state.flag)
       })
@@ -53,25 +57,32 @@ class ManageComponent extends Component {
 
   handleFormSubmit(e) {
     e.preventDefault();
+    const header = this.Auth.getToken();
 
     if (this.state.flag === true) {
-      axios.put(`${process.env.REACT_APP_SERVER}/api/components/edit/` + this.props.id, this.state.formData)
+      axios.put(`${process.env.REACT_APP_SERVER}/api/components/edit/` + this.props.id, this.state.formData, {
+        headers: {
+          'Authorization': header
+        },
+      })
         .then((res) => {
-          console.log("update",res)
+          console.log("update", res)
           this.props.makeData()
-          this.setState({collapse: true})
+          this.setState({ collapse: true })
           // this.props.history.push('/admin/adminhome/a2/listcategory');
         }).catch((err) => {
           console.log(err)
         })
     } else {
-      axios.post(`${process.env.REACT_APP_SERVER}/api/components`, this.state.formData)
+      axios.post(`${process.env.REACT_APP_SERVER}/api/components`, this.state.formData, {
+        headers: {
+          'Authorization': header
+        },
+      })
         .then((res) => {
           // console.log(res)
           this.props.makeData()
-          this.setState({collapse: true})
-
-          // this.props.history.push('/admin/adminhome/a2/listcategory');
+          this.setState({ collapse: true })
         }).catch((err) => {
           console.log(err)
         })
@@ -113,7 +124,7 @@ class ManageComponent extends Component {
               <div className="form-group">
                 <label htmlFor="warrantydate">Warranty date</label>
                 <input type="date" className="form-control" placeholder="warranty date"
-                 value={this.state.formData.warrantyDate}
+                  value={this.state.formData.warrantyDate}
                   onChange={(e) => { this.handleChange(e, 'formData', 'warrantyDate') }} />
               </div>
               <button type="submit" className="btn btn-primary btn-lg" style={{ margin: "10px" }}>Submit</button>

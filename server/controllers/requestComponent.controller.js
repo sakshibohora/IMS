@@ -2,6 +2,8 @@ const db = require('../models/index.js');
 
 // eslint-disable-next-line prefer-destructuring
 const reqcomponents = db.RequestComponents;
+const users = db.Users
+const categories = db.Categories
 exports.createNewRequestComponents = async function (req, res) {
   let data;
   try {
@@ -14,7 +16,7 @@ exports.createNewRequestComponents = async function (req, res) {
       status: req.body.status,
     });
   } catch (err) {
-    res.status(500).json({
+    res.status(404).json({
       status: false,
       message: 'Unable to save in database',
       data: err,
@@ -92,12 +94,12 @@ exports.updateRequestedComponent = async function (req, res) {
   let data;
   try {
     data = await reqcomponents.update({
-        userId: req.body.userId,
-        categoryId: req.body.categoryId,
-        componentId: req.body.componentId,
-        componentName: req.body.componentName,
-        issue: req.body.issue,
-        status: req.body.status,
+      userId: req.body.userId,
+      categoryId: req.body.categoryId,
+      componentId: req.body.componentId,
+      componentName: req.body.componentName,
+      issue: req.body.issue,
+      status: req.body.status,
     },
       { where: { id: req.params.id } });
   } catch (err) {
@@ -171,7 +173,7 @@ exports.getRequestedComponentByUser = async function (req, res) {
   }
   try {
     data = await reqcomponents.findAll({
-      where: { userId: req.body.userId},
+      where: { userId: req.body.userId },
       offset: skipping,
       limit: limiting,
     });
@@ -214,6 +216,39 @@ exports.getComponent = async function (request, response) {
   }
   if (data !== undefined) {
     response.status(200).json({
+      status: true,
+      message: 'All Data fetched successfully',
+      data,
+    });
+  }
+}
+
+exports.getRequestComponentDetails = async function (req, res) {
+  let data
+  try {
+     data = await reqcomponents.findAll({
+      include: [
+        {
+          model: users,
+          attributes: ['username'],
+          required: true,
+        },
+        {
+          model: categories,
+          attributes: ['categoryType'],
+          required: true,
+        }
+      ]
+    })
+  } catch (err) {
+    res.status(500).json({
+      status: false,
+      message: 'unable to find data',
+      data: err,
+    })
+  }
+  if (data !== undefined) {
+    res.status(200).json({
       status: true,
       message: 'All Data fetched successfully',
       data,

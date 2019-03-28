@@ -66,7 +66,6 @@ class Login extends Component {
             <i className="fa fa-key"></i>
             <a href="/forgotPassword">Forgot password ?</a>
             <button>
-             
               <span className="state">Log in</span>
             </button>
 

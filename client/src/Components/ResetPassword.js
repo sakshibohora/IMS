@@ -1,30 +1,40 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Button } from 'reactstrap'
+import AuthService from './AuthService';
 
+import { Button, Alert } from 'reactstrap'
+let formData = {
+  password: '',
+  confirmpassword: '',
+}
 export default class ResetPassword extends Component {
   constructor() {
     super();
 
     this.state = {
+      formData: { ...formData },
       username: '',
-      password: '',
       updated: false,
-      isLoading: true,
       error: false,
+      collapse: false,
     };
+    this.Auth = new AuthService();
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8080/api/users/reset/' + this.props.match.params.token)
+    const header = this.Auth.getToken();
+    axios.get('http://localhost:8080/api/users/reset/' + this.props.match.params.token, {
+      headers: {
+        'Authorization': header
+      },
+    })
       .then((response) => {
         console.log(response);
         if (response.data.message === 'password reset link a-ok') {
           this.setState({
             username: response.data.username,
             updated: false,
-            isLoading: false,
             error: false,
           });
         }
@@ -36,66 +46,49 @@ export default class ResetPassword extends Component {
           error: true,
         });
       })
-
-    // await axios
-    //   .get('http://localhost:8080/api/users/reset/'+this.props.match.params.token, {
-    //     // params: {
-    //     //   resetPasswordToken: this.props.match.params.token,
-    //     // },
-    //   })
-    //   .then(response => {
-    //     console.log(response);
-    //     if (response.data.message === 'password reset link a-ok') {
-    //       this.setState({
-    //         username: response.data.username,
-    //         updated: false,
-    //         isLoading: false,
-    //         error: false,
-    //       });
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.log(error.response.data);
-    //     this.setState({
-    //       updated: false,
-    //       isLoading: false,
-    //       error: true,
-    //     });
-    //   });
   }
 
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
-  };
+  handleChange(e, target, field) {
+    e.preventDefault();
+    const temp = { ...this.state[target] };
+    temp[field] = e.target.value;
+    this.setState({ [target]: temp })
+  }
 
   updatePassword = e => {
+    const header = this.Auth.getToken();
     e.preventDefault();
-    axios
-      .put('http://localhost:8080/api/users/updatePasswordViaEmail', {
-        username: this.state.username,
-        password: this.state.password,
-        resetPasswordToken: this.props.match.params.token,
-      })
-      .then(response => {
-        console.log(response.data);
-        if (response.data.message === 'password updated') {
-          this.setState({
-            updated: true,
-            error: false,
-          });
-        } else {
-          this.setState({
-            updated: false,
-            error: true,
-          });
-        }
-      })
-      .catch(error => {
-        console.log(error.response.data);
-      });
-  };
+    if (this.state.password === this.state.confirmpassword) {
+      axios
+        .put('http://localhost:8080/api/users/updatePasswordViaEmail', {
+          username: this.state.username,
+          password: this.state.formData.password,
+          resetPasswordToken: this.props.match.params.token,
+          headers: {
+            'Authorization': header
+          },
+        })
+        .then(response => {
+          console.log(response.data);
+          if (response.data.message === 'password updated') {
+            this.setState({
+              updated: true,
+              error: false,
+              collapse: true,
+            });
+          } else {
+            this.setState({
+              updated: false,
+              error: true,
+              collapse: false,
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error.response.data);
+        });
+    };
+  }
 
   render() {
     const { password, updated } = this.state;
@@ -115,46 +108,78 @@ export default class ResetPassword extends Component {
       );
     }
     return (
-      <div>
-        <form className="form-control" onSubmit={this.updatePassword}>
-          <input type="password"
-            id="password"
-            label="password"
-            onChange={this.handleChange('password')}
-            value={password}
-          />
-          <button
-            type="submit"
-            className="btn btn-primary btn-sm"
-            style={{ margin: "10px" }}>
-            Update Password
+      <div className="row">
+        <div className="col-lg-3"></div>
+        <div className="container col-lg-9">
+          <form onSubmit={(e) => { this.updatePassword(e) }}>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input type="password"
+                id="password"
+                onChange={(e)=>{this.handleChange(e, 'formData', 'password')}}
+                value={this.state.formData.password}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="confirmpassword">Confirm Password</label>
+              <input type="password"
+                id="confirmpassword"
+                onChange={(e)=>{this.handleChange(e, 'formData', 'confirmpassword')}}
+                value={this.state.formData.confirmpassword}
+              />
+            </div>
+            <button
+              type="submit"
+              className="btn btn-primary btn-sm"
+              style={{ margin: "10px" }}>
+              Update Password
         </button>
-        </form>
-
-        {updated && (
-          <div>
-            <p>
-              Your password has been successfully reset, please try logging in
-              again.
+            {/* <button type="submit" className="btn btn-md sg-submit-button">Raise Issue</button> */}
+          </form>
+          {updated && (
+            <div>
+              <p>
+                Your password has been successfully reset, please try logging in
+                again.
             </p>
-            <Button
-              className="btn btn-md sg-submit-button"
-              type="button" value="Home"
-              color="primary"
-              onClick={() => this.props.history.push('/')} >
-              login
+              <Button
+                className="btn btn-md sg-submit-button"
+                type="button" value="Home"
+                color="primary"
+                onClick={() => this.props.history.push('/')} >
+                login
             </Button>
-          </div>
-        )}
+            </div>
+          )}
+          <Alert color="primary" isOpen={this.state.collapse}>
+            Your Password has been updated!
+         </Alert>
+        </div>
       </div>
+
+      // <div className="row">
+      //   <div className="col-lg-3"></div>
+      //   <div className="container col-lg-9">
+      //     <form className="form-group" onSubmit={this.updatePassword}>
+
+      //       <button
+      //         type="submit"
+      //         className="btn btn-primary btn-sm"
+      //         style={{ margin: "10px" }}>
+      //         Update Password
+      //   </button>
+      //     </form>
+      //   </div>
+
+      // </div>
     );
   }
 }
-ResetPassword.propTypes = {
-  // eslint-disable-next-line react/require-default-props
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      token: PropTypes.string.isRequired,
-    }),
-  }),
-};
+// ResetPassword.propTypes = {
+//   // eslint-disable-next-line react/require-default-props
+//   match: PropTypes.shape({
+//     params: PropTypes.shape({
+//       token: PropTypes.string.isRequired,
+//     }),
+//   }),
+// };

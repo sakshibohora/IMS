@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import AuthService from './AuthService';
-import { Alert } from 'reactstrap';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from "react-table";
 import ManageRequestedComponent from './ManageRequestedComponent';
@@ -45,11 +44,16 @@ class AssignRequestedComponent extends Component {
   }
 
   makeData() {
-    axios.get(`${process.env.REACT_APP_SERVER}/api/requestComponents/list`, {
+    const header = this.Auth.getToken();
+    axios.get(`${process.env.REACT_APP_SERVER}/api/requestComponents/getRequestComponentDetails`, {
+      headers: {
+        'Authorization': header
+      },
     }).then((response) => {
       this.setState({
         data: response.data.data
       })
+      console.log(this.state.data)
     }).catch(function (error) {
       console.log(error);
     })
@@ -61,7 +65,7 @@ class AssignRequestedComponent extends Component {
 
   handleDelete(rowId) {
     const header = this.Auth.getToken();
-    axios.delete(`${process.env.REACT_APP_SERVER}/api/requestComponents/delete`+ rowId, {
+    axios.delete(`${process.env.REACT_APP_SERVER}/api/requestComponents/delete` + rowId, {
       headers: {
         'Authorization': header
       },
@@ -106,7 +110,6 @@ class AssignRequestedComponent extends Component {
   render() {
     return (
       <>
-        {/* <Button type="submit" color="primary" onClick={this.toggleAdd}>Add New User</Button>&nbsp; */}
         <ReactTable
           data={this.state.data}
           columns={[
@@ -114,12 +117,12 @@ class AssignRequestedComponent extends Component {
               Header: "Request Component Details",
               columns: [
                 {
-                  Header: "User Id",
-                  accessor: "userId"
+                  Header: "User Name",
+                  Cell: row => <span >{row.original.User.username}</span>
                 },
                 {
-                  Header: "Category Id",
-                  accessor: "categoryId"
+                  Header: "Category Type",
+                   Cell: row => <span >{row.original.Category.categoryType}</span>
                 },
                 {
                   Header: "Component Id",
@@ -142,8 +145,8 @@ class AssignRequestedComponent extends Component {
                   Header: 'operation',
                   Cell: row => (
                     <>
-                      {<Button onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
-                      {<Button onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>}
+                      {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
+                      {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>}
                     </>
                   )
                 }
@@ -154,8 +157,6 @@ class AssignRequestedComponent extends Component {
           className="-striped -highlight"
         />
         {this.renderEditCategoryModal()}
-        {/* {this.renderAddCategoryModal()} */}
-        {/* {this.renderAssignComponentModal()} */}
       </>
     )
   }

@@ -130,7 +130,7 @@ exports.getCategoryId = async function (request, response) {
   let data
   try {
     data = await categories.findAll({
-      attributes: ['id']
+      attributes: ['id','categoryType']
     });
   } catch (err) {
     response.status(500).json({

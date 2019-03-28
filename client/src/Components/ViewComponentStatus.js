@@ -23,13 +23,15 @@ class ViewStatus extends Component {
     const data = {
       userId: id,
     }
+    const header = this.Auth.getToken();
     axios.post(`${process.env.REACT_APP_SERVER}/api/requestComponents/requestComponentByUser`, data, {
-
+      headers: {
+        'Authorization': header
+      },
     }).then((response) => {
       this.setState({
         data: response.data.data
       })
-      console.log('Getting api data', this.state.data)
     })
 
       .catch(function (error) {

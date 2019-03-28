@@ -45,7 +45,11 @@ class User extends Component {
   }
 
   makeData() {
+    const header = this.Auth.getToken();
     axios.get(`${process.env.REACT_APP_SERVER}/api/users/list`, {
+      headers: {
+        'Authorization': header
+      },
     }).then((response) => {
       this.setState({
         data: response.data
@@ -120,7 +124,7 @@ class User extends Component {
   render() {
     return (
       <>
-        <Button type="submit" color="primary" onClick={this.toggleAdd}>Add New User</Button>&nbsp;
+        <Button type="submit" style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={this.toggleAdd}>Add New User</Button>&nbsp;
         <ReactTable
           data={this.state.data}
           columns={[
@@ -163,9 +167,9 @@ class User extends Component {
               Cell:
                 row => (
                   <>
-                    {<Button onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
-                    {<Button onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>}
-                    {<Button onClick={(e) => { this.togglemodal(row.original.id) }}><i className='fas'>&#xf0fe;</i>&nbsp;</Button>}
+                    {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
+                    {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>}
+                    {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.togglemodal(row.original.id) }}><i className='fas'>&#xf0fe;</i>&nbsp;</Button>}
                   </>
                 )
             }

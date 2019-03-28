@@ -1,6 +1,9 @@
 const db = require('../models/index.js');
 // eslint-disable-next-line prefer-destructuring
-const assignComponent=db.AssignedComponents
+const assignComponent = db.AssignedComponents
+const users = db.Users
+const categories = db.Categories
+const components = db.Components
 exports.assignComponent = async function (req, res) {
   let data;
   try {
@@ -130,3 +133,48 @@ exports.deleteComponents = async function (req, res) {
     });
   }
 }
+
+
+exports.getAssignedComponentsData = async function (req, res) {
+  let data
+  try {
+    data = await assignComponent.findAll({
+      include: [
+        {
+          model: users,
+          attributes: ['username'],
+          required: true,
+          as: 'AssignedTo'
+        },
+        {
+          model: users,
+          attributes: ['username'],
+          required: true,
+          as: 'AssignedBy'
+        },
+        {
+          model: categories,
+          attributes: ['categoryType'],
+          required: true
+        },
+        {
+          model: components,
+          required: true
+        },
+      ],
+    })
+  } catch (err) {
+    res.status(404).json({
+      status: false,
+      message: 'Unable To fetch data.',
+      data: err,
+    });
+  }
+  if (data !== undefined) {
+    res.status(200).json({
+      status: true,
+      message: 'fetched Successfully',
+      data,
+    });
+  }
+};

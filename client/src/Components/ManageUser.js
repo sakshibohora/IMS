@@ -32,7 +32,11 @@ class ManageUser extends Component {
 
   getData(rowId) {
     const header = this.Auth.getToken()
-    axios.get(`${process.env.REACT_APP_SERVER}/api/users/find/` + rowId)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/users/find/` + rowId, {
+      headers: {
+        'Authorization': header
+      },
+    })
       .then(response => {
         console.log(response)
         this.setState({
@@ -47,6 +51,7 @@ class ManageUser extends Component {
 
   handleFormSubmit(e) {
     e.preventDefault();
+    const header = this.Auth.getToken();
     const data = {
       username: this.state.formData.username,
       firstName: this.state.formData.firstName,
@@ -58,7 +63,11 @@ class ManageUser extends Component {
     }
     e.preventDefault();
     if (this.state.flag === true) {
-      axios.put(`${process.env.REACT_APP_SERVER}/api/users/edit` + this.props.id, data)
+      axios.put(`${process.env.REACT_APP_SERVER}/api/users/edit` + this.props.id, data, {
+        headers: {
+          'Authorization': header
+        },
+      })
         .then((res) => {
           this.props.makeData()
           this.setState({ collapse: true })
@@ -66,7 +75,11 @@ class ManageUser extends Component {
           console.log(err)
         })
     } else {
-      axios.post(`${process.env.REACT_APP_SERVER}/api/users/`, this.state.formData)
+      axios.post(`${process.env.REACT_APP_SERVER}/api/users/`, this.state.formData, {
+        headers: {
+          'Authorization': header
+        },
+      })
         .then((res) => {
           this.props.makeData()
           this.setState({ collapse: true })
@@ -94,14 +107,9 @@ class ManageUser extends Component {
               </div>
               {!this.state.flag &&
                 <div className="form-group">
-                <label htmlFor="password">Password</label>
+                  <label htmlFor="password">Password</label>
                   <input type="password" placeholder="Password" value={this.state.formData.password} onChange={(e) => this.handleChange(e, 'formData', 'password')} required />
                 </div>}
-              {/* <div className="form-group">
-                <input type={this.state.flag ? "hidden" : "password"} className="form-control" placeholder="Password"
-                  value={this.state.formData.password}
-                  onChange={(e) => { this.handleChange(e, 'formData', 'password') }} />
-              </div> */}
               <div className="form-group">
                 <label htmlFor="firstName">First Name</label>
                 <input type="text" className="form-control" placeholder="First Name"

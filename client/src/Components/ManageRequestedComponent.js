@@ -32,7 +32,11 @@ class ManageRequestedComponent extends Component {
 
   getData(rowId) {
     const header = this.Auth.getToken()
-    axios.get(`${process.env.REACT_APP_SERVER}/api/requestcomponents/find/` + rowId)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/requestcomponents/find/` + rowId, {
+      headers: {
+        'Authorization': header
+      },
+    })
       .then(response => {
         console.log(response)
         this.setState({
@@ -53,9 +57,13 @@ class ManageRequestedComponent extends Component {
 
   handleFormSubmit(e) {
     e.preventDefault();
-
+    const header = this.Auth.getToken();
     if (this.state.flag === true) {
-      axios.put(`${process.env.REACT_APP_SERVER}/api/requestComponents/edit/` + this.props.id, this.state.formData)
+      axios.put(`${process.env.REACT_APP_SERVER}/api/requestComponents/edit/` + this.props.id, this.state.formData, {
+        headers: {
+          'Authorization': header
+        },
+      })
         .then((res) => {
           console.log(res)
           this.props.makeData()
@@ -66,16 +74,40 @@ class ManageRequestedComponent extends Component {
           console.log(err)
         })
     } else {
-      axios.post(`${process.env.REACT_APP_SERVER}/api/requestComponents`, this.state.formData)
+      axios.post(`${process.env.REACT_APP_SERVER}/api/requestComponents`, this.state.formData, {
+        headers: {
+          'Authorization': header
+        },
+      })
         .then((res) => {
           console.log(res)
           this.props.makeData()
           this.props.toggleEdit()
           this.setState({
-            collapse:true
+            collapse: true
           })
         }).catch((err) => {
           console.log(err)
+        })
+    }
+    if (this.state.formData.status === 'done') {
+      const data = {
+        userId: this.state.formData.userId,
+        categoryId: this.state.formData.categoryId,
+        componentId: this.state.formData.componentId,
+        assignedBy: this.props.user.id,
+      }
+      const header = this.Auth.getToken();
+      axios.post(`${process.env.REACT_APP_SERVER}/api/assignedcomponent`, data, {
+        headers: {
+          'Authorization': header
+        },
+      })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch(function (error) {
+          console.log("asssas", error);
         })
     }
   }

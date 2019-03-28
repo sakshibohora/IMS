@@ -28,7 +28,7 @@ class Sidebar extends Component {
           <Link to='/admin/adminhome/component' onClick={() => this.closeNav()}>Manage Component</Link>
           <Link to='/admin/adminhome/incidents' onClick={() => this.closeNav()}>Manage Incidents</Link>
           <Link to='/admin/adminhome/assigncomponent' onClick={() => this.closeNav()} >Manage Requested Component</Link>
-          {/* <Link to='/admin/adminhome/ListAssignedComponent' onClick={() => this.closeNav()} >All Assigned Component</Link> */}
+          <Link to='/admin/adminhome/allassignedcomponents' onClick={() => this.closeNav()} >All Assigned Component</Link>
         </div>
         <span style={{ cursor: "pointer" }} className="openBtn" onClick={() => this.openNav()}>&#9776;</span>
       </>

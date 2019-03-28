@@ -8,14 +8,9 @@ import ViewProfile from './ViewProfile';
 import User from './User';
 import Incidents from './Incidents';
 import AssignRequestedComponent from './AssignRequestComponent';
-import ManageUser from './ManageUser';
 import Category from './Category';
 import Components from './Component';
-import ManageCategory from './ManageCategory';
-import ManageComponent from './ManageComponent';
-import ManageRequestedComponent from './ManageRequestedComponent';
-import ManageIncidents from './ManageIncidents';
-// import IncidentUpdate from './IncidentUpdates';
+import AllAssignedComponents from './AllAssignedComponents'
 const Auth = new AuthService();
 
 class AdminHome extends Component {
@@ -42,21 +37,12 @@ class AdminHome extends Component {
               />
             }
             />
-            <Route exact path={`${match.url}/user`} render={() => <User {...this.props} />} />
-            <Route exact path={`${match.url}/manageuser`} render={() => <ManageUser {...this.props} />} />
-
-            <Route exact path={`${match.url}/category`} render={() => <Category {...this.props} />} />
-            <Route exact path={`${match.url}/managecategory`} render={() => <ManageCategory {...this.props} />} />
-
-            <Route exact path={`${match.url}/component`} render={() => <Components {...this.props} />} />
-            <Route exact path={`${match.url}/managecomponent`} render={() => <ManageComponent {...this.props} />} />
-
-            <Route exact path={`${match.url}/assigncomponent`} render={() => <AssignRequestedComponent {...this.props} />} />
-            <Route exact path={`${match.url}/managerequestcomponent`} render={() => <ManageRequestedComponent {...this.props} />} />
-
-            <Route exact path={`${match.url}/incidents`} render={() => <Incidents {...this.props} />} />
-            <Route exact path={`${match.url}/manageincident`} render={() => <ManageIncidents {...this.props} />} />
-
+            <Route path={`${match.url}/user`} render={() => <User {...this.props} />} />
+            <Route path={`${match.url}/category`} render={() => <Category {...this.props} />} />
+            <Route path={`${match.url}/component`} render={() => <Components {...this.props} />} />
+            <Route path={`${match.url}/assigncomponent`} render={() => <AssignRequestedComponent {...this.props} />} />
+            <Route path={`${match.url}/incidents`} render={() => <Incidents {...this.props} />} />
+            <Route path={`${match.url}/allassignedcomponents`} render={() => <AllAssignedComponents{...this.props} />}></Route>
           </div>
         </div>
       </>

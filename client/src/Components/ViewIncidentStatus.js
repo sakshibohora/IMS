@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 import AuthService from './AuthService';
 
 // Import React Table
@@ -25,22 +24,22 @@ class ViewIncidentStatus extends Component {
       this.setState({
         data: response.data.data
       })
-      console.log('Getting api data', this.state.data)
     })
-
       .catch(function (error) {
         console.log(error);
       })
   }
   makeData() {
     const id = this.props.user.id;
+    const header = this.Auth.getToken();
     axios.get(`${process.env.REACT_APP_SERVER}/api/incidents/list/` + id, {
-
+      headers: {
+        'Authorization': header
+      },
     }).then((response) => {
       this.setState({
         data: response.data.data
       })
-      console.log('Getting api data', this.state.data)
     })
 
       .catch(function (error) {

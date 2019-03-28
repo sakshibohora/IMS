@@ -45,7 +45,11 @@ class Category extends Component {
   }
 
   makeData() {
+    const header = this.Auth.getToken();
     axios.get(`${process.env.REACT_APP_SERVER}/api/categories/list`, {
+      headers: {
+        'Authorization': header
+      },
     }).then((response) => {
       this.setState({
         data: response.data.data
@@ -79,7 +83,7 @@ class Category extends Component {
       <Modal isOpen={this.state.modalAdd} toggle={this.toggleAdd} className={this.props.className}>
         <ModalHeader toggle={this.toggleAdd}>Add New Category</ModalHeader>
         <ModalBody>
-          <ManageCategory {...this.props} makeData={this.makeData}/>
+          <ManageCategory {...this.props} makeData={this.makeData} />
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggleAdd}>Cancel</Button>
@@ -106,7 +110,7 @@ class Category extends Component {
   render() {
     return (
       <>
-        <Button type="submit" color="primary" onClick={this.toggleAdd}>Add New Category</Button>&nbsp;
+        <Button type="submit" style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={this.toggleAdd}>Add New Category</Button>&nbsp;
         <ReactTable
           data={this.state.data}
           columns={[
@@ -119,13 +123,12 @@ class Category extends Component {
               ]
             },
             {
-              Header: '',
+              Header: 'Operation',
               Cell:
                 row => (
                   <>
-                    {<Button onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
-                    {<Button onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>}
-                    {/* {<Button onClick={(e) => { this.togglemodal(row.original.id) }}><i className='fas'>&#xf0fe;</i>&nbsp;</Button>} */}
+                    {<Button style={{color:"#EBEEF4",backgroundColor:"#343a40"}} onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
+                    {<Button style={{color:"#EBEEF4",backgroundColor:"#343a40"}}onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>}
                   </>
                 )
             }
@@ -135,7 +138,6 @@ class Category extends Component {
         />
         {this.renderEditCategoryModal()}
         {this.renderAddCategoryModal()}
-        {/* {this.renderAssignComponentModal()} */}
       </>
     )
   }

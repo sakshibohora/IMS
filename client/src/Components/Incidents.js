@@ -1,13 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
-import withAuth from './withAuth';
-import { Link } from 'react-router-dom';
-import { Alert } from 'reactstrap';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
-
 import ReactTable from "react-table";
-import "react-table/react-table.css";
 import ManageIncidents from './ManageIncidents';
 
 class Incidents extends Component {
@@ -49,8 +44,11 @@ class Incidents extends Component {
   }
 
   makeData() {
-    axios.get(`${process.env.REACT_APP_SERVER}/api/incidents/list`, {
-
+    const header = this.Auth.getToken();
+    axios.get(`${process.env.REACT_APP_SERVER}/api/incidents/getincidentDetails`, {
+      headers: {
+        'Authorization': header
+      },
     }).then((response) => {
       this.setState({
         data: response.data.data
@@ -89,7 +87,8 @@ class Incidents extends Component {
               columns: [
                 {
                   Header: "Incident By",
-                  accessor: "incidentBy"
+                  Cell: row => <span >{row.original.User.username}</span>
+
                 },
                 {
                   Header: "Incident Id",
@@ -121,7 +120,7 @@ class Incidents extends Component {
                   Header: 'operation',
                   Cell: row => (
                     <>
-                      {<Button onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
+                      {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
                     </>
                   )
                 }

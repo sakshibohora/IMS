@@ -63,7 +63,11 @@ class AssignComponent extends Component {
   }
   componentDidMount() {
     const header = this.Auth.getToken()
-    axios.get(`${process.env.REACT_APP_SERVER}/api/users/find/` + this.props.id)
+    axios.get(`${process.env.REACT_APP_SERVER}/api/users/find/` + this.props.id, {
+      headers: {
+        'Authorization': header
+      },
+    })
       .then(response => {
         this.setState({ formdata: response.data.data });
       })
@@ -100,11 +104,12 @@ class AssignComponent extends Component {
       categoryId: id
     }
     const header = this.Auth.getToken()
-    axios.post(`${process.env.REACT_APP_SERVER}/components/getComponentName`, data, {
+    axios.post(`${process.env.REACT_APP_SERVER}/api/components/getComponentName`, data, {
       headers: {
         'Authorization': header,
       }
     }).then((response) => {
+      console.log(response)
       this.setState({ cName: response.data.data })
       this.setState({ collapse: false });
     }).catch(function (error) {
