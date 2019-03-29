@@ -17,7 +17,7 @@ class Components extends Component {
       modalEdit: false,
       modal: false,
       id: null,
-      collapse:false
+      collapse: false
     }
     this.toggleAdd = this.toggleAdd.bind(this)
     this.toggleEdit = this.toggleEdit.bind(this)
@@ -72,8 +72,9 @@ class Components extends Component {
         'Authorization': header
       },
     }).then((response) => {
+
+      if (this.state.collapse === false) this.setState({ collapse: !this.state.collapse })
       this.makeData();
-      this.setState({collapse:true})
     })
       .catch(function (error) {
         console.log(error);
@@ -113,7 +114,7 @@ class Components extends Component {
   render() {
     return (
       <>
-        <Button type="submit"  style={{color:"#EBEEF4",backgroundColor:"#343a40"}} onClick={this.toggleAdd}>Add New Component</Button>&nbsp;
+        <Button type="submit" style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={this.toggleAdd}>Add New Component</Button>&nbsp;
         <ReactTable
           data={this.state.data}
           columns={[
@@ -146,8 +147,8 @@ class Components extends Component {
               Header: '',
               Cell: row => (
                 <>
-                  {<Button style={{color:"#EBEEF4",backgroundColor:"#343a40"}} onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
-                  {<Button style={{color:"#EBEEF4",backgroundColor:"#343a40"}} onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>}
+                  {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
+                  {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i>&nbsp;</Button>}
                 </>
               )
             }
@@ -162,7 +163,8 @@ class Components extends Component {
           type={"error"}
           title={"alert"}
           message={'Record Deleted Successfully'}
-        />
+          onClose={() => this.setState({ collapse: !this.state.collapse})}
+      />
       </>
     )
   }
