@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import AuthService from './AuthService';
 import Simplert from 'react-simplert'
-import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
+import Select from 'react-select'
+// import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 
 class RequestComponent extends Component {
   constructor(props) {
@@ -13,9 +14,7 @@ class RequestComponent extends Component {
       componentId: '',
       categoryId: '',
       categoryType: 'Select Category',
-      dropdownOpen1: false,
       componentName: 'Select Component',
-      dropdownOpen2: false,
       issue: '',
       collapse: false
     }
@@ -23,22 +22,6 @@ class RequestComponent extends Component {
     this.changeValue1 = this.changeValue1.bind(this)
     this.changeValue2 = this.changeValue2.bind(this)
     this.changeValue3 = this.changeValue3.bind(this)
-
-    this.toggle = this.toggle.bind(this);
-    this.toggle2 = this.toggle2.bind(this);
-  }
-
-  toggle(e) {
-    this.setState(prevState => ({
-      dropdownOpen1: !prevState.dropdownOpen1
-    }));
-  }
-
-  toggle2(e) {
-    this.setState(prevState => ({
-      dropdownOpen2: !prevState.dropdownOpen2
-    }));
-
   }
   componentDidMount() {
     const header = this.Auth.getToken()
@@ -52,16 +35,13 @@ class RequestComponent extends Component {
       .catch(function (error) {
         console.log(error);
       })
-
   }
-  changeValue1(e) {
-    this.setState({ categoryType: e.currentTarget.textContent });
-    let id = e.currentTarget.getAttribute("id");
-    this.setState({
-      categoryId: id
-    })
+
+  changeValue1 = (selectedOption) => {
+    this.setState({ selectedOption });
+    this.setState({ categoryId: selectedOption.value })
     const data = {
-      categoryId: id
+      categoryId: selectedOption.value
     }
     const header = this.Auth.getToken()
     axios.post(`${process.env.REACT_APP_SERVER}/api/components/getComponentName`, data, {
@@ -77,10 +57,13 @@ class RequestComponent extends Component {
 
   }
 
-  changeValue2(e) {
-    this.setState({ componentName: e.currentTarget.textContent });
-    let id = e.currentTarget.getAttribute("id")
-    this.setState({ componentId: id })
+  changeValue2 = (componentName) => {
+    this.setState({ componentName });
+    this.setState({ componentId: componentName.value })
+  }
+
+  changeValue3(e) {
+    this.setState({ issue: e.target.value })
     this.setState({ collapse: false });
   }
 
@@ -108,12 +91,6 @@ class RequestComponent extends Component {
         console.log(error);
       })
   }
-
-  changeValue3(e) {
-    this.setState({ issue: e.target.value })
-    this.setState({ collapse: false });
-  }
-
   render() {
     return (
       <>
@@ -122,29 +99,25 @@ class RequestComponent extends Component {
           <div className="col-4">
             <form onSubmit={(e) => { this.handleFormSubmit(e) }}>
               <label htmlFor="selectcat">Select Category</label>
-              <ButtonDropdown isOpen={this.state.dropdownOpen1} toggle={this.toggle}>
-                <DropdownToggle caret>{this.state.categoryType}</DropdownToggle>
-                <DropdownMenu>
-                  {this.state.cId.map(e => {
-                    return (
-                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue1(e) }}>{e.categoryType}
-                      </DropdownItem>)
-                  })}
-                </DropdownMenu>
-              </ButtonDropdown>
+              <Select className="label1"
+                options={this.state.cId.map(e => ({
+                  label: e.categoryType,
+                  value: e.id
+                }))}
+                value={this.selectedOption}
+                onChange={(e) => { this.changeValue1(e) }}
+              />
               <br /><br />
 
               <label htmlFor="selectcomp">Select Component</label>
-              <ButtonDropdown isOpen={this.state.dropdownOpen2} toggle={this.toggle2}>
-                <DropdownToggle caret>{this.state.componentName}</DropdownToggle>
-                <DropdownMenu>
-                  {this.state.cName.map(e => {
-                    return (
-                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue2(e) }}>{e.componentName}
-                      </DropdownItem>)
-                  })}
-                </DropdownMenu>
-              </ButtonDropdown>
+              <Select className="label1"
+                options={this.state.cName.map(e => ({
+                  label: e.componentName,
+                  value: e.id
+                }))}
+                value={this.selectedOption}
+                onChange={(e) => { this.changeValue2(e) }}
+              />
               <br /><br />
               <label htmlFor="issue">Issue</label>
               <textarea
@@ -156,15 +129,14 @@ class RequestComponent extends Component {
               <button type="submit" className="btn btn-md sg-submit-button">Request Send</button>
             </form>
             <Simplert
-          showSimplert={this.state.collapse}
-          type={"success"}
-          title={"alert"}
-          message={'Request sent Successfully'}
-        />
+              showSimplert={this.state.collapse}
+              type={"success"}
+              title={"alert"}
+              message={'Request sent Successfully'}
+            />
           </div>
         </div>
       </>
-
     )
   }
 }
