@@ -1,5 +1,9 @@
 const db = require('../models/index.js');
 const users = db.Users;
+const assigncomponent = db.AssignedComponents
+const component = db.Components
+var Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 exports.createNewUsers = async function (req, res) {
   let data;
@@ -117,8 +121,11 @@ exports.updateUsers = async function (req, res) {
 //delete user
 exports.deleteUsers = async function (req, res) {
   let data;
+  uid = req.params.id
+  let result
   try {
     data = await users.destroy({ where: { id: req.params.id } });
+
   } catch (err) {
     res.status(500).json({
       status: false,
@@ -133,6 +140,24 @@ exports.deleteUsers = async function (req, res) {
       data,
     });
   }
+
+  data1 = assigncomponent.findAll({
+    where: { userId: uid },
+    attributes: ['componentId'],
+  }).then(function (res) {
+    component.update({
+      status: true
+    }, {
+        where: {
+          id: {
+            [Op.in]: [res.dataValues.id]
+          }
+        }
+
+      }).then(function (output) {
+        console.log(output,  "outputting")
+      })
+  })
 };
 
 exports.getUserDetails = async function (request, response) {
