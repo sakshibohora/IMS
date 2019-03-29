@@ -145,6 +145,7 @@ class Category extends Component {
           type={"error"}
           title={"alert"}
           message={'Record Deleted Successfully'}
+          onClose={() => this.setState({ collapse: !this.state.collapse})}
         />
       </>
     )
