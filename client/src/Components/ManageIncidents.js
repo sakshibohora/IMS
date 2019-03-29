@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Select from 'react-select'
 import AuthService from './AuthService';
-import { ButtonDropdown,DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 import Simplert from 'react-simplert'
 let formData = {
   incidentBy: '',
@@ -95,13 +95,16 @@ class ManageIncidents extends Component {
     temp[field] = e.target.value;
     this.setState({ [target]: temp })
   }
-  changeValue4(e, target, field) {
-    e.preventDefault();
-    this.setState({ firstName: e.currentTarget.textContent });
-    const temp = { ...this.state[target] };
-    temp[field] = e.currentTarget.getAttribute("id");
-    this.setState({ [target]: temp })
+  changeValue4 = (firstName) => {
+    this.setState({ firstName });
+    this.setState({ resolvedBy: firstName.value })
   }
+  // changeValue4(e, target, field) {
+  //   e.preventDefault();
+  //   this.setState({ firstName: e.currentTarget.textContent });
+  //   const temp = { ...this.state[target] };
+  //   temp[field] = e.currentTarget.getAttribute("id");
+  //   this.setState({ [target]: temp })
   render() {
     return (
       <>
@@ -138,16 +141,14 @@ class ManageIncidents extends Component {
               <div className="form-group">
                 <label htmlFor="resolvedby">Resolved By</label>
 
-                <ButtonDropdown isOpen={this.state.dropdownOpen3} toggle={this.toggle3}>
-                  <DropdownToggle caret>{this.state.firstName}</DropdownToggle>
-                  <DropdownMenu>
-                    {this.state.uname.map(e => {
-                      return (
-                        <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue4(e, 'formData', 'resolvedBy') }}>{e.firstName}
-                        </DropdownItem>)
-                    })}
-                  </DropdownMenu>
-                </ButtonDropdown>
+                <Select className="label1"
+                  options={this.state.uname.map(e => ({
+                    label: e.firstName,
+                    value: e.id
+                  }))}
+                  value={this.selectedOption}
+                  onChange={(e) => { this.changeValue4(e) }}
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="status">Status</label>
