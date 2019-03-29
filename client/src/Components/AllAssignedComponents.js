@@ -99,15 +99,15 @@ class ManageComponents extends Component {
                   accessor: "warrantyDate",
                   Cell: row => <span className='number'>{row.original.Component.warrantyDate}</span>
                 },
-                {
-                  Header: '',
-                  Cell: row => (
-                    <>
-                      {<><Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i></Button>&nbsp;</>}
-                      {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i></Button>}
-                    </>
-                  )
-                }
+                // {
+                //   Header: '',
+                //   Cell: row => (
+                //     <>
+                //       {<><Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i></Button>&nbsp;</>}
+                //       {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i></Button>}
+                //     </>
+                //   )
+                // }
               ]
             }
           ]}
