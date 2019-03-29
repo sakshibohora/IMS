@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import AuthService from './AuthService';
 import Simplert from 'react-simplert'
+import Select from 'react-select'
+// import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 
 let formData = {
   categoryId: '',
@@ -14,23 +16,47 @@ class ManageComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      categoryType: 'Select Category',
+      cId: [],
+
       formData: { ...formData },
       flag: false, //false = insert, true = edit
       collapse: false,
+      dropdownOpen1: false,
     }
     this.Auth = new AuthService()
     this.handleChange = this.handleChange.bind(this)
     this.getData = this.getData.bind(this)
     this.handleFormSubmit = this.handleFormSubmit.bind(this)
+    this.toggle = this.toggle.bind(this)
+  }
+  toggle(e) {
+    this.setState(prevState => ({
+      dropdownOpen1: !prevState.dropdownOpen1
+    }));
   }
   componentWillMount() {
     if (this.props.id != undefined)
       this.getData(this.props.id)
   }
+  componentDidMount() {
+    const header = this.Auth.getToken()
+    axios.get(`${process.env.REACT_APP_SERVER}/api/categories/getCategoryId`, {
+      headers: {
+        'Authorization': header,
+      }
+    }).then((response) => {
+      this.setState({ cId: response.data.data })
 
+    })
+      .catch(function (error) {
+        console.log(error);
+      })
+
+  }
   getData(rowId) {
     const header = this.Auth.getToken()
-    axios.get(`${process.env.REACT_APP_SERVER}/api/components/find/` + rowId,{
+    axios.get(`${process.env.REACT_APP_SERVER}/api/components/find/` + rowId, {
       headers: {
         'Authorization': header
       },
@@ -54,13 +80,22 @@ class ManageComponent extends Component {
     temp[field] = e.target.value;
     this.setState({ [target]: temp })
   }
-
+  changeValue1 = (selectedOption) => {
+    this.setState({ selectedOption });
+    console.log(`Option selected:`, selectedOption.value);
+  }
   handleFormSubmit(e) {
     e.preventDefault();
     const header = this.Auth.getToken();
-
+    const data = {
+      categoryId: parseInt(this.state.categoryId),
+      componentName: this.state.formData.componentName,
+      serialNo: this.state.formData.serialNo,
+      warrantyDate: this.state.formData.warrantyDate,
+      status: this.state.formData.status
+    }
     if (this.state.flag === true) {
-      axios.put(`${process.env.REACT_APP_SERVER}/api/components/edit/` + this.props.id, this.state.formData, {
+      axios.put(`${process.env.REACT_APP_SERVER}/api/components/edit/` + this.props.id, data, {
         headers: {
           'Authorization': header
         },
@@ -69,12 +104,11 @@ class ManageComponent extends Component {
           console.log("update", res)
           this.props.makeData()
           this.setState({ collapse: true })
-          // this.props.history.push('/admin/adminhome/a2/listcategory');
         }).catch((err) => {
           console.log(err)
         })
     } else {
-      axios.post(`${process.env.REACT_APP_SERVER}/api/components`, this.state.formData, {
+      axios.post(`${process.env.REACT_APP_SERVER}/api/components`, data, {
         headers: {
           'Authorization': header
         },
@@ -94,12 +128,16 @@ class ManageComponent extends Component {
         <form onSubmit={(e) => { this.handleFormSubmit(e) }}>
           <div className="row" >
             <div className="col-5" style={{ margin: "10px" }} >
-              <div className="form-group">
-                <label htmlFor="cateoryId">Category Id</label>
-                <input type="text" className="form-control" placeholder="Enter category"
-                  value={this.state.formData.categoryId}
-                  onChange={(e) => { this.handleChange(e, 'formData', 'categoryId') }} />
-              </div>
+              <label1>Category Type</label1>
+              <br />
+              <Select className="label1"
+                options={this.state.cId.map(e => ({
+                  label: e.categoryType,
+                  value: e.id
+                }))}
+                value={this.selectedOption}
+                onChange={(e) => { this.changeValue1(e) }}
+              />
               <div className="form-group">
                 <label htmlFor="componentname">Component Name</label>
                 <input type="text" className="form-control" placeholder="Enter component name"
@@ -135,7 +173,7 @@ class ManageComponent extends Component {
           showSimplert={this.state.collapse}
           type={"success"}
           title={"alert"}
-          message={'Category added Successfully'}
+          message={'Component added Successfully'}
         />
       </>
     )
