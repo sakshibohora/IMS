@@ -3,6 +3,8 @@ import axios from 'axios';
 import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
 import { Button } from 'reactstrap';
 import AuthService from './AuthService';
+import Select from 'react-select'
+
 
 let formdata = {
   id: '',
@@ -21,12 +23,9 @@ class AssignComponent extends Component {
       uname: [],
       formdata: { ...formdata },
       componentId: '',
-      categoryId: 'Select Category',
-      dropdownOpen1: false,
+      categoryType: 'Select Category',
       componentName: 'Select Component',
-      dropdownOpen2: false,
       firstName: 'Select Name',
-      dropdownOpen3: false,
       issue: '',
       collapse: false
     }
@@ -38,28 +37,6 @@ class AssignComponent extends Component {
     this.changeValue2 = this.changeValue2.bind(this)
     this.changeValue3 = this.changeValue3.bind(this)
     this.changeValue4 = this.changeValue4.bind(this)
-
-
-    this.toggle = this.toggle.bind(this);
-    this.toggle2 = this.toggle2.bind(this);
-    this.toggle3 = this.toggle3.bind(this);
-  }
-
-  toggle(e) {
-    this.setState(prevState => ({
-      dropdownOpen1: !prevState.dropdownOpen1
-    }));
-  }
-
-  toggle2(e) {
-    this.setState(prevState => ({
-      dropdownOpen2: !prevState.dropdownOpen2
-    }));
-  }
-  toggle3(e) {
-    this.setState(prevState => ({
-      dropdownOpen3: !prevState.dropdownOpen3
-    }));
   }
   componentDidMount() {
     const header = this.Auth.getToken()
@@ -96,12 +73,18 @@ class AssignComponent extends Component {
       console.log(error);
     })
   }
+  ChangeValue(e, currentUser, field2) {
+    e.preventDefault();
+    const temp = { ...this.state[currentUser] };
+    temp[field2] = e.target.value;
+    this.setState({ [currentUser]: temp });
+  }
 
-  changeValue1(e) {
-    this.setState({ categoryId: e.currentTarget.textContent });
-    let id = e.currentTarget.getAttribute("id");
+  changeValue1 = (selectedOption) => {
+    this.setState({ selectedOption });
+    this.setState({ categoryId: selectedOption.value })
     const data = {
-      categoryId: id
+      categoryId: selectedOption.value
     }
     const header = this.Auth.getToken()
     axios.post(`${process.env.REACT_APP_SERVER}/api/components/getComponentName`, data, {
@@ -109,33 +92,27 @@ class AssignComponent extends Component {
         'Authorization': header,
       }
     }).then((response) => {
-      console.log(response)
       this.setState({ cName: response.data.data })
       this.setState({ collapse: false });
     }).catch(function (error) {
       console.log(error);
     })
+
   }
-  ChangeValue(e, currentUser, field2) {
-    e.preventDefault();
-    const temp = { ...this.state[currentUser] };
-    temp[field2] = e.target.value;
-    this.setState({ [currentUser]: temp });
+
+  changeValue2 = (componentName) => {
+    this.setState({ componentName });
+    this.setState({ componentId: componentName.value })
   }
-  changeValue2(e) {
-    this.setState({ componentName: e.currentTarget.textContent });
-    let id = e.currentTarget.getAttribute("id")
-    this.setState({ componentId: id })
-    this.setState({ collapse: false });
-  }
+
   changeValue3(e) {
     this.setState({ issue: e.target.value })
     this.setState({ collapse: false });
   }
-  changeValue4(e) {
-    this.setState({ firstName: e.currentTarget.textContent });
-    let id = e.currentTarget.getAttribute("id");
-    this.setState({ assignedBy: id })
+
+  changeValue4 = (firstName) => {
+    this.setState({ firstName });
+    this.setState({ assignedBy: firstName.value })
   }
 
   handleUpdateData(e) {
@@ -146,7 +123,7 @@ class AssignComponent extends Component {
       componentId: this.state.componentId,
       assignedBy: this.state.assignedBy,
     }
-
+    console.log(data)
     const header = this.Auth.getToken();
     axios.post(`${process.env.REACT_APP_SERVER}/api/assignedcomponent`, data, {
       headers: {
@@ -208,42 +185,37 @@ class AssignComponent extends Component {
               </div>
             </div>
             <div className="col-4" style={{ margin: "10px" }}>
-              <label htmlFor="selectname">Select Category</label>
-              <ButtonDropdown isOpen={this.state.dropdownOpen1} toggle={this.toggle}>
-                <DropdownToggle caret>{this.state.categoryId}</DropdownToggle>
-                <DropdownMenu>
-                  {this.state.cId.map(e => {
-                    return (
-                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue1(e) }}>{e.id}
-                      </DropdownItem>)
-                  })}
-                </DropdownMenu>
-              </ButtonDropdown>
+              <label htmlFor="selectcategory">Select Category</label>
+              <Select className="label1"
+                options={this.state.cId.map(e => ({
+                  label: e.categoryType,
+                  value: e.id
+                }))}
+                value={this.selectedOption}
+                onChange={(e) => { this.changeValue1(e) }}
+              />
               <br /><br />
-              <label htmlFor="selectcomp">Select Component</label>
-              <ButtonDropdown isOpen={this.state.dropdownOpen2} toggle={this.toggle2}>
-                <DropdownToggle caret>{this.state.componentName}</DropdownToggle>
-                <DropdownMenu>
-                  {this.state.cName.map(e => {
-                    return (
-                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue2(e) }}>{e.componentName}
-                      </DropdownItem>)
-                  })}
-                </DropdownMenu>
-              </ButtonDropdown>
+              <label htmlFor="selectcomponent">Select Component</label>
+
+              <Select className="label1"
+                options={this.state.cName.map(e => ({
+                  label: e.componentName,
+                  value: e.id
+                }))}
+                value={this.selectedOption}
+                onChange={(e) => { this.changeValue2(e) }}
+              />
               <br />
               <br />
               <label htmlFor="selectname">Assigned By</label>
-              <ButtonDropdown isOpen={this.state.dropdownOpen3} toggle={this.toggle3}>
-                <DropdownToggle caret>{this.state.firstName}</DropdownToggle>
-                <DropdownMenu>
-                  {this.state.uname.map(e => {
-                    return (
-                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue4(e) }}>{e.firstName}
-                      </DropdownItem>)
-                  })}
-                </DropdownMenu>
-              </ButtonDropdown>
+              <Select className="label1"
+                options={this.state.uname.map(e => ({
+                  label: e.firstName,
+                  value: e.id
+                }))}
+                value={this.selectedOption}
+                onChange={(e) => { this.changeValue4(e) }}
+              />
             </div>
           </div>
           <Button className="btn btn-md sg-submit-button" type="submit" value="Update" color="primary" > Assign</Button>&nbsp;
@@ -254,3 +226,16 @@ class AssignComponent extends Component {
   }
 }
 export default AssignComponent;
+
+
+{/* <label htmlFor="selectcomp">Select Component</label>
+              <ButtonDropdown isOpen={this.state.dropdownOpen2} toggle={this.toggle2}>
+                <DropdownToggle caret>{this.state.componentName}</DropdownToggle>
+                <DropdownMenu>
+                  {this.state.cName.map(e => {
+                    return (
+                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue2(e) }}>{e.componentName}
+                      </DropdownItem>)
+                  })}
+                </DropdownMenu>
+              </ButtonDropdown> */}
