@@ -126,12 +126,7 @@ exports.updateIncidents = async function (request, response) {
       status: request.body.status,
     }, { where: { id: request.params.id } });
 
-    data1 = incidentUpdates.create({
-      incidentId: request.params.id,
-      updateBy: request.body.resolvedBy,
-      updates: request.body.updates,
-      status: request.body.status,
-    })
+
 
   } catch (err) {
     response.status(500).json({
@@ -147,6 +142,12 @@ exports.updateIncidents = async function (request, response) {
       data,
     });
   }
+  data1 = incidentUpdates.create({
+    incidentId: request.params.id,
+    updateBy: request.body.resolvedBy,
+    updates: request.body.updates,
+    status: request.body.status,
+  })
 };
 exports.deleteIncidents = async function (request, response) {
   let data;
