@@ -73,9 +73,9 @@ const routes = (app) => {
 
 
   //assigned component routes
-  app.get('/api/assignedComponent/list', assignedComponent.getAllAssignedComponent);
-  app.post('/api/assignedcomponent', assignedComponent.assignComponent);
-  app.get('/api/assigncomponents/getAssignedComponentsData',assignedComponent.getAssignedComponentsData)
+  app.get('/api/assignedComponent/list', passport.authenticate('jwt', { session: false }), checkSignIn, assignedComponent.getAllAssignedComponent);
+  app.post('/api/assignedcomponent', passport.authenticate('jwt', { session: false }), checkSignIn, assignedComponent.assignComponent);
+  app.get('/api/assigncomponents/getAssignedComponentsData', passport.authenticate('jwt', { session: false }), checkSignIn, assignedComponent.getAssignedComponentsData)
 
   //categories routes
   app.get('/api/categories/list', passport.authenticate('jwt', { session: false }), checkSignIn, categories.getAllCategories);
@@ -101,7 +101,7 @@ const routes = (app) => {
   app.put('/api/incidents/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.updateIncidents);
   app.delete('/api/incidents/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.deleteIncidents);
   app.get('/api/incidents/getincidentDetails', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.getIncidentdetails)
-  
+
   //incidentupdate routes
   app.get('/api/incidentUpdates/list', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.getAllIncidentUpdates);
   app.get('/api/incidentUpdates/details/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.getIncident);
