@@ -5,7 +5,8 @@ const users = db.Users
 const categories = db.Categories
 const components = db.Components
 exports.assignComponent = async function (req, res) {
-  let data;
+  let data, data1, cid;
+  cid = req.body.componentId
   try {
     data = await assignComponent.create({
       userId: req.body.userId,
@@ -13,8 +14,9 @@ exports.assignComponent = async function (req, res) {
       componentId: req.body.componentId,
       assignedBy: req.body.assignedBy,
     });
+
   } catch (err) {
-    res.status(500).json({
+    res.status(404).json({
       status: false,
       message: 'Unable to save in database',
       data: err,
@@ -27,6 +29,11 @@ exports.assignComponent = async function (req, res) {
       data,
     });
   }
+  data1 = components.update({
+    status: false
+  },
+    { where: { id: cid } }
+  )
 };
 
 exports.getAllAssignedComponent = async function (req, res) {
