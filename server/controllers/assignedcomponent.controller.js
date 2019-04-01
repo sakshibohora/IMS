@@ -4,6 +4,8 @@ const assignComponent = db.AssignedComponents
 const users = db.Users
 const categories = db.Categories
 const components = db.Components
+
+//this API is for creating/adding details of the assigned component
 exports.assignComponent = async function (req, res) {
   let data, data1, cid;
   cid = req.body.componentId
@@ -29,6 +31,8 @@ exports.assignComponent = async function (req, res) {
       data,
     });
   }
+  /*it will update components table status to false 
+    where component is assigned to anyone,status:false means component is not available  */
   data1 = components.update({
     status: false
   },
@@ -36,6 +40,7 @@ exports.assignComponent = async function (req, res) {
   )
 };
 
+//API is used to get all the assigned component
 exports.getAllAssignedComponent = async function (req, res) {
   let data;
 
@@ -94,7 +99,7 @@ exports.getAllAssignedComponent = async function (req, res) {
     });
   }
 };
-
+//update assigned component API
 exports.updateAssignedComponent = async function (req, res) {
   let data;
   try {
@@ -120,7 +125,7 @@ exports.updateAssignedComponent = async function (req, res) {
     });
   }
 }
-
+//delete assigned Component
 exports.deleteComponents = async function (req, res) {
   let data;
   try {
@@ -141,7 +146,8 @@ exports.deleteComponents = async function (req, res) {
   }
 }
 
-
+/*it will give details of all the assigned component
+ with it's username() assignedto assignedby)*/
 exports.getAssignedComponentsData = async function (req, res) {
   let data
   try {
