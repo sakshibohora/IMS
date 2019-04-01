@@ -22,7 +22,4 @@ checkSignIn = function (req, res, next) {
   }
 
 }
-
-
-
 module.exports = checkSignIn;
