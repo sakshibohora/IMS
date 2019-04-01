@@ -81,6 +81,11 @@ class ManageComponents extends Component {
                   Cell: row => <span className='number'>{row.original.AssignedBy.username}</span>
                 },
                 {
+                  Header: "Assigned To",
+                  // accessor: "categoryType",
+                  Cell: row => <span className='number'>{row.original.AssignedTo.username}</span>
+                },
+                {
                   Header: "Category Type",
                   accessor: "categoryType",
                   Cell: row => <span className='number'>{row.original.Category.categoryType}</span>
