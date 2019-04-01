@@ -46,6 +46,7 @@ class ManageComponent extends Component {
         'Authorization': header,
       }
     }).then((response) => {
+      console.log(response.data.data)
       this.setState({ cId: response.data.data })
 
     })
@@ -82,18 +83,22 @@ class ManageComponent extends Component {
   }
   changeValue1 = (selectedOption) => {
     this.setState({ selectedOption });
+    this.setState({
+      categoryId:selectedOption.value
+    })
     console.log(`Option selected:`, selectedOption.value);
   }
   handleFormSubmit(e) {
     e.preventDefault();
     const header = this.Auth.getToken();
     const data = {
-      categoryId: parseInt(this.state.categoryId),
+      categoryId: this.state.categoryId,
       componentName: this.state.formData.componentName,
       serialNo: this.state.formData.serialNo,
       warrantyDate: this.state.formData.warrantyDate,
       status: this.state.formData.status
     }
+    console.loh(this.state.data)
     if (this.state.flag === true) {
       axios.put(`${process.env.REACT_APP_SERVER}/api/components/edit/` + this.props.id, data, {
         headers: {
