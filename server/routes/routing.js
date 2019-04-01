@@ -25,7 +25,7 @@ const passport = require('passport');
 require('../config/passport')(passport);
 
 const routes = (app) => {
-  app.post('/api/users', passport.authenticate('jwt', { session: false }), checkSignIn, user.createNewUsers);
+  app.post('/api/users', user.createNewUsers);
   app.get('/api/users/find/:id', user.findUser)
   app.get('/api/users/list', passport.authenticate('jwt', { session: false }), checkSignIn, user.getAllUsers);
   app.get('/api/users/name', passport.authenticate('jwt', { session: false }), checkSignIn, user.findUserName);
@@ -64,7 +64,7 @@ const routes = (app) => {
   });
   //request component routes
   app.get('/api/requestComponents/list', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.getAllRequestedComponents);
-  app.post('/api/requestComponents', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.createNewRequestComponents);
+  app.post('/api/requestComponents/',reqcomponents.createNewRequestComponents);
   app.put('/api/requestComponents/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.updateRequestedComponent);
   app.delete('/api/requestComponents/delete:id', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.deleteRequestedComponents);
   app.post('/api/requestComponents/requestComponentByUser', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.getRequestedComponentByUser);
@@ -97,12 +97,15 @@ const routes = (app) => {
   app.get('/api/incidents/list/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.getAllIncidents);
   app.get('/api/incidents/list', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.getIncidents);
   app.post('/api/incidents', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.createIncidents);
-  app.get('/api/incidents/find/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.getIncident);
+  app.get('/api/incidents/find/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.getIncidentData);
   app.put('/api/incidents/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.updateIncidents);
   app.delete('/api/incidents/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.deleteIncidents);
   app.get('/api/incidents/getincidentDetails', passport.authenticate('jwt', { session: false }), checkSignIn, incidents.getIncidentdetails)
-
+  app.get('/api/incidents/getResolvedByName/', incidents.getResolvedByName);
+  app.get('/api/incidents/getIncidentById/:id', incidents.getIncidentById);
   //incidentupdate routes
+
+
   app.get('/api/incidentUpdates/list', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.getAllIncidentUpdates);
   app.get('/api/incidentUpdates/details/:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.getIncident);
   app.post('/api/incidentUpdates', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.createNewIncidentupdates);
@@ -110,6 +113,7 @@ const routes = (app) => {
   app.delete('/api/incidentUpdates/delete:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.deleteIncidentUpdates);
 
   //invoicers routes
+  
   app.get('/api/invoicers/', passport.authenticate('jwt', { session: false }), checkSignIn, invoicers.getAllInvoicers);
   app.post('/api/invoicers', passport.authenticate('jwt', { session: false }), checkSignIn, invoicers.createNewInvoicers);
   app.put('/api/invoicers/:id', passport.authenticate('jwt', { session: false }), checkSignIn, invoicers.updateInvoicers);
