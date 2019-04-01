@@ -8,7 +8,7 @@ import ViewProfile from './ViewProfile';
 import RequestComponent from './RequestComponent'
 import RaiseIncidents from './RaiseIncident';
 import ViewComponentStatus from './ViewComponentStatus';
-import ViewIncidentStatus from './ViewIncidentStatus';
+import ViewIncidentDetails from './ViewIssueStatus';
 import HomePage from './HomePage';
 
 const Auth = new AuthService();
@@ -36,7 +36,7 @@ class UserHome extends Component {
             <Route exact path={`${match.url}/requestComponent`} render={() => <RequestComponent {...this.props} />} />
             <Route exact path={`${match.url}/raiseIncidents`} render={() => <RaiseIncidents {...this.props} />} />
             <Route exact path={`${match.url}/viewComponentStatus`} render={() => <ViewComponentStatus {...this.props} />} />
-            <Route exact path={`${match.url}/viewIncidentStatus`} render={() => <ViewIncidentStatus {...this.props} />} />
+            <Route exact path={`${match.url}/viewIncidentStatus`} render={() => <ViewIncidentDetails {...this.props} />} />
           </div>
         </div>
       </>
