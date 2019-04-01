@@ -13,7 +13,6 @@ exports.createNewRequestComponents = async function (req, res) {
       componentId: req.body.componentId,
       componentName: req.body.componentName,
       issue: req.body.issue,
-      status: req.body.status,
     });
   } catch (err) {
     res.status(404).json({
@@ -22,7 +21,7 @@ exports.createNewRequestComponents = async function (req, res) {
       data: err,
     });
   }
-  if (data !== undefined) {
+  if (data) {
     res.status(200).json({
       status: true,
       message: 'saved in database',
@@ -226,7 +225,7 @@ exports.getComponent = async function (request, response) {
 exports.getRequestComponentDetails = async function (req, res) {
   let data
   try {
-     data = await reqcomponents.findAll({
+    data = await reqcomponents.findAll({
       include: [
         {
           model: users,
