@@ -137,10 +137,20 @@ exports.getIncident = async function (request, response) {
   let data;
   try {
     data = await incidentUpdates.findAll({
-      where: { incidentId: request.params.incidentId },
-      // order: [[sort, x]],
-      // offset: skipping,
-      // limit: limiting,
+      include: [
+        {
+          model: db.Incidents,
+          required: true,
+          as: 'IncidentDetails'
+        },
+        {
+          model: db.Users,
+          required: true,
+          as: 'UserDetails',
+          attributes: ['username', 'firstName']
+        },
+      ],
+      where: { incidentId: request.params.id }
     });
   } catch (err) {
     response.status(500).json({
@@ -157,3 +167,28 @@ exports.getIncident = async function (request, response) {
     });
   }
 };
+
+// exports.getIncident = async function (request, response) {
+//   let data;
+//   try {
+//     data = await incidentUpdates.findAll({
+//       where: { incidentId: request.params.incidentId },
+//       // order: [[sort, x]],
+//       // offset: skipping,
+//       // limit: limiting,
+//     });
+//   } catch (err) {
+//     response.status(500).json({
+//       status: false,
+//       message: 'Unable To List Data.',
+//       data: err,
+//     });
+//   }
+//   if (data !== undefined) {
+//     response.status(200).json({
+//       status: true,
+//       message: 'All Data fetched successfully',
+//       data,
+//     });
+//   }
+// };
