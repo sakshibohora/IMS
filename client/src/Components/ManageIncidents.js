@@ -18,6 +18,7 @@ class ManageIncidents extends Component {
     this.state = {
       formData: { ...formData },
       uname: [],
+      resolvedBy: '',
       firstName: 'Select Name',
       flag: false, //false = insert, true = edit
       collapse: false,
@@ -27,20 +28,11 @@ class ManageIncidents extends Component {
     this.getData = this.getData.bind(this)
     this.changeValue4 = this.changeValue4.bind(this)
     this.handleFormSubmit = this.handleFormSubmit.bind(this)
-    this.toggle3 = this.toggle3.bind(this);
-
   }
   componentWillMount() {
     if (this.props.id != undefined)
       this.getData(this.props.id)
   }
-
-  toggle3(e) {
-    this.setState(prevState => ({
-      dropdownOpen3: !prevState.dropdownOpen3
-    }));
-  }
-
   getData(rowId) {
     const header = this.Auth.getToken()
     axios.get(`${process.env.REACT_APP_SERVER}/api/incidents/find/` + rowId, {
@@ -74,14 +66,23 @@ class ManageIncidents extends Component {
   }
   handleFormSubmit(e) {
     e.preventDefault();
+    const data = {
+      incidentBy: this.state.formData.incidentBy,
+      incidentName: this.state.formData.incidentName,
+      incident: this.state.formData.incident,
+      updates: this.state.formData.updates,
+      resolvedBy: this.state.resolvedBy,
+      status: this.state.formData.status,
+    }
+    console.log("formdata", this.state.formData)
     const header = this.Auth.getToken();
-    axios.put(`${process.env.REACT_APP_SERVER}/api/incidents/edit/` + this.props.id, this.state.formData, {
+    axios.put(`${process.env.REACT_APP_SERVER}/api/incidents/edit/` + this.props.id, data, {
       headers: {
         'Authorization': header
       },
     })
       .then((res) => {
-        console.log("edit", res)
+        console.log("edit", res.data)
         this.props.makeData()
         this.setState({ collapse: true });
 
@@ -98,6 +99,7 @@ class ManageIncidents extends Component {
   changeValue4 = (firstName) => {
     this.setState({ firstName });
     this.setState({ resolvedBy: firstName.value })
+    console.log("resolve", this.state.resolvedBy)
   }
   // changeValue4(e, target, field) {
   //   e.preventDefault();
