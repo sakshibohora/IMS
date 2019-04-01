@@ -24,8 +24,8 @@ class Navbar extends Component {
           </Link>
           {this.props.user.role ? <SidebarAdmin /> : <Sidebar />}
           <form className="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-            {/* <div className="input-group">
-            </div> */}
+            <div className="input-group">
+            </div>
           </form>
           <ul className="navbar-nav ml-auto ml-md-0">
             <li className="nav-item dropdown no-arrow">
