@@ -4,13 +4,12 @@ import AuthService from './AuthService';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import ReactTable from "react-table";
 import ManageIncidents from './ManageIncidents';
+import Simplert from 'react-simplert'
 
 class Incidents extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      collapseAdd: false,
-      collapseEdit: false,
       modalAdd: false,
       modalEdit: false,
       modal: false,
@@ -43,6 +42,21 @@ class Incidents extends Component {
     }));
   }
 
+  handleDelete(rowId) {
+    const header = this.Auth.getToken();
+    axios.delete(`${process.env.REACT_APP_SERVER}/api/incidents/` + rowId, {
+      headers: {
+        'Authorization': header
+      },
+    }).then((response) => {
+      if (this.state.showSimplert === false) this.setState({ showSimplert: !this.state.showSimplert });
+      this.makeData();
+    })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }
+
   makeData() {
     const header = this.Auth.getToken();
     axios.get(`${process.env.REACT_APP_SERVER}/api/incidents/getincidentDetails`, {
@@ -60,7 +74,7 @@ class Incidents extends Component {
         console.log(error);
       })
   }
-  renderEditCategoryModal() {
+  renderEditIncidentModal() {
     return (
       <Modal isOpen={this.state.modalEdit} toggle={this.toggleEdit} className={this.props.className}>
         <ModalHeader toggle={(e) => { this.toggleEdit(e) }}>Update Incident</ModalHeader>
@@ -105,7 +119,7 @@ class Incidents extends Component {
                 },
                 {
                   Header: "Resolved By",
-                  accessor: "resolvedBy"
+                  Cell: row => <span className='number'>{row.original.ResolvedBy && row.original.ResolvedBy.username}</span>
                 },
                 {
                   Header: "Updates",
@@ -121,6 +135,7 @@ class Incidents extends Component {
                   Cell: row => (
                     <>
                       {<Button style={{ color: "#EBEEF4", backgroundColor: "#343a40" }} onClick={(e) => { this.toggleEdit(row.original.id) }} ><i className='fas'>&#xf044;</i>&nbsp;</Button>}
+                      {<Button color='danger' onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i></Button>}
                     </>
                   )
                 }
@@ -130,12 +145,20 @@ class Incidents extends Component {
           defaultPageSize={10}
           className="-striped -highlight"
         />
-        {this.renderEditCategoryModal()}
-        {/* {this.renderAddCategoryModal()} */}
-        {/* {this.renderAssignComponentModal()} */}
+        {this.renderEditIncidentModal()}
+        <Simplert type={"error"}
+          title={"Your data has been deleted!"}
+          showSimplert={this.state.showSimplert}
+          onClose={() => this.setState({ showSimplert: !this.state.showSimplert })}
+        />
+
       </>
 
     )
   }
 }
 export default Incidents;
+
+
+
+
