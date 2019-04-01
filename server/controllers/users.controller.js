@@ -121,11 +121,27 @@ exports.updateUsers = async function (req, res) {
 //delete user
 exports.deleteUsers = async function (req, res) {
   let data;
-  uid = req.params.id
-  let result
   try {
-    data = await users.destroy({ where: { id: req.params.id } });
+    uid = req.params.id
+    let result
+    data1 = await assigncomponent.findAll({
+      where: { userId: req.params.id },
+      attributes: ['componentId'],
+    }).then(function (res) {
+      console.log("egtrhyuj",res.dataValues)
 
+      component.update({
+        status: true
+      }, {
+          where: {
+            id: {
+              [Op.in]: [res.dataValues]
+            }
+          }
+        }).then(function (output) {
+          console.log(output, "outputting")
+        })
+    })
   } catch (err) {
     res.status(500).json({
       status: false,
@@ -133,31 +149,14 @@ exports.deleteUsers = async function (req, res) {
       data: err,
     });
   }
-  if (data !== undefined) {
+  if (data1 !== undefined) {
     res.status(200).json({
       status: true,
       message: 'Deleted Successfully',
       data,
     });
   }
-
-  data1 = assigncomponent.findAll({
-    where: { userId: uid },
-    attributes: ['componentId'],
-  }).then(function (res) {
-    component.update({
-      status: true
-    }, {
-        where: {
-          id: {
-            [Op.in]: [res.dataValues.id]
-          }
-        }
-
-      }).then(function (output) {
-        console.log(output,  "outputting")
-      })
-  })
+  data = users.destroy({ where: { id: req.params.id } });
 };
 
 exports.getUserDetails = async function (request, response) {
