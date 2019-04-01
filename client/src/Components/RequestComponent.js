@@ -51,15 +51,16 @@ class RequestComponent extends Component {
     }).then((response) => {
       this.setState({ cName: response.data.data })
       this.setState({ collapse: false });
+      console.log(response.data)
     }).catch(function (error) {
       console.log(error);
     })
 
   }
-
   changeValue2 = (componentName) => {
-    this.setState({ componentName });
+    this.setState({ componentName:componentName.label });
     this.setState({ componentId: componentName.value })
+    console.log('component name',this.state.componentName)
   }
 
   changeValue3(e) {
@@ -71,24 +72,25 @@ class RequestComponent extends Component {
     e.preventDefault();
     const data = {
       userId: this.props.user.id,
-      categoryId: parseInt(this.state.categoryId),
-      componentId: parseInt(this.state.componentId),
+      categoryId: this.state.categoryId,
+      componentId: this.state.componentId,
       componentName: this.state.componentName,
       issue: this.state.issue,
     }
     console.log(data)
     const header = this.Auth.getToken();
-    axios.post(`${process.env.REACT_APP_SERVER}/api/requestComponents`, data, {
+    axios.post(`${process.env.REACT_APP_SERVER}/api/requestComponents/`, data, {
       headers: {
         'Authorization': header
       },
     })
       .then((response) => {
+        console.log("werjkl",response)
         if (this.state.collapse === false) this.setState({ collapse: !this.state.collapse });
         this.setState({ categoryId: 'Select Category', componentName: 'Select Component' })
       })
       .catch(function (error) {
-        console.log(error);
+        console.log("sdfghjkl;",error);
       })
   }
   render() {
