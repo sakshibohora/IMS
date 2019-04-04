@@ -4,7 +4,6 @@ import AuthService from './AuthService';
 import Simplert from 'react-simplert'
 
 let formData = {
-  id: '',
   username: '',
   firstName: '',
   password: '',
@@ -70,7 +69,9 @@ class ManageUser extends Component {
       })
         .then((res) => {
           this.props.makeData()
-          this.setState({ collapse: true })
+          this.setState({
+            collapse: true,
+          })
         }).catch((err) => {
           console.log(err)
         })
@@ -81,8 +82,14 @@ class ManageUser extends Component {
         },
       })
         .then((res) => {
-          this.props.makeData()
-          this.setState({ collapse: true })
+          if (res.data.message !== "saved in database") {
+            console.log(res.data.message)
+            console.log(res.data.msg.error)
+            alert(res.data.msg.error.details[0].message);
+          } else {
+            this.props.makeData()
+            this.setState({ collapse: !this.state.collapse })
+          }
         }).catch((err) => {
           console.log(err)
         })
