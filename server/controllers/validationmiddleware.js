@@ -17,7 +17,7 @@ module.exports = {
   },
   schemas: {
     authSchema: joi.object().keys({
-      username: joi.string().regex(/^[a-zA-Z]+$/).required(),
+      username: joi.string().required(),
       password: joi.string().required(),
       firstName: joi.string().regex(/^[a-zA-Z]+$/).required(),
       lastName: joi.string().regex(/^[a-zA-Z]+$/).required(),
