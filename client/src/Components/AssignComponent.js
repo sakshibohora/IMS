@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { ButtonDropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap'
+import Simplert from 'react-simplert'
 import { Button } from 'reactstrap';
 import AuthService from './AuthService';
 import Select from 'react-select'
@@ -221,21 +221,15 @@ class AssignComponent extends Component {
           <Button className="btn btn-md sg-submit-button" type="submit" value="Update" color="primary" > Assign</Button>&nbsp;
           <Button className="btn btn-md sg-submit-button" type="button" value="Home" color="primary" onClick={() => this.props.history.push('/admin/adminhome')} > Home </Button>
         </form>
+        <Simplert
+          showSimplert={this.state.collapse}
+          type={"success"}
+          title={"alert"}
+          message={'Component assigned Successfully'}
+          onClose={() => this.setState({ collapse: !this.state.collapse })}
+        />
       </>
     )
   }
 }
 export default AssignComponent;
-
-
-{/* <label htmlFor="selectcomp">Select Component</label>
-              <ButtonDropdown isOpen={this.state.dropdownOpen2} toggle={this.toggle2}>
-                <DropdownToggle caret>{this.state.componentName}</DropdownToggle>
-                <DropdownMenu>
-                  {this.state.cName.map(e => {
-                    return (
-                      <DropdownItem id={e.id} key={e.id} onClick={(e) => { this.changeValue2(e) }}>{e.componentName}
-                      </DropdownItem>)
-                  })}
-                </DropdownMenu>
-              </ButtonDropdown> */}
