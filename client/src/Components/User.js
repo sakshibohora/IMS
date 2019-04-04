@@ -66,19 +66,22 @@ class User extends Component {
 
   handleDelete(rowId) {
     const header = this.Auth.getToken();
-    axios.delete(`${process.env.REACT_APP_SERVER}/api/users/delete/` + rowId,{
+    axios.post(`${process.env.REACT_APP_SERVER}/api/users/delete/` + rowId,{
       headers: {
         'Authorization': header
       },
     }).then((response) => {
+      if(response.data.status)
+        this.setState({collapse:!this.state.collapse})
+
+        console.log(response)
       this.makeData();
-      this.setState({collapse:true})
+
     })
       .catch(function (error) {
         console.log(error);
       })
   }
-
   //Add Modal
   renderAddUserModal() {
     return (
