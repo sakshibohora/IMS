@@ -84,7 +84,7 @@ class ManageComponent extends Component {
   changeValue1 = (selectedOption) => {
     this.setState({ selectedOption });
     this.setState({
-      categoryId:selectedOption.value
+      categoryId: selectedOption.value
     })
     console.log(`Option selected:`, selectedOption.value);
   }
@@ -98,7 +98,7 @@ class ManageComponent extends Component {
       warrantyDate: this.state.formData.warrantyDate,
       status: this.state.formData.status
     }
-    console.loh(this.state.data)
+    console.log(this.state.data)
     if (this.state.flag === true) {
       axios.put(`${process.env.REACT_APP_SERVER}/api/components/edit/` + this.props.id, data, {
         headers: {
@@ -106,9 +106,12 @@ class ManageComponent extends Component {
         },
       })
         .then((res) => {
-          console.log("update", res)
-          this.props.makeData()
-          this.setState({ collapse: true })
+          if (res.data.message !== "Updated Successfully") {
+            alert(res.data.msg.error.details[0].message);
+          } else {
+            this.props.makeData()
+            this.setState({ collapse: true })
+          }
         }).catch((err) => {
           console.log(err)
         })
@@ -119,9 +122,12 @@ class ManageComponent extends Component {
         },
       })
         .then((res) => {
-          // console.log(res)
-          this.props.makeData()
-          this.setState({ collapse: true })
+          if (res.data.message !== "saved in database") {
+            alert(res.data.msg.error.details[0].message);
+          } else {
+            this.props.makeData()
+            this.setState({ collapse: true })
+          }
         }).catch((err) => {
           console.log(err)
         })
