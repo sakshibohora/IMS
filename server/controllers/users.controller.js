@@ -118,54 +118,80 @@ exports.updateUsers = async function (req, res) {
   }
 
 };
-//delete user
+//delete user and update component status
 exports.deleteUsers = async function (req, res) {
+  uid = parseInt(req.params.id);
   let data;
+  let arr = [];
+  // try {
   try {
-    uid = req.params.id
-    let result
-    data1 = await assigncomponent.findAll({
-      where: { userId: req.params.id },
-      attributes: ['componentId'],
-    }).then(function (res) {
-      console.log("egtrhyuj",res.dataValues)
-
-      component.update({
-        status: true
-      }, {
-          where: {
-            id: {
-              [Op.in]: [res.dataValues]
-            }
-          }
-        }).then(function (output) {
-          console.log(output, "outputting")
-        })
+    data = await assigncomponent.findAll({
+      where: {
+        userId: uid
+      },
+      attributes: ["componentId"]
     })
-  } catch (err) {
-    res.status(500).json({
-      status: false,
-      message: 'Unable To Delete.',
-      data: err,
-    });
-  }
-  if (data1 !== undefined) {
+    for (var i = 0; i < data.length; i++) {
+      arr.push(data[i].dataValues.componentId)
+    }
+  } catch (error) {
     res.status(200).json({
-      status: true,
-      message: 'Deleted Successfully',
-      data,
-    });
+      msg: error.message
+    })
   }
-  data = users.destroy({ where: { id: req.params.id } });
+  try {
+    arr.forEach(value => {
+      component.find({
+        where: {
+          id: value
+        }
+      }).then(function (result) {
+        result.update({
+          status: true
+        })
+      }).then(function (output) {
+        res.status(200).json({
+          status: true,
+          message: 'data fetched successfully',
+          output,
+        })
+      })
+    })
+  } catch (error) {
+    res.status(200).json({
+      msg: error.message
+    })
+  }
+  try {
+    users.destroy({ where: { id: req.params.id } }).then(function(result){
+      return res.status(200).json({
+        status: true,
+        message: "data deleted"
+      })
+    })
+  } catch (error) {
+    res.status(200).json({
+      msg: error.message,
+      data1,  
+    })
+  }
 };
-
+//fetching user details
 exports.getUserDetails = async function (request, response) {
   let data;
 
   try {
     data = await users.find({
       where: { id: request.body.id },
-      attributes: ['username', 'password', 'firstName', 'lastName', 'email', 'contactNo', 'role', 'status']
+      attributes: ['username',
+        'password',
+        'firstName',
+        'lastName',
+        'email',
+        'contactNo',
+        'role',
+        'status'
+      ]
     });
   } catch (err) {
     response.status(500).json({
