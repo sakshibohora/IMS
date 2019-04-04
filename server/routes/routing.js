@@ -86,7 +86,7 @@ const routes = (app) => {
   //categories routes
   app.get('/api/categories/list', passport.authenticate('jwt', { session: false }), checkSignIn, categories.getAllCategories);
   app.post('/api/categories', passport.authenticate('jwt', { session: false }), checkSignIn,validateBody(category.authSchema), categories.createNewCategories);
-  app.put('/api/categories/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn,validateBody(category.authSchema), categories.updateCategories);
+  app.put('/api/categories/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, categories.updateCategories);
   app.delete('/api/categories/delete/:id', passport.authenticate('jwt', { session: false }), checkSignIn, categories.deleteCategories);
   app.get('/api/categories/getCategoryId', passport.authenticate('jwt', { session: false }), checkSignIn, categories.getCategoryId)
   app.get('/api/categories/find/:id', passport.authenticate('jwt', { session: false }), checkSignIn, categories.findCategory)
