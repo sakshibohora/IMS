@@ -4,8 +4,9 @@ var bcrypt = require('bcrypt-nodejs');
 
 const db = require('../models/index.js');
 const users = db.Users;
-
 const checkSignIn = require('../controllers/middleware.js')
+const {validateBody, schemas,category,component} = require('../controllers/validationmiddleware'); 
+// const validateRequest = require('../controllers/validationmiddleware.js')
 const user = require('../controllers/users.controller');
 const forgotPassword = require('../controllers/forgetpassword.controller');
 const reqcomponents = require('../controllers/requestComponent.controller');
@@ -23,14 +24,19 @@ const passport = require('passport');
 
 
 require('../config/passport')(passport);
-
+// const getUsersSchema = {
+//   query: Joi.object({
+//     firstName: Joi.string().regex(/^[a-zA-Z]{3,30}$/),
+//   })
+// };
 const routes = (app) => {
-  app.post('/api/users', user.createNewUsers);
+  // app.post('/api/users', user.createNewUsers);
+  app.post('/api/users', validateBody(schemas.authSchema),user.createNewUsers);
   app.get('/api/users/find/:id', user.findUser)
   app.get('/api/users/list', passport.authenticate('jwt', { session: false }), checkSignIn, user.getAllUsers);
   app.get('/api/users/name', passport.authenticate('jwt', { session: false }), checkSignIn, user.findUserName);
   app.put('/api/users/edit:id', passport.authenticate('jwt', { session: false }), checkSignIn, user.updateUsers);
-  app.delete('/api/users/delete/:id', passport.authenticate('jwt', { session: false }), checkSignIn, user.deleteUsers);
+  app.post('/api/users/delete/:id', user.deleteUsers);
   app.post('/api/users/getUserDetails', passport.authenticate('jwt', { session: false }), checkSignIn, user.getUserDetails);
   app.post('/api/users/forgotPassword/', forgotPassword.forgotPassword);
   app.get('/api/users/reset/:token', forgotPassword.resetpassword)
@@ -64,7 +70,7 @@ const routes = (app) => {
   });
   //request component routes
   app.get('/api/requestComponents/list', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.getAllRequestedComponents);
-  app.post('/api/requestComponents/',reqcomponents.createNewRequestComponents);
+  app.post('/api/requestComponents/', reqcomponents.createNewRequestComponents);
   app.put('/api/requestComponents/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.updateRequestedComponent);
   app.delete('/api/requestComponents/delete:id', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.deleteRequestedComponents);
   app.post('/api/requestComponents/requestComponentByUser', passport.authenticate('jwt', { session: false }), checkSignIn, reqcomponents.getRequestedComponentByUser);
@@ -79,15 +85,15 @@ const routes = (app) => {
 
   //categories routes
   app.get('/api/categories/list', passport.authenticate('jwt', { session: false }), checkSignIn, categories.getAllCategories);
-  app.post('/api/categories', passport.authenticate('jwt', { session: false }), checkSignIn, categories.createNewCategories);
-  app.put('/api/categories/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, categories.updateCategories);
+  app.post('/api/categories', passport.authenticate('jwt', { session: false }), checkSignIn,validateBody(category.authSchema), categories.createNewCategories);
+  app.put('/api/categories/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn,validateBody(category.authSchema), categories.updateCategories);
   app.delete('/api/categories/delete/:id', passport.authenticate('jwt', { session: false }), checkSignIn, categories.deleteCategories);
   app.get('/api/categories/getCategoryId', passport.authenticate('jwt', { session: false }), checkSignIn, categories.getCategoryId)
   app.get('/api/categories/find/:id', passport.authenticate('jwt', { session: false }), checkSignIn, categories.findCategory)
 
   //component routes
   app.get('/api/components/list', passport.authenticate('jwt', { session: false }), checkSignIn, components.getAllComponents);
-  app.post('/api/components', passport.authenticate('jwt', { session: false }), checkSignIn, components.createNewComponents);
+  app.post('/api/components', passport.authenticate('jwt', { session: false }), checkSignIn,validateBody(component.authSchema), components.createNewComponents);
   app.put('/api/components/edit/:id', passport.authenticate('jwt', { session: false }), checkSignIn, components.updateComponents);
   app.delete('/api/components/delete:id', passport.authenticate('jwt', { session: false }), checkSignIn, components.deleteComponents);
   app.post('/api/components/getComponentName', passport.authenticate('jwt', { session: false }), checkSignIn, components.getComponentName);
@@ -113,7 +119,7 @@ const routes = (app) => {
   app.delete('/api/incidentUpdates/delete:id', passport.authenticate('jwt', { session: false }), checkSignIn, incidentUpdates.deleteIncidentUpdates);
 
   //invoicers routes
-  
+
   app.get('/api/invoicers/', passport.authenticate('jwt', { session: false }), checkSignIn, invoicers.getAllInvoicers);
   app.post('/api/invoicers', passport.authenticate('jwt', { session: false }), checkSignIn, invoicers.createNewInvoicers);
   app.put('/api/invoicers/:id', passport.authenticate('jwt', { session: false }), checkSignIn, invoicers.updateInvoicers);
@@ -125,5 +131,38 @@ const routes = (app) => {
   app.put('/api/invoices/:id', passport.authenticate('jwt', { session: false }), checkSignIn, invoices.updateInvoices);
   app.delete('/api/invoices/:id', passport.authenticate('jwt', { session: false }), checkSignIn, invoices.deleteInvoices);
 
+
+
+  // const validateRequest = (requestSchema, req, res, next) => {
+  //   const validations = ['headers', 'params', 'query', 'body']
+  //     .map(key => {
+  //       const schema = requestSchema[key];
+  //       const value = req[key];
+  //       const validate = () => schema ? schema.validate(value) : Promise.resolve({});
+  //       console.log("hello......")
+  //       return validate().then(result => ({ [key]: result }));
+  //     });
+  //   return Promise.all(validations)
+  //     .then(result => {
+  //       req.validated = Object.assign({}, ...result);
+  //       next();
+  //     }).catch(validationError => {
+  //       console.log("hello", validationError);
+  //       const message = validationError.details.map(d => d.message);
+  //       res.status(400).send(validationError);
+  //     });
+  // };
+
+  // const getUsersSchema = {
+  //   body: Joi.object({
+    //   firstName: Joi.string().regex(/^[a-zA-Z]$/), 
+    //   firstName: Joi.string().min(3).max(30).regex(/^[a-zA-Z]+$/),
+    // }),
+    // headers: Joi.object({
+    //   token: Joi.string().token().length(20).required()
+    // }).unknown() //unknown allows other headers like Content-Type etc.
+  // };
+
+  // app.post('/api/users', (req, res, next) => validateRequest(getUsersSchema, req, res, next), user.createNewUsers);
 }
 module.exports = { routes };
