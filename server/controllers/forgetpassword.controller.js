@@ -31,8 +31,8 @@ exports.forgotPassword = async function (req, res) {
       var transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
-          user: 'sakshi.bohora@bacancytechnology.com',//valid email id, for testing purpose only
-          pass: 'Saxi@bacancy' //valid password, for testing purpose only
+          user: process.env.USERNAME,//valid email id, for testing purpose only
+          pass: process.env.PASSWORD, //valid password, for testing purpose only
         }
       });
 
@@ -61,7 +61,6 @@ exports.forgotPassword = async function (req, res) {
 }
 
 exports.resetpassword = async function (req, res) {
-  console.log('sfsfs', req.params.token)
   users.findOne({
     where: {
       resetPasswordToken: req.params.token,
