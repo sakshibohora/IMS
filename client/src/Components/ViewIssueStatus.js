@@ -114,7 +114,7 @@ class ViewIssueStatus extends Component {
                   Header: '',
                   Cell: row => (
                     <>
-                      {<Button color='danger' onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i></Button>}
+                      {/* {<Button color='danger' onClick={(e) => { this.handleDelete(row.original.id) }}><i className='fas'>&#xf1f8;</i></Button>} */}
                       {<Button color='primary' onClick={(e) => { this.toggleViewDetails(row.original.id) }}>View Details</Button>}
 
                     </>
