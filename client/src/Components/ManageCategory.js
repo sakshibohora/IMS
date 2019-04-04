@@ -58,8 +58,13 @@ class ManageCategory extends Component {
         },
       })
         .then((res) => {
-          this.props.makeData()
-          this.setState({ collapse: true })
+          if (res.data.message !== "Updated Successfully") {
+            console.log(res.data.msg.error.details[0].message)
+            alert(res.data.msg.error.details[0].message);
+          } else {
+            this.props.makeData()
+            this.setState({ collapse: !this.state.collapse })
+          }
         }).catch((err) => {
           console.log(err)
         })
@@ -70,10 +75,14 @@ class ManageCategory extends Component {
         },
       })
         .then((res) => {
-          if(this.state.collapse === false) this.setState({ collapse: !this.state.collapse });
-
-          this.props.makeData()
-
+          if (res.data.message !== "saved in database") {
+            console.log(res.data.message)
+            console.log(res.data.msg.error)            
+            alert(res.data.msg.error.details[0].message);
+          } else {
+            this.props.makeData()
+            this.setState({ collapse: true })
+          }
         }).catch((err) => {
           console.log(err)
         })
