@@ -126,7 +126,7 @@ class ManageComponent extends Component {
             alert(res.data.msg.error.details[0].message);
           } else {
             this.props.makeData()
-            this.setState({ collapse: true })
+            this.setState({ categoryId:'', formData:{...formData} ,collapse: true })
           }
         }).catch((err) => {
           console.log(err)
@@ -146,7 +146,7 @@ class ManageComponent extends Component {
                   label: e.categoryType,
                   value: e.id
                 }))}
-                value={this.selectedOption}
+                value={this.state.selectedOption}
                 onChange={(e) => { this.changeValue1(e) }}
               />
               <div className="form-group">
