@@ -2,6 +2,7 @@ const joi = require('joi');
 module.exports = {
   validateBody: (schema) => {
     return (req, res, next) => {
+      console.log(req.body)
       const result = joi.validate(req.body, schema);
       if (result.error) {
         console.log("in result error")
@@ -32,13 +33,13 @@ module.exports = {
       categoryType: joi.string().regex(/^[a-zA-Z]*\s?[a-zA-Z]+$/).required()
     })
   },
-  component:{
-    authSchema:joi.object().keys({
-      componentName:joi.string().regex(/^[a-zA-Z]*\s?[a-zA-Z]+$/).required(),
+  component: {
+    authSchema: joi.object().keys({
+      componentName: joi.string().regex(/^[a-zA-Z]*\s?[a-zA-Z]+$/).required(),
       status: joi.boolean().required(),
-      categoryId:joi.any(),
-      warrantyDate:joi.date(),
-      serialNo:joi.string().regex(/^[a-zA-Z0-9]+$/).required(),
+      categoryId: joi.any(),
+      warrantyDate: joi.date(),
+      serialNo: joi.string().regex(/^[a-zA-Z0-9]+$/).required(),
     })
   }
 }
