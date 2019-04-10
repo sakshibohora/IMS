@@ -88,7 +88,7 @@ class ManageUser extends Component {
             alert(res.data.msg.error.details[0].message);
           } else {
             this.props.makeData()
-            this.setState({ collapse: !this.state.collapse })
+            this.setState({ formData:{...formData},collapse: !this.state.collapse })
           }
         }).catch((err) => {
           console.log(err)
